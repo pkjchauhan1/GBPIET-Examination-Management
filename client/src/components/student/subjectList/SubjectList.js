@@ -11,7 +11,7 @@ const SubjectList = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getSubject(user.result.department, user.result.year));
+    dispatch(getSubject(user.result.course, user.result.year));
   }, [dispatch]);
   return (
     <div className="bg-[#d6d9e0] h-screen flex items-center justify-center">

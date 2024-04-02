@@ -17,13 +17,10 @@ const adminSchema = mongoose.Schema(
     username: {
       type: String,
     },
-    department: {
+    course: {
       type: String,
     },
     dob: {
-      type: String,
-    },
-    joiningYear: {
       type: String,
     },
     avatar: {

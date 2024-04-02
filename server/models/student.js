@@ -39,7 +39,7 @@ const studentSchema = new Schema({
   motherName: {
     type: String,
   },
-  department: {
+  course: {
     type: String,
     required: true,
   },

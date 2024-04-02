@@ -10,8 +10,6 @@ import adminRoutes from "./routes/adminRoutes.js";
 import studentRoutes from "./routes/studentRoutes.js";
 import facultyRoutes from "./routes/facultyRoutes.js";
 
-import { adminLogin } from "./controller/adminController.js";
-
 app.use(cors("*"));
 app.use(express.json());
 
@@ -27,6 +25,7 @@ app.get("/", (req, res) => {
   res.send("Hello to college erp API");
 });
 
+mongoose.set("strictQuery", false);
 mongoose
   .connect(process.env.CONNECTION_URL, {
     useNewUrlParser: true,

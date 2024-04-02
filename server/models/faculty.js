@@ -26,7 +26,7 @@ const facultySchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  department: {
+  course: {
     type: String,
     required: true,
   },

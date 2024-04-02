@@ -73,11 +73,11 @@ export const getStudent = (formData) => async (dispatch) => {
 };
 
 export const uploadMark =
-  (marks, department, section, year, test) => async (dispatch) => {
+  (marks, course, section, year, test) => async (dispatch) => {
     try {
       const formData = {
         marks,
-        department,
+        course,
         section,
         year,
         test,
@@ -91,13 +91,12 @@ export const uploadMark =
   };
 
 export const markAttendance =
-  (checkedValue, subjectName, department, year, section) =>
-  async (dispatch) => {
+  (checkedValue, subjectName, course, year, section) => async (dispatch) => {
     try {
       const formData = {
         selectedStudents: checkedValue,
         subjectName,
-        department,
+        course,
         year,
         section,
       };

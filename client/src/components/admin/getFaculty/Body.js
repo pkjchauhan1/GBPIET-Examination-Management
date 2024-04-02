@@ -9,9 +9,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { SET_ERRORS } from "../../../redux/actionTypes";
 const Body = () => {
   const dispatch = useDispatch();
-  const [department, setDepartment] = useState("");
+  const [course, setCourse] = useState("");
   const [error, setError] = useState({});
-  const departments = useSelector((state) => state.admin.allDepartment);
+  const courses = useSelector((state) => state.admin.allCourse);
   const [search, setSearch] = useState(false);
   const [loading, setLoading] = useState(false);
   const store = useSelector((state) => state);
@@ -28,7 +28,7 @@ const Body = () => {
     setSearch(true);
     setLoading(true);
     setError({});
-    dispatch(getFaculty({ department }));
+    dispatch(getFaculty({ course }));
   };
   const faculties = useSelector((state) => state.admin.faculties.result);
 
@@ -52,25 +52,28 @@ const Body = () => {
         <div className=" mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]">
           <form
             className="flex flex-col space-y-2 col-span-1"
-            onSubmit={handleSubmit}>
-            <label htmlFor="department">Department</label>
+            onSubmit={handleSubmit}
+          >
+            <label htmlFor="course">Course</label>
             <Select
               required
               displayEmpty
               sx={{ height: 36, width: 224 }}
               inputProps={{ "aria-label": "Without label" }}
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}>
+              value={course}
+              onChange={(e) => setCourse(e.target.value)}
+            >
               <MenuItem value="">None</MenuItem>
-              {departments?.map((dp, idx) => (
-                <MenuItem key={idx} value={dp.department}>
-                  {dp.department}
+              {courses?.map((dp, idx) => (
+                <MenuItem key={idx} value={dp.course}>
+                  {dp.course}
                 </MenuItem>
               ))}
             </Select>
             <button
               className={`${classes.adminFormSubmitButton} w-56`}
-              type="submit">
+              type="submit"
+            >
               Search
             </button>
           </form>
@@ -117,25 +120,31 @@ const Body = () => {
                   {faculties?.map((fac, idx) => (
                     <div
                       key={idx}
-                      className={`${classes.adminDataBody} grid-cols-12`}>
+                      className={`${classes.adminDataBody} grid-cols-12`}
+                    >
                       <h1
-                        className={`${classes.adminDataBodyFields} font-bold border-0 col-span-1`}>
+                        className={`${classes.adminDataBodyFields} font-bold border-0 col-span-1`}
+                      >
                         {idx + 1}
                       </h1>
                       <h1
-                        className={`col-span-3 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-3 ${classes.adminDataBodyFields}`}
+                      >
                         {fac.name}
                       </h1>
                       <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields} `}>
+                        className={`col-span-2 ${classes.adminDataBodyFields} `}
+                      >
                         {fac.username}
                       </h1>
                       <h1
-                        className={`col-span-3 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-3 ${classes.adminDataBodyFields}`}
+                      >
                         {fac.email}
                       </h1>
                       <h1
-                        className={`col-span-3 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-3 ${classes.adminDataBodyFields}`}
+                      >
                         {fac.designation}
                       </h1>
                     </div>

@@ -1,32 +1,11 @@
 import Admin from "../models/admin.js";
-import Department from "../models/department.js";
+import Course from "../models/course.js";
 import Faculty from "../models/faculty.js";
 import Student from "../models/student.js";
 import Subject from "../models/subject.js";
 import Notice from "../models/notice.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
-function generatePassword() {
-  // Define the characters to be used
-  const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const numbers = "0123456789";
-
-  // Start the password with an '@'
-  let password = "@";
-
-  // Add a random number
-  password += numbers.charAt(Math.floor(Math.random() * numbers.length));
-
-  // Add uppercase characters until we reach at least 6 characters in length
-  while (password.length < 6) {
-    password += uppercaseChars.charAt(
-      Math.floor(Math.random() * uppercaseChars.length)
-    );
-  }
-
-  return password;
-}
 
 export const adminLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -96,7 +75,7 @@ export const updatedPassword = async (req, res) => {
 };
 export const updateAdmin = async (req, res) => {
   try {
-    const { name, dob, department, contactNumber, avatar, email } = req.body;
+    const { name, dob, course, contactNumber, avatar, email } = req.body;
     const updatedAdmin = await Admin.findOne({ email });
     if (name) {
       updatedAdmin.name = name;
@@ -106,8 +85,8 @@ export const updateAdmin = async (req, res) => {
       updatedAdmin.dob = dob;
       await updatedAdmin.save();
     }
-    if (department) {
-      updatedAdmin.department = department;
+    if (course) {
+      updatedAdmin.course = course;
       await updatedAdmin.save();
     }
     if (contactNumber) {
@@ -128,7 +107,7 @@ export const updateAdmin = async (req, res) => {
 
 export const addAdmin = async (req, res) => {
   try {
-    const { name, dob, department, contactNumber, avatar, email, joiningYear } =
+    const { name, dob, course, contactNumber, avatar, email, joiningYear } =
       req.body;
     const errors = { emailError: String };
     const existingAdmin = await Admin.findOne({ email });
@@ -136,34 +115,34 @@ export const addAdmin = async (req, res) => {
       errors.emailError = "Email already exists";
       return res.status(400).json(errors);
     }
-    const existingDepartment = await Department.findOne({ department });
-    let departmentHelper = existingDepartment?.departmentCode;
-    const admins = await Admin.find({ department });
+    const existingCourse = await Course.findOne({ course });
+    let courseHelper = existingCourse?.courseCode;
+    const admins = await Admin.find({ course });
 
     let helper;
     if (admins.length < 10) {
-      helper = "00" + admins.length.toString();
+      helper = "0" + admins.length.toString();
     } else if (admins.length < 100 && admins.length > 9) {
       helper = "0" + admins.length.toString();
     } else {
       helper = admins.length.toString();
     }
     var date = new Date();
-    var components = ["ADM", date.getFullYear(), departmentHelper, helper];
+    var components = ["ADM", date.getFullYear(), courseHelper, helper];
 
     var username = components.join("");
-    let hashedPassword;
-    const newDob = dob.split("-").reverse().join("-");
 
-    hashedPassword = await bcrypt.hash(newDob, 10);
+    let newPassword = "@Abc12345";
+    let hashedPassword = await bcrypt.hash(newPassword, 10);
     var passwordUpdated = false;
+
     const newAdmin = await new Admin({
       name,
       email,
       password: hashedPassword,
       joiningYear,
       username,
-      department,
+      course,
       avatar,
       contactNumber,
       dob,
@@ -212,34 +191,34 @@ export const createNotice = async (req, res) => {
   }
 };
 
-export const addDepartment = async (req, res) => {
+export const addCourse = async (req, res) => {
   try {
-    const errors = { departmentError: String };
-    const { department } = req.body;
-    const existingDepartment = await Department.findOne({ department });
-    if (existingDepartment) {
-      errors.departmentError = "Department already added";
+    const errors = { courseError: String };
+    const { course } = req.body;
+    const existingCourse = await Course.findOne({ course });
+    if (existingCourse) {
+      errors.courseError = "Course already added";
       return res.status(400).json(errors);
     }
-    const departments = await Department.find({});
-    let add = departments.length + 1;
-    let departmentCode;
+    const courses = await Course.find({});
+    let add = courses.length + 1;
+    let courseCode;
     if (add < 9) {
-      departmentCode = "0" + add.toString();
+      courseCode = "0" + add.toString();
     } else {
-      departmentCode = add.toString();
+      courseCode = add.toString();
     }
 
-    const newDepartment = await new Department({
-      department,
-      departmentCode,
+    const newCourse = await new Course({
+      course,
+      courseCode,
     });
 
-    await newDepartment.save();
+    await newCourse.save();
     return res.status(200).json({
       success: true,
-      message: "Department added successfully",
-      response: newDepartment,
+      message: "Course added successfully",
+      response: newCourse,
     });
   } catch (error) {
     const errors = { backendError: String };
@@ -253,7 +232,7 @@ export const addFaculty = async (req, res) => {
     const {
       name,
       dob,
-      department,
+      course,
       contactNumber,
       avatar,
       email,
@@ -268,11 +247,11 @@ export const addFaculty = async (req, res) => {
       return res.status(400).json(errors);
     }
 
-    const existingDepartment = await Department.findOne({ department });
+    const existingCourse = await Course.findOne({ course });
 
-    let departmentHelper = existingDepartment.departmentCode;
+    let courseHelper = existingCourse.courseCode;
 
-    const faculties = await Faculty.find({ department });
+    const faculties = await Faculty.find({ course });
 
     let helper;
     if (faculties.length < 10) {
@@ -283,11 +262,10 @@ export const addFaculty = async (req, res) => {
       helper = faculties.length.toString();
     }
     var date = new Date();
-    var components = ["FAC", date.getFullYear(), departmentHelper, helper];
-
+    var components = ["FAC", date.getFullYear(), courseHelper, helper];
     var username = components.join("");
 
-    let newPassword = generatePassword();
+    let newPassword = "@Abc12345";
     let hashedPassword = await bcrypt.hash(newPassword, 10);
     var passwordUpdated = false;
 
@@ -297,7 +275,7 @@ export const addFaculty = async (req, res) => {
       password: hashedPassword,
       joiningYear,
       username,
-      department,
+      course,
       avatar,
       contactNumber,
       dob,
@@ -320,9 +298,9 @@ export const addFaculty = async (req, res) => {
 
 export const getFaculty = async (req, res) => {
   try {
-    const { department } = req.body;
+    const { course } = req.body;
     const errors = { noFacultyError: String };
-    const faculties = await Faculty.find({ department });
+    const faculties = await Faculty.find({ course });
     if (faculties.length === 0) {
       errors.noFacultyError = "No Faculty Found";
       return res.status(404).json(errors);
@@ -352,8 +330,7 @@ export const getNotice = async (req, res) => {
 
 export const addSubject = async (req, res) => {
   try {
-    const { totalLectures, department, subjectCode, subjectName, year } =
-      req.body;
+    const { totalLectures, course, subjectCode, subjectName, year } = req.body;
     const errors = { subjectError: String };
     const subject = await Subject.findOne({ subjectCode });
     if (subject) {
@@ -363,14 +340,14 @@ export const addSubject = async (req, res) => {
 
     const newSubject = await new Subject({
       totalLectures,
-      department,
+      course,
       subjectCode,
       subjectName,
       year,
     });
 
     await newSubject.save();
-    const students = await Student.find({ department, year });
+    const students = await Student.find({ course, year });
     if (students.length !== 0) {
       for (var i = 0; i < students.length; i++) {
         students[i].subjects.push(newSubject._id);
@@ -391,12 +368,12 @@ export const addSubject = async (req, res) => {
 
 export const getSubject = async (req, res) => {
   try {
-    const { department, year } = req.body;
+    const { course, year } = req.body;
 
     if (!req.userId) return res.json({ message: "Unauthenticated" });
     const errors = { noSubjectError: String };
 
-    const subjects = await Subject.find({ department, year });
+    const subjects = await Subject.find({ course, year });
     if (subjects.length === 0) {
       errors.noSubjectError = "No Subject Found";
       return res.status(404).json(errors);
@@ -411,11 +388,11 @@ export const getSubject = async (req, res) => {
 
 export const getAdmin = async (req, res) => {
   try {
-    const { department } = req.body;
+    const { course } = req.body;
 
     const errors = { noAdminError: String };
 
-    const admins = await Admin.find({ department });
+    const admins = await Admin.find({ course });
     if (admins.length === 0) {
       errors.noAdminError = "No Subject Found";
       return res.status(404).json(errors);
@@ -493,13 +470,13 @@ export const deleteSubject = async (req, res) => {
   }
 };
 
-export const deleteDepartment = async (req, res) => {
+export const deleteCourse = async (req, res) => {
   try {
-    const { department } = req.body;
+    const { course } = req.body;
 
-    await Department.findOneAndDelete({ department });
+    await Course.findOneAndDelete({ course });
 
-    res.status(200).json({ message: "Department Deleted" });
+    res.status(200).json({ message: "Course Deleted" });
   } catch (error) {
     const errors = { backendError: String };
     errors.backendError = error;
@@ -512,7 +489,7 @@ export const addStudent = async (req, res) => {
     const {
       name,
       dob,
-      department,
+      course,
       contactNumber,
       avatar,
       email,
@@ -531,10 +508,10 @@ export const addStudent = async (req, res) => {
       errors.emailError = "Email already exists";
       return res.status(400).json(errors);
     }
-    const existingDepartment = await Department.findOne({ department });
-    let departmentHelper = existingDepartment.departmentCode;
+    const existingCourse = await Course.findOne({ course });
+    let courseHelper = existingCourse.courseCode;
 
-    const students = await Student.find({ department });
+    const students = await Student.find({ course });
     let helper;
     if (students.length < 10) {
       helper = "00" + students.length.toString();
@@ -544,13 +521,11 @@ export const addStudent = async (req, res) => {
       helper = students.length.toString();
     }
     var date = new Date();
-    var components = ["STU", date.getFullYear(), departmentHelper, helper];
-
+    var components = ["STU", date.getFullYear(), courseHelper, helper];
     var username = components.join("");
-    let hashedPassword;
-    const newDob = dob.split("-").reverse().join("-");
 
-    hashedPassword = await bcrypt.hash(newDob, 10);
+    let newPassword = "@Abc12345";
+    let hashedPassword = await bcrypt.hash(newPassword, 10);
     var passwordUpdated = false;
 
     const newStudent = await new Student({
@@ -558,7 +533,7 @@ export const addStudent = async (req, res) => {
       dob,
       password: hashedPassword,
       username,
-      department,
+      course,
       contactNumber,
       avatar,
       email,
@@ -573,7 +548,7 @@ export const addStudent = async (req, res) => {
       passwordUpdated,
     });
     await newStudent.save();
-    const subjects = await Subject.find({ department, year });
+    const subjects = await Subject.find({ course, year });
     if (subjects.length !== 0) {
       for (var i = 0; i < subjects.length; i++) {
         newStudent.subjects.push(subjects[i]._id);
@@ -594,9 +569,9 @@ export const addStudent = async (req, res) => {
 
 export const getStudent = async (req, res) => {
   try {
-    const { department, year, section } = req.body;
+    const { course, year, section } = req.body;
     const errors = { noStudentError: String };
-    const students = await Student.find({ department, year });
+    const students = await Student.find({ course, year });
 
     if (students.length === 0) {
       errors.noStudentError = "No Student Found";
@@ -636,10 +611,10 @@ export const getAllAdmin = async (req, res) => {
     console.log("Backend Error", error);
   }
 };
-export const getAllDepartment = async (req, res) => {
+export const getAllCourse = async (req, res) => {
   try {
-    const departments = await Department.find();
-    res.status(200).json(departments);
+    const courses = await Course.find();
+    res.status(200).json(courses);
   } catch (error) {
     console.log("Backend Error", error);
   }

@@ -18,7 +18,7 @@ const Body = () => {
   const students = useSelector((state) => state.admin.allStudent);
   const faculties = useSelector((state) => state.admin.allFaculty);
   const admins = useSelector((state) => state.admin.allAdmin);
-  const departments = useSelector((state) => state.admin.allDepartment);
+  const courses = useSelector((state) => state.admin.allCourse);
 
   return (
     <div className="flex-[0.8] mt-3">
@@ -65,8 +65,8 @@ const Body = () => {
                 sx={{ fontSize: 40 }}
               />
               <div className="flex flex-col">
-                <h1>Department</h1>
-                <h2 className="text-2xl font-bold">{departments?.length}</h2>
+                <h1>Course</h1>
+                <h2 className="text-2xl font-bold">{courses?.length}</h2>
               </div>
             </div>
           </div>

@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 
-const departmentSchema = mongoose.Schema({
-  department: {
+const courseSchema = mongoose.Schema({
+  course: {
     type: String,
     required: true,
   },
-  departmentCode: {
+  courseCode: {
     type: String,
     required: true,
     unique: true,
   },
 });
 
-export default mongoose.model("department", departmentSchema);
+export default mongoose.model("course", courseSchema);

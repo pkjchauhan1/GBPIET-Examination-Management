@@ -20,7 +20,7 @@ const Body = () => {
     test: "",
     totalMarks: "",
     date: "",
-    department: user.result.department,
+    course: user.result.course,
   });
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const Body = () => {
         test: "",
         totalMarks: "",
         date: "",
-        department: user.result.department,
+        course: user.result.course,
       });
     }
   }, [store.errors]);
@@ -56,7 +56,7 @@ const Body = () => {
           test: "",
           totalMarks: "",
           date: "",
-          department: user.result.department,
+          course: user.result.course,
         });
 
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -113,15 +113,15 @@ const Body = () => {
                 </div>
 
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Department :</h1>
+                  <h1 className={classes.adminLabel}>Course :</h1>
 
                   <input
                     required
-                    placeholder={user.result.department}
+                    placeholder={user.result.course}
                     disabled
                     className={classes.adminInput}
                     type="text"
-                    value={user.result.department}
+                    value={user.result.course}
                   />
                 </div>
                 <div className={classes.adminForm3}>
@@ -205,7 +205,7 @@ const Body = () => {
                     test: "",
                     totalMarks: "",
                     date: "",
-                    department: "",
+                    course: "",
                   });
                   setError({});
                 }}

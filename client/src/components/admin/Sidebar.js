@@ -98,22 +98,22 @@ const Sidebar = () => {
         </div>
         <div className="">
           <NavLink
-            to="/admin/adddepartment"
+            to="/admin/addcourse"
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
             }
           >
             <AddIcon className="" />
-            <h1 className="font-normal">Add Department</h1>
+            <h1 className="font-normal">Add Course</h1>
           </NavLink>
           <NavLink
-            to="/admin/deletedepartment"
+            to="/admin/deletecourse"
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
             }
           >
             <DeleteIcon className="" />
-            <h1 className="font-normal">Delete Department</h1>
+            <h1 className="font-normal">Delete Course</h1>
           </NavLink>
         </div>
         <div className="">

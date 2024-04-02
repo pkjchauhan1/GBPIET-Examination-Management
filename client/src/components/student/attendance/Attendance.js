@@ -12,11 +12,7 @@ const Attendance = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(
-      getAttendance(
-        user.result.department,
-        user.result.year,
-        user.result.section
-      )
+      getAttendance(user.result.course, user.result.year, user.result.section)
     );
   }, [dispatch]);
   return (

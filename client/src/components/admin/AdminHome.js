@@ -4,7 +4,7 @@ import {
   getAllStudent,
   getAllFaculty,
   getAllAdmin,
-  getAllDepartment,
+  getAllCourse,
   getNotice,
 } from "../../redux/actions/adminActions";
 import Body from "./Body";
@@ -17,7 +17,7 @@ const AdminHome = () => {
     dispatch(getAllStudent());
     dispatch(getAllFaculty());
     dispatch(getAllAdmin());
-    dispatch(getAllDepartment());
+    dispatch(getAllCourse());
     dispatch(getNotice());
   }, [dispatch]);
   return (
