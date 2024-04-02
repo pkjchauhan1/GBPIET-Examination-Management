@@ -17,7 +17,6 @@ import AdminPassword from "./components/admin/profile/update/password/Password";
 import AdminUpdate from "./components/admin/profile/update/Update";
 import CreateTest from "./components/faculty/createTest/CreateTest";
 import FacultyHome from "./components/faculty/FacultyHome";
-import MarkAttendance from "./components/faculty/markAttendance/MarkAttendance";
 import FacultyProfile from "./components/faculty/profile/Profile";
 import FacultyFirstTimePassword from "./components/faculty/profile/update/firstTimePassword/FirstTimePassword";
 import FacultyPassword from "./components/faculty/profile/update/password/Password";
@@ -39,7 +38,6 @@ import StudentUpdate from "./components/student/profile/update/Update";
 import StudentPassword from "./components/student/profile/update/password/Password";
 import SubjectList from "./components/student/subjectList/SubjectList";
 import TestResult from "./components/student/testResult/TestResult";
-import Attendance from "./components/student/attendance/Attendance";
 import DeleteAdmin from "./components/admin/deleteAdmin/DeleteAdmin";
 import DeleteCourse from "./components/admin/deleteCourse/DeleteCourse";
 import DeleteFaculty from "./components/admin/deleteFaculty/DeleteFaculty";
@@ -91,7 +89,6 @@ const App = () => {
       <Route path="/faculty/update/password" element={<FacultyPassword />} />
       <Route path="/faculty/createtest" element={<CreateTest />} />
       <Route path="/faculty/uploadmarks" element={<UploadMarks />} />
-      <Route path="/faculty/markattendance" element={<MarkAttendance />} />
 
       {/* Student  */}
 
@@ -104,7 +101,6 @@ const App = () => {
       <Route path="/student/update/password" element={<StudentPassword />} />
       <Route path="/student/subjectlist" element={<SubjectList />} />
       <Route path="/student/testresult" element={<TestResult />} />
-      <Route path="/student/attendance" element={<Attendance />} />
     </Routes>
   );
 };
