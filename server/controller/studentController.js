@@ -1,9 +1,7 @@
-import student from "../models/student.js";
 import Test from "../models/test.js";
 import Student from "../models/student.js";
 import Subject from "../models/subject.js";
 import Marks from "../models/marks.js";
-import Attendence from "../models/attendance.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
@@ -169,38 +167,6 @@ export const testResult = async (req, res) => {
     }
 
     res.status(200).json({ result });
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-
-export const attendance = async (req, res) => {
-  try {
-    const { course, year, section } = req.body;
-    const errors = { notestError: String };
-    const student = await Student.findOne({ course, year, section });
-
-    const attendence = await Attendence.find({
-      student: student._id,
-    }).populate("subject");
-    if (!attendence) {
-      res.status(400).json({ message: "Attendence not found" });
-    }
-
-    res.status(200).json({
-      result: attendence.map((att) => {
-        let res = {};
-        res.percentage = (
-          (att.lectureAttended / att.totalLecturesByFaculty) *
-          100
-        ).toFixed(2);
-        res.subjectCode = att.subject.subjectCode;
-        res.subjectName = att.subject.subjectName;
-        res.attended = att.lectureAttended;
-        res.total = att.totalLecturesByFaculty;
-        return res;
-      }),
-    });
   } catch (error) {
     res.status(500).json(error);
   }

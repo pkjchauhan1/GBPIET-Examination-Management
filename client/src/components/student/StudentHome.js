@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getNotice } from "../../redux/actions/adminActions";
-import {
-  getAttendance,
-  getSubject,
-  getTestResult,
-} from "../../redux/actions/studentActions";
+import { getSubject, getTestResult } from "../../redux/actions/studentActions";
 
 import Body from "./Body";
 import Header from "./Header";
@@ -19,9 +15,6 @@ const StudentHome = () => {
     dispatch(getSubject(user.result.course, user.result.year));
     dispatch(
       getTestResult(user.result.course, user.result.year, user.result.section)
-    );
-    dispatch(
-      getAttendance(user.result.course, user.result.year, user.result.section)
     );
     dispatch(getNotice());
   }, [dispatch]);
