@@ -73,7 +73,7 @@ const StudentRegister = () => {
       setPassword("");
       setFatherName("");
       setLoading(false);
-      setCourset("");
+      setCourse("");
       setDob(new Date());
       setShowPassword("");
       setContactNumber("");
