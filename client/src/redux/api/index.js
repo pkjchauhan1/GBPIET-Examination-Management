@@ -13,10 +13,8 @@ API.interceptors.request.use((req) => {
 });
 
 // Admin
-
 export const adminSignIn = async (formData) => {
   return await API.post("/api/admin/login", formData);
-  // console.log("formData");
 };
 
 export const adminUpdatePassword = (updatedPassword) =>
@@ -28,7 +26,7 @@ export const getAllFaculty = () => API.get("/api/admin/getallfaculty");
 
 export const getAllAdmin = () => API.get("/api/admin/getalladmin");
 
-export const getAllDepartment = () => API.get("/api/admin/getalldepartment");
+export const getAllCourse = () => API.get("/api/admin/getallcourse");
 export const getAllSubject = () => API.get("/api/admin/getallsubject");
 
 export const updateAdmin = (updatedAdmin) =>
@@ -44,19 +42,16 @@ export const deleteStudent = (data) =>
   API.post("/api/admin/deletestudent", data);
 export const deleteSubject = (data) =>
   API.post("/api/admin/deletesubject", data);
-export const deleteDepartment = (data) =>
-  API.post("/api/admin/deletedepartment", data);
+export const deleteCourse = (data) => API.post("/api/admin/deletecourse", data);
 
 export const getAdmin = (admin) => API.post("/api/admin/getadmin", admin);
 
-export const addDepartment = (department) =>
-  API.post("/api/admin/adddepartment", department);
+export const addCourse = (course) => API.post("/api/admin/addcourse", course);
 
 export const addFaculty = (faculty) =>
   API.post("/api/admin/addfaculty", faculty);
 
-export const getFaculty = (department) =>
-  API.post("/api/admin/getfaculty", department);
+export const getFaculty = (course) => API.post("/api/admin/getfaculty", course);
 
 export const addSubject = (subject) =>
   API.post("/api/admin/addsubject", subject);

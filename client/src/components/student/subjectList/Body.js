@@ -13,7 +13,7 @@ const Body = () => {
   const [loading, setLoading] = useState(false);
   const store = useSelector((state) => state);
   const [value, setValue] = useState({
-    department: "",
+    course: "",
     year: "",
   });
   const [search, setSearch] = useState(false);
@@ -88,21 +88,26 @@ const Body = () => {
                   {subjects?.map((sub, idx) => (
                     <div
                       key={idx}
-                      className={`${classes.adminDataBody} grid-cols-7`}>
+                      className={`${classes.adminDataBody} grid-cols-7`}
+                    >
                       <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-1 ${classes.adminDataBodyFields}`}
+                      >
                         {idx + 1}
                       </h1>
                       <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-2 ${classes.adminDataBodyFields}`}
+                      >
                         {sub.subjectCode}
                       </h1>
                       <h1
-                        className={`col-span-3 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-3 ${classes.adminDataBodyFields}`}
+                      >
                         {sub.subjectName}
                       </h1>
                       <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-1 ${classes.adminDataBodyFields}`}
+                      >
                         {sub.totalLectures}
                       </h1>
                     </div>

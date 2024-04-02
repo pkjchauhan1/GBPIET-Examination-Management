@@ -8,17 +8,18 @@ import MenuItem from "@mui/material/MenuItem";
 import Spinner from "../../../utils/Spinner";
 import { ADD_FACULTY, SET_ERRORS } from "../../../redux/actionTypes";
 import * as classes from "../../../utils/styles";
+
 const Body = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
-  const departments = useSelector((state) => state.admin.allDepartment);
+  const courses = useSelector((state) => state.admin.allCourse);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const [value, setValue] = useState({
     name: "",
     dob: "",
     email: "",
-    department: "",
+    course: "",
     contactNumber: "",
     avatar: "",
     joiningYear: Date().split(" ")[3],
@@ -48,7 +49,7 @@ const Body = () => {
           name: "",
           dob: "",
           email: "",
-          department: "",
+          course: "",
           contactNumber: "",
           avatar: "",
           joiningYear: Date().split(" ")[3],
@@ -137,20 +138,21 @@ const Body = () => {
               </div>
               <div className={classes.adminForm2r}>
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Department :</h1>
+                  <h1 className={classes.adminLabel}>Course :</h1>
                   <Select
                     required
                     displayEmpty
                     sx={{ height: 36 }}
                     inputProps={{ "aria-label": "Without label" }}
-                    value={value.department}
+                    value={value.course}
                     onChange={(e) =>
-                      setValue({ ...value, department: e.target.value })
-                    }>
+                      setValue({ ...value, course: e.target.value })
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
-                    {departments?.map((dp, idx) => (
-                      <MenuItem key={idx} value={dp.department}>
-                        {dp.department}
+                    {courses?.map((dp, idx) => (
+                      <MenuItem key={idx} value={dp.course}>
+                        {dp.course}
                       </MenuItem>
                     ))}
                   </Select>
@@ -165,7 +167,8 @@ const Body = () => {
                     value={value.gender}
                     onChange={(e) =>
                       setValue({ ...value, gender: e.target.value })
-                    }>
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="Male">Male</MenuItem>
                     <MenuItem value="Female">Female</MenuItem>
@@ -209,7 +212,7 @@ const Body = () => {
                     name: "",
                     dob: "",
                     email: "",
-                    department: "",
+                    course: "",
                     contactNumber: "",
                     avatar: "",
                     joiningYear: Date().split(" ")[3],
@@ -219,7 +222,8 @@ const Body = () => {
                   setError({});
                 }}
                 className={classes.adminFormClearButton}
-                type="button">
+                type="button"
+              >
                 Clear
               </button>
             </div>

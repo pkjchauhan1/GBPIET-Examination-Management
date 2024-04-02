@@ -16,7 +16,7 @@ const schema = yup
     avatar: yup.string().required(),
     username: yup.string().required(),
     password: yup.string().required(),
-    department: yup.string().required(),
+    course: yup.string().required(),
     joiningYear: yup.string().required(),
     contactNumber: yup.string().required(),
     email: yup.string().email().required(),
@@ -30,7 +30,7 @@ const defaultValues = {
   avatar: "",
   username: "",
   password: "",
-  department: "",
+  course: "",
   joiningYear: "",
   showPassword: "",
   contactNumber: "",
@@ -68,7 +68,7 @@ const AdminRegister = () => {
       avatar,
       username,
       password,
-      department,
+      course,
       contactNumber,
       joiningYear,
     } = data;
@@ -81,7 +81,7 @@ const AdminRegister = () => {
         avatar,
         username,
         password,
-        department,
+        course,
         contactNumber,
         joiningYear: new Date(joiningYear).getFullYear(),
       })
@@ -237,10 +237,10 @@ const AdminRegister = () => {
             </div>
           </div>
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Department</p>
+            <p className="text-[#515966] font-bold text-sm">Course</p>
             <div
               className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.department ? "border border-red-500" : ""
+                errors.course ? "border border-red-500" : ""
               }`}
             >
               <Controller

@@ -17,7 +17,8 @@ const Body = () => {
           </div>
           <div
             onClick={() => navigate("/admin/update")}
-            className="flex space-x-2 cursor-pointer">
+            className="flex space-x-2 cursor-pointer"
+          >
             <SecurityUpdateIcon />
             <h1 className="font-bold">Update</h1>
           </div>
@@ -31,7 +32,7 @@ const Body = () => {
               <Data label="Name" value={user.result.name} />
               <Data label="Email" value={user.result.email} />
               <Data label="Username" value={user.result.username} />
-              <Data label="Department" value={user.result.department} />
+              <Data label="Course" value={user.result.course} />
             </div>
             <div className="flex flex-col space-y-10 ">
               <Data label="DOB" value={user.result.dob} />

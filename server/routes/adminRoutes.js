@@ -10,16 +10,16 @@ import {
   getSubject,
   addStudent,
   getStudent,
-  addDepartment,
+  addCourse,
   getAllStudent,
   getAllFaculty,
   getAllAdmin,
-  getAllDepartment,
+  getAllCourse,
   getAllSubject,
   updatedPassword,
   getAdmin,
   deleteAdmin,
-  deleteDepartment,
+  deleteCourse,
   deleteFaculty,
   deleteStudent,
   deleteSubject,
@@ -51,9 +51,9 @@ router.post("/getfaculty", auth, getFaculty);
 router.get("/getallfaculty", auth, getAllFaculty);
 router.post("/deletefaculty", auth, deleteFaculty);
 
-router.post("/adddepartment", auth, addDepartment);
-router.get("/getalldepartment", auth, getAllDepartment);
-router.post("/deletedepartment", auth, deleteDepartment);
+router.post("/addcourse", auth, addCourse);
+router.get("/getallcourse", auth, getAllCourse);
+router.post("/deletecourse", auth, deleteCourse);
 
 router.post("/addsubject", auth, addSubject);
 router.post("/getsubject", auth, getSubject);

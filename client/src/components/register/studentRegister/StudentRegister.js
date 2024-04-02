@@ -16,7 +16,7 @@ const StudentRegister = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [gender, setGender] = useState(undefined);
-  const [department, setDepartment] = useState("");
+  const [course, setCourse] = useState("");
   const [fatherName, setFatherName] = useState("");
   const [section, setSection] = useState(undefined);
   const [translate, setTranslate] = useState(false);
@@ -54,7 +54,7 @@ const StudentRegister = () => {
     //     avatar,
     //     username,
     //     password,
-    //     department,
+    //     course,
     //     designation,
     //     contactNumber,
     //     joiningYear: new Date(joiningYear).getFullYear(),
@@ -73,7 +73,7 @@ const StudentRegister = () => {
       setPassword("");
       setFatherName("");
       setLoading(false);
-      setDepartment("");
+      setCourset("");
       setDob(new Date());
       setShowPassword("");
       setContactNumber("");
@@ -222,13 +222,13 @@ const StudentRegister = () => {
             </div>
           </div>
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Department</p>
+            <p className="text-[#515966] font-bold text-sm">Course</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
               <input
                 required
                 type="text"
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
+                value={course}
+                onChange={(e) => setCourse(e.target.value)}
                 className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
               />
             </div>

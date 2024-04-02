@@ -16,20 +16,12 @@ const StudentHome = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getSubject(user.result.department, user.result.year));
+    dispatch(getSubject(user.result.course, user.result.year));
     dispatch(
-      getTestResult(
-        user.result.department,
-        user.result.year,
-        user.result.section
-      )
+      getTestResult(user.result.course, user.result.year, user.result.section)
     );
     dispatch(
-      getAttendance(
-        user.result.department,
-        user.result.year,
-        user.result.section
-      )
+      getAttendance(user.result.course, user.result.year, user.result.section)
     );
     dispatch(getNotice());
   }, [dispatch]);

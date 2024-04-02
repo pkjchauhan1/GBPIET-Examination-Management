@@ -20,7 +20,7 @@ const Body = () => {
     test: "",
     totalMarks: "",
     date: "",
-    department: user.result.department,
+    course: user.result.course,
   });
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const Body = () => {
         test: "",
         totalMarks: "",
         date: "",
-        department: user.result.department,
+        course: user.result.course,
       });
     }
   }, [store.errors]);
@@ -56,7 +56,7 @@ const Body = () => {
           test: "",
           totalMarks: "",
           date: "",
-          department: user.result.department,
+          course: user.result.course,
         });
 
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -79,7 +79,10 @@ const Body = () => {
           <h1>Create Result</h1>
         </div>
         <div className=" mr-10 bg-white flex flex-col rounded-xl ">
-          <form className={`${classes.adminForm0} scrollbar-thin scrollbar-track-white scrollbar-thumb-black overflow-y-scroll h-[30rem]`} onSubmit={handleSubmit}>
+          <form
+            className={`${classes.adminForm0} scrollbar-thin scrollbar-track-white scrollbar-thumb-black overflow-y-scroll h-[30rem]`}
+            onSubmit={handleSubmit}
+          >
             <div className={classes.adminForm1}>
               <div className={classes.adminForm2l}>
                 <div className={classes.adminForm3}>
@@ -127,7 +130,9 @@ const Body = () => {
                 </div>
 
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Month & Year of Examination :</h1>
+                  <h1 className={classes.adminLabel}>
+                    Month & Year of Examination :
+                  </h1>
 
                   <input
                     required
@@ -150,7 +155,8 @@ const Body = () => {
                     value={value.year}
                     onChange={(e) =>
                       setValue({ ...value, year: e.target.value })
-                    }>
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="1">1</MenuItem>
                     <MenuItem value="2">2</MenuItem>
@@ -225,7 +231,8 @@ const Body = () => {
                     value={value.section}
                     onChange={(e) =>
                       setValue({ ...value, section: e.target.value })
-                    }>
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="1">1</MenuItem>
                     <MenuItem value="2">2</MenuItem>
@@ -233,7 +240,6 @@ const Body = () => {
                   </Select>
                 </div>
               </div>
-              
             </div>
             <div className={classes.adminFormButton}>
               <button className={classes.adminFormSubmitButton} type="submit">
@@ -248,12 +254,13 @@ const Body = () => {
                     test: "",
                     totalMarks: "",
                     date: "",
-                    department: "",
+                    course: "",
                   });
                   setError({});
                 }}
                 className={classes.adminFormClearButton}
-                type="button">
+                type="button"
+              >
                 Clear
               </button>
             </div>

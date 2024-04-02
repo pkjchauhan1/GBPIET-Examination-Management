@@ -10,7 +10,7 @@ const testSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  department: {
+  course: {
     type: String,
     required: true,
   },

@@ -11,7 +11,7 @@ import { CREATE_NOTICE, SET_ERRORS } from "../../../redux/actionTypes";
 const Body = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
-  const departments = useSelector((state) => state.admin.allDepartment);
+  // const courses = useSelector((state) => state.admin.allCourse);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const [value, setValue] = useState({
@@ -109,7 +109,8 @@ const Body = () => {
                     value={value.noticeFor}
                     onChange={(e) =>
                       setValue({ ...value, noticeFor: e.target.value })
-                    }>
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="all">All</MenuItem>
                     <MenuItem value="faculty">Faculty</MenuItem>
@@ -168,7 +169,8 @@ const Body = () => {
                   setError({});
                 }}
                 className={classes.adminFormClearButton}
-                type="button">
+                type="button"
+              >
                 Clear
               </button>
             </div>

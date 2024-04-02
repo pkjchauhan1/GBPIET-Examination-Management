@@ -3,12 +3,12 @@ import Body from "./Body";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { useDispatch } from "react-redux";
-import { getAllDepartment } from "../../../../redux/actions/adminActions";
+import { getAllCourse } from "../../../../redux/actions/adminActions";
 
 const Update = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllDepartment());
+    dispatch(getAllCourse());
   }, [dispatch]);
   return (
     <div className="bg-[#d6d9e0] h-screen flex items-center justify-center">

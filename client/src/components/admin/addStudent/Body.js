@@ -12,7 +12,7 @@ import * as classes from "../../../utils/styles";
 const Body = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
-  const departments = useSelector((state) => state.admin.allDepartment);
+  const courses = useSelector((state) => state.admin.allCourse);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const errorRef = useRef();
@@ -21,7 +21,7 @@ const Body = () => {
     name: "",
     dob: "",
     email: "",
-    department: "",
+    course: "",
     contactNumber: "",
     avatar: "",
     batch: "",
@@ -57,7 +57,7 @@ const Body = () => {
           name: "",
           dob: "",
           email: "",
-          department: "",
+          course: "",
           contactNumber: "",
           avatar: "",
           batch: "",
@@ -92,7 +92,8 @@ const Body = () => {
         <div className=" mr-10 bg-white flex flex-col rounded-xl ">
           <form
             className={`${classes.adminForm0} scrollbar-thin scrollbar-track-white scrollbar-thumb-black overflow-y-scroll h-[30rem]`}
-            onSubmit={handleSubmit}>
+            onSubmit={handleSubmit}
+          >
             <div className={classes.adminForm1}>
               <div className={classes.adminForm2l}>
                 <div className={classes.adminForm3}>
@@ -189,7 +190,8 @@ const Body = () => {
                     value={value.year}
                     onChange={(e) =>
                       setValue({ ...value, year: e.target.value })
-                    }>
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="1">1</MenuItem>
                     <MenuItem value="2">2</MenuItem>
@@ -200,20 +202,21 @@ const Body = () => {
               </div>
               <div className={classes.adminForm2r}>
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Department :</h1>
+                  <h1 className={classes.adminLabel}>Course :</h1>
                   <Select
                     required
                     displayEmpty
                     sx={{ height: 36 }}
                     inputProps={{ "aria-label": "Without label" }}
-                    value={value.department}
+                    value={value.course}
                     onChange={(e) =>
-                      setValue({ ...value, department: e.target.value })
-                    }>
+                      setValue({ ...value, course: e.target.value })
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
-                    {departments?.map((dp, idx) => (
-                      <MenuItem key={idx} value={dp.department}>
-                        {dp.department}
+                    {courses?.map((dp, idx) => (
+                      <MenuItem key={idx} value={dp.course}>
+                        {dp.course}
                       </MenuItem>
                     ))}
                   </Select>
@@ -228,7 +231,8 @@ const Body = () => {
                     value={value.gender}
                     onChange={(e) =>
                       setValue({ ...value, gender: e.target.value })
-                    }>
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="Male">Male</MenuItem>
                     <MenuItem value="Female">Female</MenuItem>
@@ -297,7 +301,8 @@ const Body = () => {
                     value={value.section}
                     onChange={(e) =>
                       setValue({ ...value, section: e.target.value })
-                    }>
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="1">1</MenuItem>
                     <MenuItem value="2">2</MenuItem>
@@ -328,7 +333,7 @@ const Body = () => {
                     name: "",
                     dob: "",
                     email: "",
-                    department: "",
+                    course: "",
                     contactNumber: "",
                     avatar: "",
                     batch: "",
@@ -343,7 +348,8 @@ const Body = () => {
                   setError({});
                 }}
                 className={classes.adminFormClearButton}
-                type="button">
+                type="button"
+              >
                 Clear
               </button>
             </div>

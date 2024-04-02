@@ -15,14 +15,14 @@ const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const store = useSelector((state) => state);
-  const departments = useSelector((state) => state.admin.allDepartment);
+  const courses = useSelector((state) => state.admin.allCourse);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const [value, setValue] = useState({
     name: "",
     dob: "",
     email: user.result.email,
-    department: "",
+    course: "",
     contactNumber: "",
     avatar: "",
     designation: "",
@@ -41,7 +41,7 @@ const Body = () => {
     if (
       value.name === "" &&
       value.dob === "" &&
-      value.department === "" &&
+      value.course === "" &&
       value.contactNumber === "" &&
       value.avatar === "" &&
       value.designation === ""
@@ -77,7 +77,8 @@ const Body = () => {
 
           <div
             onClick={() => navigate("/faculty/update/password")}
-            className="flex space-x-2 cursor-pointer">
+            className="flex space-x-2 cursor-pointer"
+          >
             <VisibilityOffIcon />
             <h1 className="font-bold">Password</h1>
           </div>
@@ -138,19 +139,20 @@ const Body = () => {
 
               <div className={classes.adminForm2r}>
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Department :</h1>
+                  <h1 className={classes.adminLabel}>Course :</h1>
                   <Select
                     displayEmpty
                     sx={{ height: 36 }}
                     inputProps={{ "aria-label": "Without label" }}
-                    value={value.department}
+                    value={value.course}
                     onChange={(e) =>
-                      setValue({ ...value, department: e.target.value })
-                    }>
+                      setValue({ ...value, course: e.target.value })
+                    }
+                  >
                     <MenuItem value="">None</MenuItem>
-                    {departments?.map((dp, idx) => (
-                      <MenuItem key={idx} value={dp.department}>
-                        {dp.department}
+                    {courses?.map((dp, idx) => (
+                      <MenuItem key={idx} value={dp.course}>
+                        {dp.course}
                       </MenuItem>
                     ))}
                   </Select>
@@ -190,7 +192,8 @@ const Body = () => {
               <button
                 onClick={() => navigate("/admin/profile")}
                 className={classes.adminFormClearButton}
-                type="button">
+                type="button"
+              >
                 Cancel
               </button>
             </div>

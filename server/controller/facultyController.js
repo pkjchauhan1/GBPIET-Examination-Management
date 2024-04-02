@@ -85,8 +85,8 @@ export const updateFaculty = async (req, res) => {
       updatedFaculty.dob = dob;
       await updatedFaculty.save();
     }
-    if (department) {
-      updatedFaculty.department = department;
+    if (course) {
+      updatedFaculty.course = course;
       await updatedFaculty.save();
     }
     if (contactNumber) {
@@ -111,12 +111,12 @@ export const updateFaculty = async (req, res) => {
 
 export const createTest = async (req, res) => {
   try {
-    const { subjectCode, department, year, section, date, test, totalMarks } =
+    const { subjectCode, course, year, section, date, test, totalMarks } =
       req.body;
     const errors = { testError: String };
     const existingTest = await Test.findOne({
       subjectCode,
-      department,
+      course,
       year,
       section,
       test,
@@ -131,13 +131,13 @@ export const createTest = async (req, res) => {
       section,
       test,
       date,
-      department,
+      course,
       subjectCode,
       year,
     });
 
     await newTest.save();
-    const students = await Student.find({ department, year, section });
+    const students = await Student.find({ course, year, section });
     return res.status(200).json({
       success: true,
       message: "Test added successfully",
@@ -152,9 +152,9 @@ export const createTest = async (req, res) => {
 
 export const getTest = async (req, res) => {
   try {
-    const { department, year, section } = req.body;
+    const { course, year, section } = req.body;
 
-    const tests = await Test.find({ department, year, section });
+    const tests = await Test.find({ course, year, section });
 
     res.status(200).json({ result: tests });
   } catch (error) {
@@ -166,9 +166,9 @@ export const getTest = async (req, res) => {
 
 export const getStudent = async (req, res) => {
   try {
-    const { department, year, section } = req.body;
+    const { course, year, section } = req.body;
     const errors = { noStudentError: String };
-    const students = await Student.find({ department, year, section });
+    const students = await Student.find({ course, year, section });
     if (students.length === 0) {
       errors.noStudentError = "No Student Found";
       return res.status(404).json(errors);
@@ -184,11 +184,11 @@ export const getStudent = async (req, res) => {
 
 export const uploadMarks = async (req, res) => {
   try {
-    const { department, year, section, test, marks } = req.body;
+    const { course, year, section, test, marks } = req.body;
 
     const errors = { examError: String };
     const existingTest = await Test.findOne({
-      department,
+      course,
       year,
       section,
       test,
@@ -220,12 +220,11 @@ export const uploadMarks = async (req, res) => {
 
 export const markAttendance = async (req, res) => {
   try {
-    const { selectedStudents, subjectName, department, year, section } =
-      req.body;
+    const { selectedStudents, subjectName, course, year, section } = req.body;
 
     const sub = await Subject.findOne({ subjectName });
 
-    const allStudents = await Student.find({ department, year, section });
+    const allStudents = await Student.find({ course, year, section });
 
     for (let i = 0; i < allStudents.length; i++) {
       const pre = await Attendence.findOne({

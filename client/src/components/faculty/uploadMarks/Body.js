@@ -18,7 +18,7 @@ const Body = () => {
   const [marks, setMarks] = useState([]);
 
   const [value, setValue] = useState({
-    department: "",
+    course: "",
     year: "",
     section: "",
     test: "",
@@ -29,7 +29,7 @@ const Body = () => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
       setLoading(false);
-      setValue({ department: "", year: "", section: "", test: "" });
+      setValue({ course: "", year: "", section: "", test: "" });
     }
   }, [store.errors]);
 
@@ -56,7 +56,7 @@ const Body = () => {
   const uploadMarks = (e) => {
     setError({});
     dispatch(
-      uploadMark(marks, value.department, value.section, value.year, value.test)
+      uploadMark(marks, value.course, value.section, value.year, value.test)
     );
   };
 
@@ -66,14 +66,14 @@ const Body = () => {
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
-    setValue({ ...value, department: user.result.department });
+    setValue({ ...value, course: user.result.course });
   }, []);
 
   useEffect(() => {
     if (store.errors || store.faculty.marksUploaded) {
       setLoading(false);
       if (store.faculty.marksUploaded) {
-        setValue({ department: "", year: "", test: "", section: "" });
+        setValue({ course: "", year: "", test: "", section: "" });
         setSearch(false);
         dispatch({ type: SET_ERRORS, payload: {} });
         dispatch({ type: MARKS_UPLOADED, payload: false });
@@ -99,7 +99,8 @@ const Body = () => {
         <div className=" mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]">
           <form
             className="flex flex-col space-y-2 col-span-1"
-            onSubmit={handleSubmit}>
+            onSubmit={handleSubmit}
+          >
             <label htmlFor="year">Year</label>
             <Select
               required
@@ -107,7 +108,8 @@ const Body = () => {
               sx={{ height: 36, width: 224 }}
               inputProps={{ "aria-label": "Without label" }}
               value={value.year}
-              onChange={(e) => setValue({ ...value, year: e.target.value })}>
+              onChange={(e) => setValue({ ...value, year: e.target.value })}
+            >
               <MenuItem value="">None</MenuItem>
               <MenuItem value="1">1</MenuItem>
               <MenuItem value="2">2</MenuItem>
@@ -121,7 +123,8 @@ const Body = () => {
               sx={{ height: 36, width: 224 }}
               inputProps={{ "aria-label": "Without label" }}
               value={value.section}
-              onChange={(e) => setValue({ ...value, section: e.target.value })}>
+              onChange={(e) => setValue({ ...value, section: e.target.value })}
+            >
               <MenuItem value="">None</MenuItem>
               <MenuItem value="1">1</MenuItem>
               <MenuItem value="2">2</MenuItem>
@@ -134,7 +137,8 @@ const Body = () => {
               sx={{ height: 36, width: 224 }}
               inputProps={{ "aria-label": "Without label" }}
               value={value.test}
-              onChange={(e) => setValue({ ...value, test: e.target.value })}>
+              onChange={(e) => setValue({ ...value, test: e.target.value })}
+            >
               <MenuItem value="">None</MenuItem>
               {tests?.map((test, idx) => (
                 <MenuItem value={test.test} key={idx}>
@@ -144,7 +148,8 @@ const Body = () => {
             </Select>
             <button
               className={`${classes.adminFormSubmitButton} w-56`}
-              type="submit">
+              type="submit"
+            >
               Search
             </button>
           </form>
@@ -191,22 +196,27 @@ const Body = () => {
                   {students?.map((stu, idx) => (
                     <div
                       key={idx}
-                      className={`${classes.adminDataBody} grid-cols-8`}>
+                      className={`${classes.adminDataBody} grid-cols-8`}
+                    >
                       <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-1 ${classes.adminDataBodyFields}`}
+                      >
                         {idx + 1}
                       </h1>
                       <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-2 ${classes.adminDataBodyFields}`}
+                      >
                         {stu.name}
                       </h1>
                       <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-2 ${classes.adminDataBodyFields}`}
+                      >
                         {stu.username}
                       </h1>
 
                       <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-1 ${classes.adminDataBodyFields}`}
+                      >
                         {stu.section}
                       </h1>
                       <input
@@ -225,7 +235,8 @@ const Body = () => {
               <div className="">
                 <button
                   onClick={uploadMarks}
-                  className={`${classes.adminFormSubmitButton} bg-blue-500 mt-5 ml-[22rem]`}>
+                  className={`${classes.adminFormSubmitButton} bg-blue-500 mt-5 ml-[22rem]`}
+                >
                   Upload
                 </button>
               </div>

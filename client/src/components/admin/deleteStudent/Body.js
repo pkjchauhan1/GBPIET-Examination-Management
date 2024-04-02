@@ -9,14 +9,14 @@ import { DELETE_STUDENT, SET_ERRORS } from "../../../redux/actionTypes";
 
 const Body = () => {
   const dispatch = useDispatch();
-  const departments = useSelector((state) => state.admin.allDepartment);
+  const courses = useSelector((state) => state.admin.allCourse);
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const store = useSelector((state) => state);
   const [checkedValue, setCheckedValue] = useState([]);
 
   const [value, setValue] = useState({
-    department: "",
+    course: "",
     year: "",
   });
   const [search, setSearch] = useState(false);
@@ -57,7 +57,7 @@ const Body = () => {
 
   useEffect(() => {
     if (store.admin.studentDeleted) {
-      setValue({ department: "", year: "" });
+      setValue({ course: "", year: "" });
       setSearch(false);
       setLoading(false);
       dispatch({ type: DELETE_STUDENT, payload: false });
@@ -82,21 +82,21 @@ const Body = () => {
         <div className=" mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]">
           <form
             className="flex flex-col space-y-2 col-span-1"
-            onSubmit={handleSubmit}>
-            <label htmlFor="department">Department</label>
+            onSubmit={handleSubmit}
+          >
+            <label htmlFor="course">Course</label>
             <Select
               required
               displayEmpty
               sx={{ height: 36, width: 224 }}
               inputProps={{ "aria-label": "Without label" }}
-              value={value.department}
-              onChange={(e) =>
-                setValue({ ...value, department: e.target.value })
-              }>
+              value={value.course}
+              onChange={(e) => setValue({ ...value, course: e.target.value })}
+            >
               <MenuItem value="">None</MenuItem>
-              {departments?.map((dp, idx) => (
-                <MenuItem key={idx} value={dp.department}>
-                  {dp.department}
+              {courses?.map((dp, idx) => (
+                <MenuItem key={idx} value={dp.course}>
+                  {dp.course}
                 </MenuItem>
               ))}
             </Select>
@@ -107,7 +107,8 @@ const Body = () => {
               sx={{ height: 36, width: 224 }}
               inputProps={{ "aria-label": "Without label" }}
               value={value.year}
-              onChange={(e) => setValue({ ...value, year: e.target.value })}>
+              onChange={(e) => setValue({ ...value, year: e.target.value })}
+            >
               <MenuItem value="">None</MenuItem>
               <MenuItem value="1">1</MenuItem>
               <MenuItem value="2">2</MenuItem>
@@ -117,7 +118,8 @@ const Body = () => {
 
             <button
               className={`${classes.adminFormSubmitButton} w-56`}
-              type="submit">
+              type="submit"
+            >
               Search
             </button>
           </form>
@@ -164,7 +166,8 @@ const Body = () => {
                   {students?.map((adm, idx) => (
                     <div
                       key={idx}
-                      className={`${classes.adminDataBody} grid-cols-8`}>
+                      className={`${classes.adminDataBody} grid-cols-8`}
+                    >
                       <input
                         onChange={handleInputChange}
                         value={adm._id}
@@ -172,20 +175,24 @@ const Body = () => {
                         type="checkbox"
                       />
                       <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-1 ${classes.adminDataBodyFields}`}
+                      >
                         {idx + 1}
                       </h1>
                       <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-2 ${classes.adminDataBodyFields}`}
+                      >
                         {adm.name}
                       </h1>
                       <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-2 ${classes.adminDataBodyFields}`}
+                      >
                         {adm.username}
                       </h1>
 
                       <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
+                        className={`col-span-2 ${classes.adminDataBodyFields}`}
+                      >
                         {adm.section}
                       </h1>
                     </div>
@@ -196,7 +203,8 @@ const Body = () => {
               <div className="space-x-3 flex items-center justify-center mt-5">
                 <button
                   onClick={dltStudent}
-                  className={`${classes.adminFormSubmitButton} bg-blue-500`}>
+                  className={`${classes.adminFormSubmitButton} bg-blue-500`}
+                >
                   Delete
                 </button>
               </div>

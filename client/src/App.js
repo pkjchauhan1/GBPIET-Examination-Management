@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import AddAdmin from "./components/admin/addAdmin/AddAdmin";
-import AddDepartment from "./components/admin/addDepartment/AddDepartment";
+import AddCourse from "./components/admin/addCourse/AddCourse";
 import AddFaculty from "./components/admin/addFaculty/AddFaculty";
 import AddStudent from "./components/admin/addStudent/AddStudent";
 import AddSubject from "./components/admin/addSubject/AddSubject";
@@ -41,7 +41,7 @@ import SubjectList from "./components/student/subjectList/SubjectList";
 import TestResult from "./components/student/testResult/TestResult";
 import Attendance from "./components/student/attendance/Attendance";
 import DeleteAdmin from "./components/admin/deleteAdmin/DeleteAdmin";
-import DeleteDepartment from "./components/admin/deleteDepartment/DeleteDepartment";
+import DeleteCourse from "./components/admin/deleteCourse/DeleteCourse";
 import DeleteFaculty from "./components/admin/deleteFaculty/DeleteFaculty";
 import DeleteStudent from "./components/admin/deleteStudent/DeleteStudent";
 import DeleteSubject from "./components/admin/deleteSubject/DeleteSubject";
@@ -68,8 +68,8 @@ const App = () => {
       <Route path="/admin/createnotice" element={<CreateNotice />} />
       <Route path="/admin/addadmin" element={<AddAdmin />} />
       <Route path="/admin/deleteadmin" element={<DeleteAdmin />} />
-      <Route path="/admin/adddepartment" element={<AddDepartment />} />
-      <Route path="/admin/deletedepartment" element={<DeleteDepartment />} />
+      <Route path="/admin/addcourse" element={<AddCourse />} />
+      <Route path="/admin/deletecourse" element={<DeleteCourse />} />
       <Route path="/admin/addfaculty" element={<AddFaculty />} />
       <Route path="/admin/deletefaculty" element={<DeleteFaculty />} />
       <Route path="/admin/deletestudent" element={<DeleteStudent />} />

@@ -38,7 +38,8 @@ const Sidebar = () => {
             to="/faculty/home"
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
-            }>
+            }
+          >
             <HomeIcon className="" />
             <h1 className="font-normal">Dashboard</h1>
           </NavLink>
@@ -46,7 +47,8 @@ const Sidebar = () => {
             to="/faculty/profile"
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
-            }>
+            }
+          >
             <AssignmentIndIcon className="" />
             <h1 className="font-normal">Profile</h1>
           </NavLink>
@@ -56,7 +58,8 @@ const Sidebar = () => {
             to="/faculty/createtest"
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
-            }>
+            }
+          >
             <AddIcon className="" />
             <h1 className="font-normal">Create Test</h1>
           </NavLink>
@@ -64,11 +67,11 @@ const Sidebar = () => {
             to="/faculty/uploadmarks"
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
-            }>
+            }
+          >
             <AddIcon className="" />
             <h1 className="font-normal">Upload Marks</h1>
           </NavLink>
-          
         </div>
         {/* <div className="">
           <NavLink
@@ -85,7 +88,8 @@ const Sidebar = () => {
             to="/faculty/result"
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
-            }>
+            }
+          >
             <EngineeringIcon className="" />
             <h1 className="font-normal">Result</h1>
           </NavLink>

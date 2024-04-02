@@ -12,11 +12,7 @@ const TestResult = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(
-      getTestResult(
-        user.result.department,
-        user.result.year,
-        user.result.section
-      )
+      getTestResult(user.result.course, user.result.year, user.result.section)
     );
   }, [dispatch]);
   return (

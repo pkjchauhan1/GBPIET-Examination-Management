@@ -10,7 +10,7 @@ const subjectSchema = new Schema({
     type: String,
     required: true,
   },
-  department: {
+  course: {
     type: String,
     required: true,
   },

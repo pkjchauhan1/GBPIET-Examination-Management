@@ -9,16 +9,16 @@ import {
   LOGOUT,
   UPDATE_ADMIN,
   GET_STUDENT,
-  ADD_DEPARTMENT,
+  ADD_COURSE,
   GET_ALL_STUDENT,
   GET_ALL_SUBJECT,
   GET_ALL_FACULTY,
   GET_ALL_ADMIN,
-  GET_ALL_DEPARTMENT,
+  GET_ALL_COURSE,
   UPDATE_PASSWORD,
   GET_ADMIN,
   DELETE_ADMIN,
-  DELETE_DEPARTMENT,
+  DELETE_COURSE,
   DELETE_FACULTY,
   DELETE_STUDENT,
   DELETE_SUBJECT,
@@ -31,7 +31,7 @@ const initialState = {
   updatedPassword: false,
   updatedAdmin: false,
   adminAdded: false,
-  departmentAdded: false,
+  courseAdded: false,
   facultyAdded: false,
   studentAdded: false,
   subjectAdded: false,
@@ -39,14 +39,14 @@ const initialState = {
   allSubject: [],
   allStudent: [],
   allAdmin: [],
-  allDepartment: [],
+  allCourse: [],
   students: [],
   faculties: [],
   subjects: [],
   admins: [],
   notices: [],
   adminDeleted: false,
-  departmentDeleted: false,
+  courseDeleted: false,
   facultyDeleted: false,
   studentDeleted: false,
   subjectDeleted: false,
@@ -87,10 +87,10 @@ const adminReducer = (state = initialState, action) => {
         ...state,
         adminDeleted: action.payload,
       };
-    case DELETE_DEPARTMENT:
+    case DELETE_COURSE:
       return {
         ...state,
-        departmentDeleted: action.payload,
+        courseDeleted: action.payload,
       };
     case DELETE_FACULTY:
       return {
@@ -107,10 +107,10 @@ const adminReducer = (state = initialState, action) => {
         ...state,
         subjectDeleted: action.payload,
       };
-    case ADD_DEPARTMENT:
+    case ADD_COURSE:
       return {
         ...state,
-        departmentAdded: action.payload,
+        courseAdded: action.payload,
       };
     case ADD_FACULTY:
       return {
@@ -142,10 +142,10 @@ const adminReducer = (state = initialState, action) => {
         ...state,
         allAdmin: action.payload,
       };
-    case GET_ALL_DEPARTMENT:
+    case GET_ALL_COURSE:
       return {
         ...state,
-        allDepartment: action.payload,
+        allCourse: action.payload,
       };
     case ADD_SUBJECT:
       return {
