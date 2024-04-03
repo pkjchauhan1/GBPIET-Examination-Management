@@ -75,14 +75,10 @@ export const updatedPassword = async (req, res) => {
 };
 export const updateAdmin = async (req, res) => {
   try {
-    const { name, dob, course, contactNumber, avatar, email } = req.body;
+    const { name, course, contactNumber, avatar, email } = req.body;
     const updatedAdmin = await Admin.findOne({ email });
     if (name) {
       updatedAdmin.name = name;
-      await updatedAdmin.save();
-    }
-    if (dob) {
-      updatedAdmin.dob = dob;
       await updatedAdmin.save();
     }
     if (course) {
@@ -107,7 +103,7 @@ export const updateAdmin = async (req, res) => {
 
 export const addAdmin = async (req, res) => {
   try {
-    const { name, dob, course, contactNumber, avatar, email, joiningYear } =
+    const { name, course, contactNumber, avatar, email, joiningYear } =
       req.body;
     const errors = { emailError: String };
     const existingAdmin = await Admin.findOne({ email });
@@ -145,7 +141,6 @@ export const addAdmin = async (req, res) => {
       course,
       avatar,
       contactNumber,
-      dob,
       passwordUpdated,
     });
     await newAdmin.save();
@@ -231,7 +226,6 @@ export const addFaculty = async (req, res) => {
   try {
     const {
       name,
-      dob,
       course,
       contactNumber,
       avatar,
@@ -278,7 +272,6 @@ export const addFaculty = async (req, res) => {
       course,
       avatar,
       contactNumber,
-      dob,
       gender,
       designation,
       passwordUpdated,
@@ -488,7 +481,6 @@ export const addStudent = async (req, res) => {
   try {
     const {
       name,
-      dob,
       course,
       contactNumber,
       avatar,
@@ -530,7 +522,6 @@ export const addStudent = async (req, res) => {
 
     const newStudent = await new Student({
       name,
-      dob,
       password: hashedPassword,
       username,
       course,

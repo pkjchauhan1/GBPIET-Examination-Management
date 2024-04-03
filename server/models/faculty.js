@@ -33,10 +33,6 @@ const facultySchema = mongoose.Schema({
   contactNumber: {
     type: Number,
   },
-  dob: {
-    type: String,
-    required: true,
-  },
   joiningYear: {
     type: Number,
     required: true,

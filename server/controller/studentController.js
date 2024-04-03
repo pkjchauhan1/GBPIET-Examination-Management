@@ -72,7 +72,6 @@ export const updateStudent = async (req, res) => {
   try {
     const {
       name,
-      dob,
       course,
       contactNumber,
       avatar,
@@ -87,10 +86,6 @@ export const updateStudent = async (req, res) => {
     const updatedStudent = await Student.findOne({ email });
     if (name) {
       updatedStudent.name = name;
-      await updatedStudent.save();
-    }
-    if (dob) {
-      updatedStudent.dob = dob;
       await updatedStudent.save();
     }
     if (course) {

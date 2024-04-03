@@ -20,9 +20,6 @@ const adminSchema = mongoose.Schema(
     course: {
       type: String,
     },
-    dob: {
-      type: String,
-    },
     avatar: {
       type: String,
     },

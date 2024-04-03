@@ -56,10 +56,6 @@ const studentSchema = new Schema({
   fatherContactNumber: {
     type: Number,
   },
-  dob: {
-    type: String,
-    required: true,
-  },
   passwordUpdated: {
     type: Boolean,
     default: false,
