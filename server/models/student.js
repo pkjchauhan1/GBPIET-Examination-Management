@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
+
 const studentSchema = new Schema({
   name: {
     type: String,
