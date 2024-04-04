@@ -3,7 +3,6 @@ import Test from "../models/test.js";
 import Student from "../models/student.js";
 import Subject from "../models/subject.js";
 import Marks from "../models/marks.js";
-import Attendence from "../models/attendance.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
@@ -74,15 +73,11 @@ export const updatedPassword = async (req, res) => {
 
 export const updateFaculty = async (req, res) => {
   try {
-    const { name, dob, department, contactNumber, avatar, email, designation } =
+    const { name, course, contactNumber, avatar, email, designation } =
       req.body;
     const updatedFaculty = await Faculty.findOne({ email });
     if (name) {
       updatedFaculty.name = name;
-      await updatedFaculty.save();
-    }
-    if (dob) {
-      updatedFaculty.dob = dob;
       await updatedFaculty.save();
     }
     if (course) {
@@ -211,58 +206,6 @@ export const uploadMarks = async (req, res) => {
       await newMarks.save();
     }
     res.status(200).json({ message: "Marks uploaded successfully" });
-  } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
-  }
-};
-
-export const markAttendance = async (req, res) => {
-  try {
-    const { selectedStudents, subjectName, course, year, section } = req.body;
-
-    const sub = await Subject.findOne({ subjectName });
-
-    const allStudents = await Student.find({ course, year, section });
-
-    for (let i = 0; i < allStudents.length; i++) {
-      const pre = await Attendence.findOne({
-        student: allStudents[i]._id,
-        subject: sub._id,
-      });
-      if (!pre) {
-        const attendence = new Attendence({
-          student: allStudents[i]._id,
-          subject: sub._id,
-        });
-        attendence.totalLecturesByFaculty += 1;
-        await attendence.save();
-      } else {
-        pre.totalLecturesByFaculty += 1;
-        await pre.save();
-      }
-    }
-
-    for (var a = 0; a < selectedStudents.length; a++) {
-      const pre = await Attendence.findOne({
-        student: selectedStudents[a],
-        subject: sub._id,
-      });
-      if (!pre) {
-        const attendence = new Attendence({
-          student: selectedStudents[a],
-          subject: sub._id,
-        });
-
-        attendence.lectureAttended += 1;
-        await attendence.save();
-      } else {
-        pre.lectureAttended += 1;
-        await pre.save();
-      }
-    }
-    res.status(200).json({ message: "Attendance Marked successfully" });
   } catch (error) {
     const errors = { backendError: String };
     errors.backendError = error;

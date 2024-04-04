@@ -7,7 +7,6 @@ import {
   GET_TEST,
   GET_STUDENT,
   MARKS_UPLOADED,
-  ATTENDANCE_MARKED,
 } from "../actionTypes";
 import * as api from "../api";
 
@@ -25,7 +24,7 @@ export const facultySignIn = (formData, navigate) => async (dispatch) => {
 export const facultyUpdatePassword =
   (formData, navigate) => async (dispatch) => {
     try {
-      const { data } = await api.facultyUpdatePassword(formData);
+      const {} = await api.facultyUpdatePassword(formData);
       dispatch({ type: UPDATE_PASSWORD, payload: true });
       alert("Password Updated");
       navigate("/faculty/home");
@@ -36,7 +35,7 @@ export const facultyUpdatePassword =
 
 export const updateFaculty = (formData) => async (dispatch) => {
   try {
-    const { data } = await api.updateFaculty(formData);
+    const {} = await api.updateFaculty(formData);
     dispatch({ type: UPDATE_FACULTY, payload: true });
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
@@ -45,7 +44,7 @@ export const updateFaculty = (formData) => async (dispatch) => {
 
 export const createTest = (formData) => async (dispatch) => {
   try {
-    const { data } = await api.createTest(formData);
+    const {} = await api.createTest(formData);
     alert("Test Created Successfully");
 
     dispatch({ type: ADD_TEST, payload: true });
@@ -82,27 +81,9 @@ export const uploadMark =
         year,
         test,
       };
-      const { data } = await api.uploadMarks(formData);
+      const {} = await api.uploadMarks(formData);
       alert("Marks Uploaded Successfully");
       dispatch({ type: MARKS_UPLOADED, payload: true });
-    } catch (error) {
-      dispatch({ type: SET_ERRORS, payload: error.response.data });
-    }
-  };
-
-export const markAttendance =
-  (checkedValue, subjectName, course, year, section) => async (dispatch) => {
-    try {
-      const formData = {
-        selectedStudents: checkedValue,
-        subjectName,
-        course,
-        year,
-        section,
-      };
-      const { data } = await api.markAttendance(formData);
-      alert("Attendance Marked Successfully");
-      dispatch({ type: ATTENDANCE_MARKED, payload: true });
     } catch (error) {
       dispatch({ type: SET_ERRORS, payload: error.response.data });
     }
