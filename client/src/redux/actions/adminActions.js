@@ -123,7 +123,7 @@ export const createNotice = (formData) => async (dispatch) => {
 };
 export const getAdmin = (formData) => async (dispatch) => {
   try {
-    const {} = await api.getAdmin(formData);
+    const { data } = await api.getAdmin(formData);
     dispatch({ type: GET_STUDENT, payload: data });
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
