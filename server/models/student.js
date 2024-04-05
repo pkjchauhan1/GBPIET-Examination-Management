@@ -11,16 +11,33 @@ const studentSchema = new Schema({
     required: true,
     unique: true,
   },
-  avatar: {
-    type: String,
-  },
   password: {
     type: String,
     required: true,
   },
+  course: {
+    type: String,
+    requireL: true,
+  },
   year: {
     type: Number,
     required: true,
+  },
+  semester: {
+    type: Number,
+    required: true,
+  },
+  university_roll_no: {
+    type: Number,
+    required: true,
+  },
+  university_enrollment_no: {
+    type: String,
+    require: true,
+  },
+  college_id: {
+    type: Number,
+    require: true,
   },
   subjects: [
     {
@@ -28,36 +45,22 @@ const studentSchema = new Schema({
       ref: "subject",
     },
   ],
-  username: {
-    type: String,
-  },
   gender: {
     type: String,
   },
-  fatherName: {
+  father_name: {
     type: String,
   },
-  motherName: {
-    type: String,
-  },
-  course: {
-    type: String,
-    required: true,
-  },
-  section: {
-    type: String,
-    required: true,
-  },
-  batch: {
-    type: String,
-  },
-  contactNumber: {
+  contact_number: {
     type: Number,
   },
-  fatherContactNumber: {
+  father_contact_number: {
     type: Number,
   },
-  passwordUpdated: {
+  avatar: {
+    type: String,
+  },
+  password_updated: {
     type: Boolean,
     default: false,
   },
