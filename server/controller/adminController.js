@@ -526,8 +526,6 @@ export const addStudent = async (req, res) => {
         avatar,
       });
 
-      // await newStudent.save();
-
       const subjects = await Subject.find({ course, year });
       if (subjects.length !== 0) {
         for (var i = 0; i < subjects.length; i++) {
