@@ -144,6 +144,7 @@ export const addAdmin = async (req, res) => {
       passwordUpdated,
     });
     await newAdmin.save();
+
     return res.status(200).json({
       success: true,
       message: "Admin registerd successfully",
