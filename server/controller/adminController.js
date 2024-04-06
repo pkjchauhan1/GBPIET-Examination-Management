@@ -477,80 +477,71 @@ export const deleteCourse = async (req, res) => {
   }
 };
 
+// TODO: add authenticationuniversi for university_rollno
+// TODO: add fields in subject schema
 export const addStudent = async (req, res) => {
   try {
     const {
       name,
       course,
-      contactNumber,
-      avatar,
-      email,
-      section,
       gender,
-      batch,
-      fatherName,
-      motherName,
-      fatherContactNumber,
-      motherContactNumber,
+      email,
+      contact_number,
+      father_name,
+      father_contact_number,
       year,
+      semester,
+      university_roll_no,
+      university_enrollment_no,
+      college_id,
+      avatar,
     } = req.body;
-    const errors = { emailError: String };
-    const existingStudent = await Student.findOne({ email });
+
+    const errors = { collegeIdError: String };
+    const existingStudent = await Student.findOne({ college_id });
+
     if (existingStudent) {
-      errors.emailError = "Email already exists";
+      errors.collegeIdError = "Student Already exists";
       return res.status(400).json(errors);
-    }
-    const existingCourse = await Course.findOne({ course });
-    let courseHelper = existingCourse.courseCode;
-
-    const students = await Student.find({ course });
-    let helper;
-    if (students.length < 10) {
-      helper = "00" + students.length.toString();
-    } else if (students.length < 100 && students.length > 9) {
-      helper = "0" + students.length.toString();
     } else {
-      helper = students.length.toString();
-    }
-    var date = new Date();
-    var components = ["STU", date.getFullYear(), courseHelper, helper];
-    var username = components.join("");
+      let newPassword = "@Abc12345";
+      let hashedPassword = await bcrypt.hash(newPassword, 10);
+      var password_updated = false;
 
-    let newPassword = "@Abc12345";
-    let hashedPassword = await bcrypt.hash(newPassword, 10);
-    var passwordUpdated = false;
+      const newStudent = await new Student({
+        name,
+        password: hashedPassword,
+        course,
+        gender,
+        email,
+        contact_number,
+        father_name,
+        father_contact_number,
+        year,
+        semester,
+        university_roll_no,
+        university_enrollment_no,
+        college_id,
+        password_updated,
+        avatar,
+      });
 
-    const newStudent = await new Student({
-      name,
-      password: hashedPassword,
-      username,
-      course,
-      contactNumber,
-      avatar,
-      email,
-      section,
-      gender,
-      batch,
-      fatherName,
-      motherName,
-      fatherContactNumber,
-      motherContactNumber,
-      year,
-      passwordUpdated,
-    });
-    await newStudent.save();
-    const subjects = await Subject.find({ course, year });
-    if (subjects.length !== 0) {
-      for (var i = 0; i < subjects.length; i++) {
-        newStudent.subjects.push(subjects[i]._id);
+      // await newStudent.save();
+
+      const subjects = await Subject.find({ course, year });
+      if (subjects.length !== 0) {
+        for (var i = 0; i < subjects.length; i++) {
+          newStudent.subjects.push(subjects[i]._id);
+        }
+        await newStudent.save();
       }
+
+      return res.status(200).json({
+        success: true,
+        message: "Student registerd successfully",
+        response: newStudent,
+      });
     }
-    await newStudent.save();
-    return res.status(200).json({
-      success: true,
-      message: "Student registerd successfully",
-      response: newStudent,
-    });
   } catch (error) {
     const errors = { backendError: String };
     errors.backendError = error;
