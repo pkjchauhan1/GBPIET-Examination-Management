@@ -52,12 +52,8 @@ const StudentLogin = () => {
   };
 
   return (
-    <div className="bg-[#d65158] h-screen w-screen flex items-center justify-center">
-      <a href="/">
-        <button className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]">
-          Home
-        </button>
-      </a>
+    <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center">
+    
       <div className="grid grid-cols-2">
         <div
           className={`h-96 w-96 bg-white flex items-center justify-center ${
@@ -144,6 +140,11 @@ const StudentLogin = () => {
           >
             Login
           </button>
+          <a href="/" className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]">
+          Home
+        
+      
+      </a>
           {loading && (
             <Spinner
               message="Logging In"
