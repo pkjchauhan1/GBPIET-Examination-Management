@@ -1,16 +1,15 @@
 import Faculty from "../models/faculty.js";
 import Student from "../models/student.js";
-import Marks from "../models/marks.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 export const facultyLogin = async (req, res) => {
-  const { username, password } = req.body;
-  const errors = { usernameError: String, passwordError: String };
+  const { email, password } = req.body;
+  const errors = { emailError: String, passwordError: String };
   try {
-    const existingFaculty = await Faculty.findOne({ username });
+    const existingFaculty = await Faculty.findOne({ email });
     if (!existingFaculty) {
-      errors.usernameError = "Faculty doesn't exist.";
+      errors.emailError = "Faculty doesn't exist.";
       return res.status(404).json(errors);
     }
     const isPasswordCorrect = await bcrypt.compare(

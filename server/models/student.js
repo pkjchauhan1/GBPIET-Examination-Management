@@ -28,7 +28,7 @@ const studentSchema = new Schema({
     required: true,
   },
   university_roll_no: {
-    type: Number,
+    type: String,
     required: true,
   },
   university_enrollment_no: {
@@ -36,7 +36,7 @@ const studentSchema = new Schema({
     require: true,
   },
   college_id: {
-    type: Number,
+    type: String,
     require: true,
   },
   subjects: [
