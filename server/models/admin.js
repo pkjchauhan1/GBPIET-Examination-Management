@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const adminSchema = mongoose.Schema(
   {
@@ -18,7 +19,8 @@ const adminSchema = mongoose.Schema(
       type: String,
     },
     course: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "course",
     },
     avatar: {
       type: String,

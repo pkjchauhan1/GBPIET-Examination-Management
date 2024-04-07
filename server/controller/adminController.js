@@ -6,6 +6,39 @@ import Subject from "../models/subject.js";
 import Notice from "../models/notice.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import transporter from "../config/nodeMailerConfig.js";
+import fs from "fs/promises";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+async function sendEmails(users) {
+  const htmlTemplate = await fs.readFile(
+    path.join(__dirname, "welcome_email.html"),
+    "utf8"
+  );
+
+  for (const user of users) {
+    let htmlContent = htmlTemplate
+      .replace("{{user_email}}", user.email)
+      .replace("{{user_pass}}", user.newPassword)
+      .replace("{{user_name}}", user.name);
+
+    try {
+      const mailInfo = await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: user.email,
+        subject: "Welcome to GBPIET Result Management System",
+        html: htmlContent,
+      });
+      return mailInfo;
+    } catch (error) {
+      console.error(`Failed to send email to ${user.email}:`, error);
+    }
+  }
+}
 
 export const adminLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -32,7 +65,7 @@ export const adminLogin = async (req, res) => {
         username: existingAdmin.username,
         id: existingAdmin._id,
       },
-      "sEcReT",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -196,18 +229,9 @@ export const addCourse = async (req, res) => {
       errors.courseError = "Course already added";
       return res.status(400).json(errors);
     }
-    const courses = await Course.find({});
-    let add = courses.length + 1;
-    let courseCode;
-    if (add < 9) {
-      courseCode = "0" + add.toString();
-    } else {
-      courseCode = add.toString();
-    }
 
     const newCourse = await new Course({
       course,
-      courseCode,
     });
 
     await newCourse.save();
@@ -225,64 +249,40 @@ export const addCourse = async (req, res) => {
 
 export const addFaculty = async (req, res) => {
   try {
-    const {
-      name,
-      course,
-      contactNumber,
-      avatar,
-      email,
-      joiningYear,
-      gender,
-      designation,
-    } = req.body;
-    const errors = { emailError: String };
-    const existingFaculty = await Faculty.findOne({ email });
+    const { name, course, contact_number, email, gender, avatar } = req.body;
+    const errors = { facultyError: String };
+    const existingFaculty = await Faculty.findOne({
+      $or: [{ email: email }, { contact_number: contact_number }],
+    });
+
     if (existingFaculty) {
-      errors.emailError = "Email already exists";
+      errors.facultyError = "Faculty already exists";
       return res.status(400).json(errors);
-    }
-
-    const existingCourse = await Course.findOne({ course });
-
-    let courseHelper = existingCourse.courseCode;
-
-    const faculties = await Faculty.find({ course });
-
-    let helper;
-    if (faculties.length < 10) {
-      helper = "00" + faculties.length.toString();
-    } else if (faculties.length < 100 && faculties.length > 9) {
-      helper = "0" + faculties.length.toString();
+    } else if (contact_number.toString().length != 10) {
+      return res.status(400).json({ message: "Invalid contact number" });
     } else {
-      helper = faculties.length.toString();
+      let newPassword = "@Abc12345";
+      let hashedPassword = await bcrypt.hash(newPassword, 10);
+      var passwordUpdated = false;
+
+      const newFaculty = await new Faculty({
+        name,
+        password: hashedPassword,
+        course,
+        contact_number,
+        email,
+        gender,
+        avatar,
+        passwordUpdated,
+      });
+      await newFaculty.save();
+      sendEmails([{ email: email, newPassword: newPassword, name: name }]);
+      return res.status(200).json({
+        success: true,
+        message: "Faculty registerd successfully, email sent",
+        response: newFaculty,
+      });
     }
-    var date = new Date();
-    var components = ["FAC", date.getFullYear(), courseHelper, helper];
-    var username = components.join("");
-
-    let newPassword = "@Abc12345";
-    let hashedPassword = await bcrypt.hash(newPassword, 10);
-    var passwordUpdated = false;
-
-    const newFaculty = await new Faculty({
-      name,
-      email,
-      password: hashedPassword,
-      joiningYear,
-      username,
-      course,
-      avatar,
-      contactNumber,
-      gender,
-      designation,
-      passwordUpdated,
-    });
-    await newFaculty.save();
-    return res.status(200).json({
-      success: true,
-      message: "Faculty registerd successfully",
-      response: newFaculty,
-    });
   } catch (error) {
     const errors = { backendError: String };
     errors.backendError = error;
@@ -306,6 +306,7 @@ export const getFaculty = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+
 export const getNotice = async (req, res) => {
   try {
     const errors = { noNoticeError: String };
@@ -480,8 +481,6 @@ export const deleteCourse = async (req, res) => {
   }
 };
 
-// TODO: add authenticationuniversi for university_rollno
-// TODO: add fields in subject schema
 export const addStudent = async (req, res) => {
   try {
     const {
@@ -504,8 +503,18 @@ export const addStudent = async (req, res) => {
     const existingStudent = await Student.findOne({ college_id });
 
     if (existingStudent) {
-      errors.collegeIdError = "Student Already exists";
+      errors.collegeIdError = "Student already exists";
       return res.status(400).json(errors);
+    } else if (college_id.length != 7) {
+      return res.status(400).json({ message: "Invalid College ID" });
+    } else if (university_roll_no.length != 12) {
+      return res.status(400).json({ message: "Invalid University Rollno" });
+    } else if (university_enrollment_no.length != 12) {
+      return res
+        .status(400)
+        .json({ message: "Invalid University Enrollment Number" });
+    } else if (contact_number.toString().length != 10) {
+      return res.status(400).json({ message: "Invalid Contact Number" });
     } else {
       let newPassword = "@Abc12345";
       let hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -528,8 +537,6 @@ export const addStudent = async (req, res) => {
         password_updated,
         avatar,
       });
-
-      // await newStudent.save();
 
       const subjects = await Subject.find({ course, year });
       if (subjects.length !== 0) {
