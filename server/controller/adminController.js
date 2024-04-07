@@ -6,6 +6,39 @@ import Subject from "../models/subject.js";
 import Notice from "../models/notice.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import transporter from "../config/nodeMailerConfig.js";
+import fs from "fs/promises";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+async function sendEmails(users) {
+  const htmlTemplate = await fs.readFile(
+    path.join(__dirname, "welcome_email.html"),
+    "utf8"
+  );
+
+  for (const user of users) {
+    let htmlContent = htmlTemplate
+      .replace("{{user_email}}", user.email)
+      .replace("{{user_pass}}", user.newPassword)
+      .replace("{{user_name}}", user.name);
+
+    try {
+      const mailInfo = await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: user.email,
+        subject: "Welcome to GBPIET Result Management System",
+        html: htmlContent,
+      });
+      return mailInfo;
+    } catch (error) {
+      console.error(`Failed to send email to ${user.email}:`, error);
+    }
+  }
+}
 
 export const adminLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -32,7 +65,7 @@ export const adminLogin = async (req, res) => {
         username: existingAdmin.username,
         id: existingAdmin._id,
       },
-      "sEcReT",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -217,11 +250,16 @@ export const addCourse = async (req, res) => {
 export const addFaculty = async (req, res) => {
   try {
     const { name, course, contact_number, email, gender, avatar } = req.body;
-    const errors = { emailError: String };
-    const existingFaculty = await Faculty.findOne({ email });
+    const errors = { facultyError: String };
+    const existingFaculty = await Faculty.findOne({
+      $or: [{ email: email }, { contact_number: contact_number }],
+    });
+
     if (existingFaculty) {
-      errors.emailError = "Email already exists";
+      errors.facultyError = "Faculty already exists";
       return res.status(400).json(errors);
+    } else if (contact_number.toString().length != 10) {
+      return res.status(400).json({ message: "Invalid contact number" });
     } else {
       let newPassword = "@Abc12345";
       let hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -238,9 +276,10 @@ export const addFaculty = async (req, res) => {
         passwordUpdated,
       });
       await newFaculty.save();
+      sendEmails([{ email: email, newPassword: newPassword, name: name }]);
       return res.status(200).json({
         success: true,
-        message: "Faculty registerd successfully",
+        message: "Faculty registerd successfully, email sent",
         response: newFaculty,
       });
     }
@@ -267,6 +306,7 @@ export const getFaculty = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+
 export const getNotice = async (req, res) => {
   try {
     const errors = { noNoticeError: String };

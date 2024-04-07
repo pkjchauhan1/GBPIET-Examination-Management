@@ -25,7 +25,7 @@ export const studentLogin = async (req, res) => {
         college_id: existingStudent.college_id,
         id: existingStudent._id,
       },
-      "sEcReT",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 

@@ -5,6 +5,7 @@ import connectDB from "./config/connection.js";
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
+const PORT = process.env.PORT;
 
 import adminRoutes from "./routes/adminRoutes.js";
 import studentRoutes from "./routes/studentRoutes.js";
@@ -22,7 +23,6 @@ app.use("/api/student", studentRoutes);
 
 connectDB(process.env.CONNECTION_URL);
 
-const PORT = process.env.PORT || 5000;
 app.listen(4000, () =>
   console.log(`Server running on -> http://localhost:${PORT}`)
 );
