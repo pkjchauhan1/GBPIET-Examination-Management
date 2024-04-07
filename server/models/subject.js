@@ -10,10 +10,12 @@ const subjectSchema = new Schema({
   subjectCode: {
     type: String,
     required: true,
+    index: true,
   },
   course: {
     type: String,
     required: true,
+    index: true,
   },
   year: {
     type: String,
@@ -22,15 +24,18 @@ const subjectSchema = new Schema({
   semester: {
     type: Number,
     required: true,
+    enum: [1, 2],
   },
   totalLectures: {
     type: Number,
     default: 15,
+    min: 0, //Ensure non-nagitive values
   },
   credits: {
-    type: Number,
     //sandy,
+    type: Number,
     required: true,
+    min: 1,
   },
   externalMarks: {
     //sandy
@@ -51,6 +56,7 @@ const subjectSchema = new Schema({
     //sandy
     type: String,
     required: true,
+    enum: ["A", "B", "C", "D", "F"],
   },
   gradePoint: {
     //sandy
