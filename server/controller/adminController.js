@@ -327,7 +327,7 @@ export const getNotice = async (req, res) => {
 
 export const addSubject = async (req, res) => {
   try {
-    const { totalLectures, course, subjectCode, subjectName, year } = req.body;
+    const { course, subjectCode, subjectName, year, semester } = req.body;
     const errors = { subjectError: String };
     const subject = await Subject.findOne({ subjectCode });
     if (subject) {
@@ -336,11 +336,11 @@ export const addSubject = async (req, res) => {
     }
 
     const newSubject = await new Subject({
-      totalLectures,
       course,
       subjectCode,
       subjectName,
       year,
+      semester,
     });
 
     await newSubject.save();
@@ -365,12 +365,12 @@ export const addSubject = async (req, res) => {
 
 export const getSubject = async (req, res) => {
   try {
-    const { course, year } = req.body;
+    const { course, year, semester } = req.body;
 
     if (!req.userId) return res.json({ message: "Unauthenticated" });
     const errors = { noSubjectError: String };
 
-    const subjects = await Subject.find({ course, year });
+    const subjects = await Subject.find({ course, year, semester });
     if (subjects.length === 0) {
       errors.noSubjectError = "No Subject Found";
       return res.status(404).json(errors);
@@ -452,18 +452,24 @@ export const deleteStudent = async (req, res) => {
 };
 export const deleteSubject = async (req, res) => {
   try {
-    const subjects = req.body;
-    const errors = { noSubjectError: String };
-    for (var i = 0; i < subjects.length; i++) {
-      var subject = subjects[i];
-
-      await Subject.findOneAndDelete({ _id: subject });
+    const subjectIds = req.body;
+    if (!Array.isArray(subjectIds) || subjectIds.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No subjects provided for deletion." });
     }
-    res.status(200).json({ message: "Subject Deleted" });
+    const result = await Subject.deleteMany({ _id: { $in: subjectIds } });
+    if (result.deletedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "No subjects found with the provided IDs." });
+    }
+    res.status(200).json({ message: "Subjects deleted successfully." });
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
+    console.error("Backend Error:", error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
@@ -614,8 +620,9 @@ export const getAllCourse = async (req, res) => {
 export const getAllSubject = async (req, res) => {
   try {
     const subjects = await Subject.find();
-    res.status(200).json(subjects);
+    res.status(200).json({ success: true, data: subjects });
   } catch (error) {
-    console.log("Backend Error", error);
+    console.error("Backend Error", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

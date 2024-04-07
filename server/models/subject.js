@@ -32,34 +32,28 @@ const subjectSchema = new Schema({
     min: 0, //Ensure non-nagitive values
   },
   credits: {
-    //sandy,
     type: Number,
     required: true,
     min: 1,
   },
   externalMarks: {
-    //sandy
     type: Number,
     required: true,
   },
   sessionalMarks: {
-    //sandy
     type: Number,
     required: true,
   },
   totalMarks: {
-    //sandy
     type: Number,
     required: true,
   },
   grade: {
-    //sandy
     type: String,
     required: true,
     enum: ["A", "B", "C", "D", "F"],
   },
   gradePoint: {
-    //sandy
     type: Number,
     required: true,
   },
