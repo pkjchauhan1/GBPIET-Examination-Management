@@ -322,6 +322,8 @@ export const getNotice = async (req, res) => {
   }
 };
 
+//Sandy
+
 export const addSubject = async (req, res) => {
   try {
     const { totalLectures, course, subjectCode, subjectName, year } = req.body;
