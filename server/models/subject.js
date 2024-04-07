@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
+
 const subjectSchema = new Schema({
   subjectName: {
     type: String,
@@ -9,22 +10,52 @@ const subjectSchema = new Schema({
   subjectCode: {
     type: String,
     required: true,
+    index: true,
   },
   course: {
     type: String,
     required: true,
-  },
-  totalLectures: {
-    type: Number,
-    default: 10,
+    index: true,
   },
   year: {
     type: String,
     required: true,
   },
-  attendence: {
-    type: Schema.Types.ObjectId,
-    ref: "attendence",
+  semester: {
+    type: Number,
+    required: true,
+    enum: [1, 2],
+  },
+  totalLectures: {
+    type: Number,
+    default: 15,
+    min: 0, //Ensure non-nagitive values
+  },
+  credits: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
+  externalMarks: {
+    type: Number,
+    required: true,
+  },
+  sessionalMarks: {
+    type: Number,
+    required: true,
+  },
+  totalMarks: {
+    type: Number,
+    required: true,
+  },
+  grade: {
+    type: String,
+    required: true,
+    enum: ["A", "B", "C", "D", "F"],
+  },
+  gradePoint: {
+    type: Number,
+    required: true,
   },
 });
 

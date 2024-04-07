@@ -1,16 +1,14 @@
 import Student from "../models/student.js";
-import Subject from "../models/subject.js";
-import Marks from "../models/marks.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 export const studentLogin = async (req, res) => {
-  const { username, password } = req.body;
-  const errors = { usernameError: String, passwordError: String };
+  const { college_id, password } = req.body;
+  const errors = { collegeIdError: String, passwordError: String };
   try {
-    const existingStudent = await Student.findOne({ username });
+    const existingStudent = await Student.findOne({ college_id });
     if (!existingStudent) {
-      errors.usernameError = "Student doesn't exist.";
+      errors.collegeIdError = "Student doesn't exist.";
       return res.status(404).json(errors);
     }
     const isPasswordCorrect = await bcrypt.compare(
@@ -24,10 +22,10 @@ export const studentLogin = async (req, res) => {
 
     const token = jwt.sign(
       {
-        email: existingStudent.email,
+        college_id: existingStudent.college_id,
         id: existingStudent._id,
       },
-      "sEcReT",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -70,6 +68,7 @@ export const updatedPassword = async (req, res) => {
 export const updateStudent = async (req, res) => {
   try {
     const {
+      //
       name,
       course,
       contactNumber,

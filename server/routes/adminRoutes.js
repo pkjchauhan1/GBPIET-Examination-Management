@@ -32,6 +32,7 @@ const router = express.Router();
 router.post("/login", adminLogin);
 
 router.post("/updatepassword", auth, updatedPassword);
+
 router.post("/addadmin", addAdmin);
 router.post("/getadmin", auth, getAdmin);
 router.get("/getalladmin", auth, getAllAdmin);

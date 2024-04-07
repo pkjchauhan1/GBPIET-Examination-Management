@@ -10,32 +10,23 @@ const facultySchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  avatar: {
-    type: String,
-  },
   password: {
     type: String,
   },
-  username: {
-    type: String,
-  },
   gender: {
-    type: String,
-  },
-  designation: {
-    type: String,
+    type: Boolean, // True -> Male, False -> Female
     required: true,
   },
   course: {
     type: String,
     required: true,
   },
-  contactNumber: {
-    type: Number,
-  },
-  joiningYear: {
+  contact_number: {
     type: Number,
     required: true,
+  },
+  avatar: {
+    type: String,
   },
   passwordUpdated: {
     type: Boolean,
