@@ -17,14 +17,11 @@ const Body = () => {
   const [error, setError] = useState({});
   const [value, setValue] = useState({
     name: "",
-    dob: "",
     email: "",
     course: "",
     contactNumber: "",
     avatar: "",
-    joiningYear: Date().split(" ")[3],
     gender: "",
-    designation: "",
   });
 
   useEffect(() => {
@@ -47,14 +44,11 @@ const Body = () => {
       if (store.admin.facultyAdded) {
         setValue({
           name: "",
-          dob: "",
           email: "",
           course: "",
           contactNumber: "",
           avatar: "",
-          joiningYear: Date().split(" ")[3],
           gender: "",
-          designation: "",
         });
         dispatch({ type: SET_ERRORS, payload: {} });
         dispatch({ type: ADD_FACULTY, payload: false });
@@ -93,7 +87,7 @@ const Body = () => {
                     }
                   />
                 </div>
-                <div className={classes.adminForm3}>
+                {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>DOB :</h1>
 
                   <input
@@ -106,7 +100,7 @@ const Body = () => {
                       setValue({ ...value, dob: e.target.value })
                     }
                   />
-                </div>
+                </div> */}
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Email :</h1>
 
@@ -121,7 +115,7 @@ const Body = () => {
                     }
                   />
                 </div>
-                <div className={classes.adminForm3}>
+                {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Designation :</h1>
 
                   <input
@@ -134,7 +128,7 @@ const Body = () => {
                       setValue({ ...value, designation: e.target.value })
                     }
                   />
-                </div>
+                </div> */}
               </div>
               <div className={classes.adminForm2r}>
                 <div className={classes.adminForm3}>
@@ -210,12 +204,10 @@ const Body = () => {
                 onClick={() => {
                   setValue({
                     name: "",
-                    dob: "",
                     email: "",
                     course: "",
                     contactNumber: "",
                     avatar: "",
-                    joiningYear: Date().split(" ")[3],
                     password: "",
                     username: "",
                   });

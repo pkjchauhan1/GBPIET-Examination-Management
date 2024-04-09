@@ -17,8 +17,16 @@ const Body = () => {
     subjectName: "",
     subjectCode: "",
     year: "",
+    semester: "",
     totalLectures: "",
     course: "",
+    credits: "",
+    externalMarks: "",
+    sessionalMarks: "",
+    totalMarks: "",
+    grade: "",
+    gradePoint: "",
+
   });
 
   useEffect(() => {
@@ -28,8 +36,15 @@ const Body = () => {
         subjectName: "",
         subjectCode: "",
         year: "",
+        semester: "",
         totalLectures: "",
         course: "",
+        credits: "",
+        externalMarks: "",
+        sessionalMarks: "",
+        totalMarks: "",
+        grade: "",
+        gradePoint: "",
       });
     }
   }, [store.errors]);
@@ -49,8 +64,15 @@ const Body = () => {
           subjectName: "",
           subjectCode: "",
           year: "",
+          semester: "",
           totalLectures: "",
           course: "",
+          credits: "",
+          externalMarks: "",
+          sessionalMarks: "",
+          totalMarks: "",
+          grade: "",
+          gradePoint: "",
         });
 
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -125,6 +147,29 @@ const Body = () => {
                     <MenuItem value="4">4</MenuItem>
                   </Select>
                 </div>
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>Semester :</h1>
+                  <Select
+                    required
+                    displayEmpty
+                    sx={{ height: 36 }}
+                    inputProps={{ "aria-label": "Without label" }}
+                    value={value.semester}
+                    onChange={(e) =>
+                      setValue({ ...value, Year: e.target.value })
+                    }
+                  >
+                    <MenuItem value="">None</MenuItem>
+                    <MenuItem value="1">1</MenuItem>
+                    <MenuItem value="2">2</MenuItem>
+                    <MenuItem value="3">3</MenuItem>
+                    <MenuItem value="4">4</MenuItem>
+                    <MenuItem value="5">5</MenuItem>
+                    <MenuItem value="6">6</MenuItem>
+                    <MenuItem value="7">7</MenuItem>
+                    <MenuItem value="8">8</MenuItem>
+                  </Select>
+                </div>
               </div>
               <div className={classes.adminForm2r}>
                 <div className={classes.adminForm3}>
@@ -137,10 +182,68 @@ const Body = () => {
                     type="number"
                     value={value.totalLectures}
                     onChange={(e) =>
-                      setValue({ ...value, totalLectures: e.target.value })
+                      setValue({ ...value, TotalLectures: e.target.value })
                     }
                   />
+                  
                 </div>
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>Credits :</h1>
+
+                  <input
+                    required
+                    placeholder="Credits"
+                    className={classes.adminInput}
+                    type="number"
+                    value={value.credits}
+                    onChange={(e) =>
+                      setValue({ ...value, Credits: e.target.value })
+                    }
+                  />
+               </div>
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>External Marks :</h1>
+
+                  <input
+                    required
+                    placeholder="External Marks"
+                    className={classes.adminInput}
+                    type="number"
+                    value={value.externalMarks}
+                    onChange={(e) =>
+                      setValue({ ...value, ExternalMarks: e.target.value })
+                    }
+                  />   
+                </div>
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>Sessional Marks :</h1>
+
+                  <input
+                    required
+                    placeholder="Sessional Marks"
+                    className={classes.adminInput}
+                    type="number"
+                    value={value.sessionalMarks}
+                    onChange={(e) =>
+                      setValue({ ...value, SessionalMarks: e.target.value })
+                    }
+                  />  
+                </div>
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>Total Marks :</h1>
+
+                  <input
+                    required
+                    placeholder="Total Marks"
+                    className={classes.adminInput}
+                    type="number"
+                    value={value.TotalMarks}
+                    onChange={(e) =>
+                      setValue({ ...value, totalMarks: e.target.value })
+                    }
+                  />  
+                </div>  
+                
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Course :</h1>
                   <Select
@@ -175,6 +278,12 @@ const Body = () => {
                     year: "",
                     totalLectures: "",
                     course: "",
+                    credits: "",
+                    externalMarks: "",
+                    sessionalMarks: "",
+                    totalMarks: "",
+                    grade: "",
+                    gradePoint: "",
                   });
                   setError({});
                 }}
