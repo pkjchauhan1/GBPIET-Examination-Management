@@ -18,13 +18,11 @@ const Body = () => {
     subjectCode: "",
     year: "",
     semester: "",
-    totalLectures: "",
     course: "",
     credits: "",
     externalMarks: "",
     sessionalMarks: "",
     totalMarks: "",
-    grade: "",
     gradePoint: "",
 
   });
@@ -37,13 +35,11 @@ const Body = () => {
         subjectCode: "",
         year: "",
         semester: "",
-        totalLectures: "",
         course: "",
         credits: "",
         externalMarks: "",
         sessionalMarks: "",
         totalMarks: "",
-        grade: "",
         gradePoint: "",
       });
     }
@@ -65,13 +61,11 @@ const Body = () => {
           subjectCode: "",
           year: "",
           semester: "",
-          totalLectures: "",
           course: "",
           credits: "",
           externalMarks: "",
           sessionalMarks: "",
           totalMarks: "",
-          grade: "",
           gradePoint: "",
         });
 
@@ -127,6 +121,26 @@ const Body = () => {
                     }
                   />
                 </div>
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>Course :</h1>
+                  <Select
+                    required
+                    displayEmpty
+                    sx={{ height: 36 }}
+                    inputProps={{ "aria-label": "Without label" }}
+                    value={value.course}
+                    onChange={(e) =>
+                      setValue({ ...value, course: e.target.value })
+                    }
+                  >
+                    <MenuItem value="">None</MenuItem>
+                    {courses?.map((dp, idx) => (
+                      <MenuItem key={idx} value={dp.course}>
+                        {dp.course}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>  
 
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Year :</h1>
@@ -171,22 +185,10 @@ const Body = () => {
                   </Select>
                 </div>
               </div>
+              
+              
               <div className={classes.adminForm2r}>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Total Lectures :</h1>
 
-                  <input
-                    required
-                    placeholder="Total Lectures"
-                    className={classes.adminInput}
-                    type="number"
-                    value={value.totalLectures}
-                    onChange={(e) =>
-                      setValue({ ...value, TotalLectures: e.target.value })
-                    }
-                  />
-                  
-                </div>
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Credits :</h1>
 
@@ -244,26 +246,21 @@ const Body = () => {
                   />  
                 </div>  
                 
+                
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Course :</h1>
-                  <Select
+                  <h1 className={classes.adminLabel}>Grade Point :</h1>
+
+                  <input
                     required
-                    displayEmpty
-                    sx={{ height: 36 }}
-                    inputProps={{ "aria-label": "Without label" }}
-                    value={value.course}
+                    placeholder="Grade Point"
+                    className={classes.adminInput}
+                    type="number"
+                    value={value.gradePoint}
                     onChange={(e) =>
-                      setValue({ ...value, course: e.target.value })
+                      setValue({ ...value, gradePoint: e.target.value })
                     }
-                  >
-                    <MenuItem value="">None</MenuItem>
-                    {courses?.map((dp, idx) => (
-                      <MenuItem key={idx} value={dp.course}>
-                        {dp.course}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
+                  />  
+                </div>  
               </div>
             </div>
             <div className={classes.adminFormButton}>
