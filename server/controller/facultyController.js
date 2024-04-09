@@ -27,7 +27,7 @@ export const facultyLogin = async (req, res) => {
         id: existingFaculty._id,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     res.status(200).json({ result: existingFaculty, token: token });

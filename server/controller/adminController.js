@@ -66,7 +66,7 @@ export const adminLogin = async (req, res) => {
         id: existingAdmin._id,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     res.status(200).json({ result: existingAdmin, token: token });
@@ -106,6 +106,7 @@ export const updatedPassword = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+
 export const updateAdmin = async (req, res) => {
   try {
     const { name, course, contactNumber, avatar, email } = req.body;
@@ -143,6 +144,8 @@ export const addAdmin = async (req, res) => {
     if (existingAdmin) {
       errors.emailError = "Email already exists";
       return res.status(400).json(errors);
+    } else if (contactNumber.toString().length != 10) {
+      return res.status(400).json({ message: "Invalid contact number" });
     }
     const existingCourse = await Course.findOne({ course });
     let courseHelper = existingCourse?.courseCode;
@@ -177,10 +180,11 @@ export const addAdmin = async (req, res) => {
       passwordUpdated,
     });
     await newAdmin.save();
+    sendEmails([{ username: username, newPassword: newPassword, name: name }]);
 
     return res.status(200).json({
       success: true,
-      message: "Admin registerd successfully",
+      message: "Admin registerd successfully and email sent",
       response: newAdmin,
     });
   } catch (error) {
@@ -437,7 +441,6 @@ export const deleteFaculty = async (req, res) => {
 export const deleteStudent = async (req, res) => {
   try {
     const students = req.body;
-    const errors = { noStudentError: String };
     for (var i = 0; i < students.length; i++) {
       var student = students[i];
 
@@ -450,6 +453,7 @@ export const deleteStudent = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+
 export const deleteSubject = async (req, res) => {
   try {
     const subjectIds = req.body;
@@ -496,7 +500,6 @@ export const addStudent = async (req, res) => {
       email,
       contact_number,
       father_name,
-      father_contact_number,
       year,
       semester,
       university_roll_no,
@@ -519,45 +522,44 @@ export const addStudent = async (req, res) => {
       return res
         .status(400)
         .json({ message: "Invalid University Enrollment Number" });
-    } else if (contact_number.toString().length != 10) {
+    } else if (contact_number.length != 10) {
       return res.status(400).json({ message: "Invalid Contact Number" });
-    } else {
-      let newPassword = "@Abc12345";
-      let hashedPassword = await bcrypt.hash(newPassword, 10);
-      var password_updated = false;
-
-      const newStudent = await new Student({
-        name,
-        password: hashedPassword,
-        course,
-        gender,
-        email,
-        contact_number,
-        father_name,
-        father_contact_number,
-        year,
-        semester,
-        university_roll_no,
-        university_enrollment_no,
-        college_id,
-        password_updated,
-        avatar,
-      });
-
-      const subjects = await Subject.find({ course, year });
-      if (subjects.length !== 0) {
-        for (var i = 0; i < subjects.length; i++) {
-          newStudent.subjects.push(subjects[i]._id);
-        }
-        await newStudent.save();
-      }
-
-      return res.status(200).json({
-        success: true,
-        message: "Student registerd successfully",
-        response: newStudent,
-      });
     }
+    let newPassword = "@Abc12345";
+    let hashedPassword = await bcrypt.hash(newPassword, 10);
+    var password_updated = false;
+
+    const newStudent = await new Student({
+      name,
+      password: hashedPassword,
+      course,
+      gender,
+      email,
+      contact_number,
+      father_name,
+      year,
+      semester,
+      university_roll_no,
+      university_enrollment_no,
+      college_id,
+      password_updated,
+      avatar,
+    });
+
+    const subjects = await Subject.find({ course, year });
+    if (subjects.length !== 0) {
+      for (var i = 0; i < subjects.length; i++) {
+        newStudent.subjects.push(subjects[i]._id);
+      }
+    }
+    await newStudent.save();
+    sendEmails([{ email: email, newPassword: newPassword, name: name }]);
+
+    return res.status(200).json({
+      success: true,
+      message: "Student registerd successfully and email sent",
+      response: newStudent,
+    });
   } catch (error) {
     const errors = { backendError: String };
     errors.backendError = error;
@@ -567,9 +569,9 @@ export const addStudent = async (req, res) => {
 
 export const getStudent = async (req, res) => {
   try {
-    const { course, year, section } = req.body;
+    const { course, year, semester } = req.body;
     const errors = { noStudentError: String };
-    const students = await Student.find({ course, year });
+    const students = await Student.find({ course, year, semester });
 
     if (students.length === 0) {
       errors.noStudentError = "No Student Found";
@@ -583,6 +585,7 @@ export const getStudent = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+
 export const getAllStudent = async (req, res) => {
   try {
     const students = await Student.find();

@@ -12,13 +12,13 @@ import { useForm, Controller } from "react-hook-form";
 
 const schema = yup
   .object({
-    username: yup.string().required(),
+    email: yup.string().required(),
     password: yup.string().required(),
   })
   .required();
 
 const defaultValues = {
-  username: "",
+  email: "",
   password: "",
 };
 
@@ -44,10 +44,10 @@ const FacultyLogin = () => {
     }, 1000);
   }, []);
 
-  const onSubmit = ({ username, password }) => {
+  const onSubmit = ({ email, password }) => {
     setLoading(true);
 
-    dispatch(facultySignIn({ username, password }, navigate));
+    dispatch(facultySignIn({ email, password }, navigate));
   };
 
   return (
@@ -75,20 +75,20 @@ const FacultyLogin = () => {
         >
           <h1 className="text-white text-3xl font-semibold">Faculty</h1>
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Username</p>
+            <p className="text-[#515966] font-bold text-sm">Email</p>
             <div
               className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.username ? "border border-red-500" : ""
+                errors.email ? "border border-red-500" : ""
               }`}
             >
               <Controller
-                name="username"
+                name="email"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <input
                     type="text"
-                    placeholder="Username"
+                    placeholder="Email"
                     className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
                     {...field}
                   />
@@ -153,10 +153,10 @@ const FacultyLogin = () => {
             />
           )}
           <ul className="mt-2">
-            {errors.username ? (
+            {errors.email ? (
               <li>
                 <small className="text-red-500">
-                  {errors.username.message}
+                  {errors.email.message}
                 </small>
               </li>
             ) : null}

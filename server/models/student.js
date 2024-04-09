@@ -16,8 +16,8 @@ const studentSchema = new Schema({
     required: true,
   },
   course: {
-    type: String,
-    requireL: true,
+    type: Schema.Types.ObjectId,
+    ref: "course",
   },
   year: {
     type: Number,
@@ -52,10 +52,11 @@ const studentSchema = new Schema({
     type: String,
   },
   contact_number: {
-    type: Number,
+    type: String,
   },
-  father_contact_number: {
-    type: Number,
+  marks: {
+    type: Schema.Types.ObjectId,
+    ref: "marks",
   },
   avatar: {
     type: String,
