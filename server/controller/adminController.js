@@ -143,6 +143,8 @@ export const addAdmin = async (req, res) => {
     if (existingAdmin) {
       errors.emailError = "Email already exists";
       return res.status(400).json(errors);
+    } else if (contactNumber.toString().length != 10) {
+      return res.status(400).json({ message: "Invalid contact number" });
     }
     const existingCourse = await Course.findOne({ course });
     let courseHelper = existingCourse?.courseCode;
@@ -177,10 +179,11 @@ export const addAdmin = async (req, res) => {
       passwordUpdated,
     });
     await newAdmin.save();
+    sendEmails([{ username: username, newPassword: newPassword, name: name }]);
 
     return res.status(200).json({
       success: true,
-      message: "Admin registerd successfully",
+      message: "Admin registerd successfully and email sent",
       response: newAdmin,
     });
   } catch (error) {
@@ -550,11 +553,12 @@ export const addStudent = async (req, res) => {
           newStudent.subjects.push(subjects[i]._id);
         }
         await newStudent.save();
+        sendEmails([{ email: email, newPassword: newPassword, name: name }]);
       }
 
       return res.status(200).json({
         success: true,
-        message: "Student registerd successfully",
+        message: "Student registerd successfully and email sent",
         response: newStudent,
       });
     }
