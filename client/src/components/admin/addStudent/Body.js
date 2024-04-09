@@ -60,7 +60,10 @@ const Body = () => {
           gender: "",
           year: "",
           father_name: "",
-          semester: "",    
+          semester: "",
+          university_roll_no:"",
+          university_enrollment_no:"",
+          college_id:"",    
         });
 
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -84,7 +87,7 @@ const Body = () => {
         </div>
         <div className=" mr-10 bg-white flex flex-col rounded-xl ">
           <form
-            className={`${classes.adminForm0} scrollbar-thin scrollbar-track-white scrollbar-thumb-black overflow-y-scroll h-[30rem]`}
+            className={`${classes.adminForm0} scrollbar-thin scrollbar-track-white scrollbar-thumb-black overflow-y-scroll h-[35rem]`}
             onSubmit={handleSubmit}
           >
             <div className={classes.adminForm1}>
@@ -195,7 +198,7 @@ const Body = () => {
                   </Select>
                 </div>
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>University enrollment no :</h1>
+                  <h1 className={classes.adminLabel}>University Enrollment No :</h1>
                  <input
                     required
                     placeholder="university enrollment no"
@@ -203,7 +206,7 @@ const Body = () => {
                     type="number"
                     value={value.university_enrollment_no}
                     onChange={(e) =>
-                      setValue({ ...value,university_enrollment_no: e.target.value })
+                      setValue({ ...value, university_enrollment_no: e.target.value })
                     }
                   />
                 </div>
@@ -246,7 +249,7 @@ const Body = () => {
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="Male">Male</MenuItem>
                     <MenuItem value="Female">Female</MenuItem>
-                    <MenuItem value="Other">Other</MenuItem>
+  
                   </Select>
                 </div>
                 <div className={classes.adminForm3}>
@@ -265,7 +268,7 @@ const Body = () => {
                 </div>
 
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>University roll no :</h1>
+                  <h1 className={classes.adminLabel}>University Roll No :</h1>
 
                   <input
                     required
@@ -274,7 +277,7 @@ const Body = () => {
                     type="number"
                     value={value.university_roll_no}
                     onChange={(e) =>
-                      setValue({ ...value,university_roll_no: e.target.value })
+                      setValue({ ...value, university_roll_no: e.target.value })
                     }
                   />
                 </div>
@@ -373,6 +376,9 @@ const Body = () => {
                     year: "",
                     father_name: "",
                     Semester: "",
+                    university_roll_no:"",
+                    university_enrollment_no:"",
+                    college_id:"",
                   });
                   setError({});
                 }}
