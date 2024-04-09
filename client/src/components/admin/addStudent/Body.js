@@ -30,7 +30,6 @@ const Body = () => {
     year: "",
     father_name: "",
     semester: "",
-    father_contact_number: "",
   });
 
   useEffect(() => {
@@ -61,9 +60,7 @@ const Body = () => {
           gender: "",
           year: "",
           father_name: "",
-          semester: "",
-          father_contact_number: "",
-    
+          semester: "",    
         });
 
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -122,11 +119,11 @@ const Body = () => {
                 </div>
 
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>college Id:</h1>
+                  <h1 className={classes.adminLabel}>College ID :</h1>
 
                   <input
                     required
-                    placeholder="College Id"
+                    placeholder="College ID"
                     className={classes.adminInput}
                     type="number"
                     value={value.college_id}
@@ -198,7 +195,7 @@ const Body = () => {
                   </Select>
                 </div>
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>university enrollment no :</h1>
+                  <h1 className={classes.adminLabel}>University enrollment no :</h1>
                  <input
                     required
                     placeholder="university enrollment no"
@@ -268,11 +265,11 @@ const Body = () => {
                 </div>
 
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>university roll no :</h1>
+                  <h1 className={classes.adminLabel}>University roll no :</h1>
 
                   <input
                     required
-                    placeholder="university_roll_no"
+                    placeholder="University roll no"
                     className={classes.adminInput}
                     type="number"
                     value={value.university_roll_no}
@@ -284,7 +281,7 @@ const Body = () => {
                 
 
 
-                <div className={classes.adminForm3}>
+                {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>
                     Father's Contact Number :
                   </h1>
@@ -302,7 +299,8 @@ const Body = () => {
                       })
                     }
                   />
-                </div>
+                </div> */}
+
                 {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>
                     Mother's Contact Number :
@@ -310,7 +308,7 @@ const Body = () => {
 
                   <input
                     required
-                    placeholder="Father's Contact Number"
+                    placeholder="Mother's Contact Number"
                     className={classes.adminInput}
                     type="number"
                     value={value.motherContactNumber}
@@ -323,7 +321,7 @@ const Body = () => {
                   />
                 </div> */}
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>semester :</h1>
+                  <h1 className={classes.adminLabel}>Semester :</h1>
                   <Select
                     required
                     displayEmpty
@@ -371,14 +369,10 @@ const Body = () => {
                     course: "",
                     contact_number: "",
                     avatar: "",
-                    batch: "",
                     gender: "",
                     year: "",
                     father_name: "",
-                    motherName: "",
                     Semester: "",
-                    father_contact_number: "",
-                    motherContactNumber: "",
                   });
                   setError({});
                 }}

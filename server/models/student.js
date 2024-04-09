@@ -54,8 +54,9 @@ const studentSchema = new Schema({
   contact_number: {
     type: Number,
   },
-  father_contact_number: {
-    type: Number,
+  marks: {
+    type: Schema.Types.ObjectId,
+    ref: "marks",
   },
   avatar: {
     type: String,
