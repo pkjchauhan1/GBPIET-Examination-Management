@@ -106,6 +106,7 @@ export const updatedPassword = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+
 export const updateAdmin = async (req, res) => {
   try {
     const { name, course, contactNumber, avatar, email } = req.body;
@@ -440,7 +441,6 @@ export const deleteFaculty = async (req, res) => {
 export const deleteStudent = async (req, res) => {
   try {
     const students = req.body;
-    const errors = { noStudentError: String };
     for (var i = 0; i < students.length; i++) {
       var student = students[i];
 
@@ -453,6 +453,7 @@ export const deleteStudent = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+
 export const deleteSubject = async (req, res) => {
   try {
     const subjectIds = req.body;
@@ -521,7 +522,7 @@ export const addStudent = async (req, res) => {
       return res
         .status(400)
         .json({ message: "Invalid University Enrollment Number" });
-    } else if (contact_number.toString().length != 10) {
+    } else if (contact_number.length != 10) {
       return res.status(400).json({ message: "Invalid Contact Number" });
     }
     let newPassword = "@Abc12345";
@@ -550,9 +551,9 @@ export const addStudent = async (req, res) => {
       for (var i = 0; i < subjects.length; i++) {
         newStudent.subjects.push(subjects[i]._id);
       }
-      await newStudent.save();
-      sendEmails([{ email: email, newPassword: newPassword, name: name }]);
     }
+    await newStudent.save();
+    sendEmails([{ email: email, newPassword: newPassword, name: name }]);
 
     return res.status(200).json({
       success: true,
@@ -568,9 +569,9 @@ export const addStudent = async (req, res) => {
 
 export const getStudent = async (req, res) => {
   try {
-    const { course, year, section } = req.body;
+    const { course, year, semester } = req.body;
     const errors = { noStudentError: String };
-    const students = await Student.find({ course, year });
+    const students = await Student.find({ course, year, semester });
 
     if (students.length === 0) {
       errors.noStudentError = "No Student Found";
@@ -584,6 +585,7 @@ export const getStudent = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+
 export const getAllStudent = async (req, res) => {
   try {
     const students = await Student.find();

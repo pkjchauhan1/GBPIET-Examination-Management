@@ -52,7 +52,7 @@ const studentSchema = new Schema({
     type: String,
   },
   contact_number: {
-    type: Number,
+    type: String,
   },
   marks: {
     type: Schema.Types.ObjectId,
