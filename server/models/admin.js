@@ -27,6 +27,7 @@ const adminSchema = mongoose.Schema(
     },
     contactNumber: {
       type: Number,
+      required: true,
     },
     passwordUpdated: {
       type: Boolean,
