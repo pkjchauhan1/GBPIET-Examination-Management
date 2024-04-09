@@ -10,6 +10,7 @@ import ShowNotice from "../notices/ShowNotice";
 import { useSelector } from "react-redux";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Notice from "../notices/Notice";
+
 const Body = () => {
   const [open, setOpen] = useState(false);
   const [openNotice, setOpenNotice] = useState({});
@@ -18,10 +19,12 @@ const Body = () => {
   const attendance = useSelector((state) => state.student.attendance.result);
   const user = JSON.parse(localStorage.getItem("user"));
   const subjects = useSelector((state) => state.admin.subjects.result);
-  var totalAttendance = 0;
+  // var totalAttendance = 0;
+  const totalAttendance = attendance?.reduce((total, att) => total + att.attended, 0) || 0;
+
   console.log(attendance);
 
-  attendance?.map((att) => (totalAttendance += att.attended));
+  // attendance?.map((att) => (totalAttendance += att.attended));
 
   const [value, onChange] = useState(new Date());
 

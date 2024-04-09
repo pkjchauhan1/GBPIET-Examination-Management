@@ -68,6 +68,7 @@ export const updatedPassword = async (req, res) => {
 export const updateStudent = async (req, res) => {
   try {
     const {
+      //
       name,
       course,
       contactNumber,
