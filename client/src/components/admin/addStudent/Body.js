@@ -19,19 +19,18 @@ const Body = () => {
 
   const [value, setValue] = useState({
     name: "",
-    dob: "",
     email: "",
     course: "",
-    contactNumber: "",
+    contact_number: "",
     avatar: "",
-    batch: "",
+    university_roll_no: "",
+    university_enrollment_no: "",
+    college_id: "",
     gender: "",
     year: "",
-    fatherName: "",
-    motherName: "",
-    section: "",
-    fatherContactNumber: "",
-    motherContactNumber: "",
+    father_name: "",
+    semester: "",
+    father_contact_number: "",
   });
 
   useEffect(() => {
@@ -55,19 +54,16 @@ const Body = () => {
       if (store.admin.studentAdded) {
         setValue({
           name: "",
-          dob: "",
           email: "",
           course: "",
-          contactNumber: "",
+          contact_number: "", 
           avatar: "",
-          batch: "",
           gender: "",
           year: "",
-          fatherName: "",
-          motherName: "",
-          section: "",
-          fatherContactNumber: "",
-          motherContactNumber: "",
+          father_name: "",
+          semester: "",
+          father_contact_number: "",
+    
         });
 
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -111,20 +107,6 @@ const Body = () => {
                   />
                 </div>
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>DOB :</h1>
-
-                  <input
-                    required
-                    placeholder="DD/MM/YYYY"
-                    className={classes.adminInput}
-                    type="date"
-                    value={value.dob}
-                    onChange={(e) =>
-                      setValue({ ...value, dob: e.target.value })
-                    }
-                  />
-                </div>
-                <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Email :</h1>
 
                   <input
@@ -138,7 +120,23 @@ const Body = () => {
                     }
                   />
                 </div>
+
                 <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>college Id:</h1>
+
+                  <input
+                    required
+                    placeholder="College Id"
+                    className={classes.adminInput}
+                    type="number"
+                    value={value.college_id}
+                    onChange={(e) =>
+                      setValue({ ...value,college_id: e.target.value })
+                    }
+                  />
+                </div>
+
+                {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Batch :</h1>
 
                   <input
@@ -151,7 +149,7 @@ const Body = () => {
                       setValue({ ...value, batch: e.target.value })
                     }
                   />
-                </div>
+                </div> */}
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Father's Name :</h1>
 
@@ -160,13 +158,13 @@ const Body = () => {
                     placeholder="Father's Name"
                     className={classes.adminInput}
                     type="text"
-                    value={value.fatherName}
+                    value={value.father_name}
                     onChange={(e) =>
-                      setValue({ ...value, fatherName: e.target.value })
+                      setValue({ ...value, father_name: e.target.value })
                     }
                   />
                 </div>
-                <div className={classes.adminForm3}>
+                {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Mother's Name :</h1>
 
                   <input
@@ -179,7 +177,7 @@ const Body = () => {
                       setValue({ ...value, motherName: e.target.value })
                     }
                   />
-                </div>
+                </div> */}
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Year :</h1>
                   <Select
@@ -199,7 +197,22 @@ const Body = () => {
                     <MenuItem value="4">4</MenuItem>
                   </Select>
                 </div>
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>university enrollment no :</h1>
+                 <input
+                    required
+                    placeholder="university enrollment no"
+                    className={classes.adminInput}
+                    type="number"
+                    value={value.university_enrollment_no}
+                    onChange={(e) =>
+                      setValue({ ...value,university_enrollment_no: e.target.value })
+                    }
+                  />
+                </div>
               </div>
+
+  
               <div className={classes.adminForm2r}>
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Course :</h1>
@@ -247,12 +260,30 @@ const Body = () => {
                     placeholder="Contact Number"
                     className={classes.adminInput}
                     type="number"
-                    value={value.contactNumber}
+                    value={value.contact_number}
                     onChange={(e) =>
-                      setValue({ ...value, contactNumber: e.target.value })
+                      setValue({ ...value, contact_number: e.target.value })
                     }
                   />
                 </div>
+
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>university roll no :</h1>
+
+                  <input
+                    required
+                    placeholder="university_roll_no"
+                    className={classes.adminInput}
+                    type="number"
+                    value={value.university_roll_no}
+                    onChange={(e) =>
+                      setValue({ ...value,university_roll_no: e.target.value })
+                    }
+                  />
+                </div>
+                
+
+
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>
                     Father's Contact Number :
@@ -263,16 +294,16 @@ const Body = () => {
                     placeholder="Father's Contact Number"
                     className={classes.adminInput}
                     type="number"
-                    value={value.fatherContactNumber}
+                    value={value.father_contact_number}
                     onChange={(e) =>
                       setValue({
                         ...value,
-                        fatherContactNumber: e.target.value,
+                        father_contact_number: e.target.value,
                       })
                     }
                   />
                 </div>
-                <div className={classes.adminForm3}>
+                {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>
                     Mother's Contact Number :
                   </h1>
@@ -290,23 +321,28 @@ const Body = () => {
                       })
                     }
                   />
-                </div>
+                </div> */}
                 <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Section :</h1>
+                  <h1 className={classes.adminLabel}>semester :</h1>
                   <Select
                     required
                     displayEmpty
                     sx={{ height: 36 }}
                     inputProps={{ "aria-label": "Without label" }}
-                    value={value.section}
+                    value={value.semester}
                     onChange={(e) =>
-                      setValue({ ...value, section: e.target.value })
+                      setValue({ ...value, semester: e.target.value })
                     }
                   >
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="1">1</MenuItem>
                     <MenuItem value="2">2</MenuItem>
                     <MenuItem value="3">3</MenuItem>
+                    <MenuItem value="4">4</MenuItem>
+                    <MenuItem value="5">5</MenuItem>
+                    <MenuItem value="6">6</MenuItem>
+                    <MenuItem value="7">7</MenuItem>
+                    <MenuItem value="8">8</MenuItem>
                   </Select>
                 </div>
 
@@ -331,18 +367,17 @@ const Body = () => {
                 onClick={() => {
                   setValue({
                     name: "",
-                    dob: "",
                     email: "",
                     course: "",
-                    contactNumber: "",
+                    contact_number: "",
                     avatar: "",
                     batch: "",
                     gender: "",
                     year: "",
-                    fatherName: "",
+                    father_name: "",
                     motherName: "",
-                    section: "",
-                    fatherContactNumber: "",
+                    Semester: "",
+                    father_contact_number: "",
                     motherContactNumber: "",
                   });
                   setError({});
