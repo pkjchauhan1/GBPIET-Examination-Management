@@ -66,7 +66,7 @@ export const adminLogin = async (req, res) => {
         id: existingAdmin._id,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     res.status(200).json({ result: existingAdmin, token: token });
@@ -523,43 +523,42 @@ export const addStudent = async (req, res) => {
         .json({ message: "Invalid University Enrollment Number" });
     } else if (contact_number.toString().length != 10) {
       return res.status(400).json({ message: "Invalid Contact Number" });
-    } else {
-      let newPassword = "@Abc12345";
-      let hashedPassword = await bcrypt.hash(newPassword, 10);
-      var password_updated = false;
-
-      const newStudent = await new Student({
-        name,
-        password: hashedPassword,
-        course,
-        gender,
-        email,
-        contact_number,
-        father_name,
-        year,
-        semester,
-        university_roll_no,
-        university_enrollment_no,
-        college_id,
-        password_updated,
-        avatar,
-      });
-
-      const subjects = await Subject.find({ course, year });
-      if (subjects.length !== 0) {
-        for (var i = 0; i < subjects.length; i++) {
-          newStudent.subjects.push(subjects[i]._id);
-        }
-        await newStudent.save();
-        sendEmails([{ email: email, newPassword: newPassword, name: name }]);
-      }
-
-      return res.status(200).json({
-        success: true,
-        message: "Student registerd successfully and email sent",
-        response: newStudent,
-      });
     }
+    let newPassword = "@Abc12345";
+    let hashedPassword = await bcrypt.hash(newPassword, 10);
+    var password_updated = false;
+
+    const newStudent = await new Student({
+      name,
+      password: hashedPassword,
+      course,
+      gender,
+      email,
+      contact_number,
+      father_name,
+      year,
+      semester,
+      university_roll_no,
+      university_enrollment_no,
+      college_id,
+      password_updated,
+      avatar,
+    });
+
+    const subjects = await Subject.find({ course, year });
+    if (subjects.length !== 0) {
+      for (var i = 0; i < subjects.length; i++) {
+        newStudent.subjects.push(subjects[i]._id);
+      }
+      await newStudent.save();
+      sendEmails([{ email: email, newPassword: newPassword, name: name }]);
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Student registerd successfully and email sent",
+      response: newStudent,
+    });
   } catch (error) {
     const errors = { backendError: String };
     errors.backendError = error;
