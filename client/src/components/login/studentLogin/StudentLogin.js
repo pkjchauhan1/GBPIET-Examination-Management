@@ -12,13 +12,13 @@ import { useForm, Controller } from "react-hook-form";
 
 const schema = yup
   .object({
-    username: yup.string().required(),
+    college_id: yup.string().required(),
     password: yup.string().required(),
   })
   .required();
 
 const defaultValues = {
-  username: "",
+  college_id: "",
   password: "",
 };
 
@@ -45,10 +45,10 @@ const StudentLogin = () => {
     }, 1000);
   }, []);
 
-  const onSubmit = ({ username, password }) => {
+  const onSubmit = ({ college_id, password }) => {
     setLoading(true);
 
-    dispatch(studentSignIn({ username, password }, navigate));
+    dispatch(studentSignIn({ college_id, password }, navigate));
   };
 
   return (
@@ -76,20 +76,20 @@ const StudentLogin = () => {
         >
           <h1 className="text-white text-3xl font-semibold">Student</h1>
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Username</p>
+            <p className="text-[#515966] font-bold text-sm">College ID</p>
             <div
               className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.username ? "border border-red-500" : ""
+                errors.college_id ? "border border-red-500" : ""
               }`}
             >
               <Controller
-                name="username"
+                name="college_id"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <input
                     type="text"
-                    placeholder="Username"
+                    placeholder="College ID"
                     className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
                     {...field}
                   />
@@ -155,10 +155,10 @@ const StudentLogin = () => {
             />
           )}
           <ul className="mt-2">
-            {errors.username ? (
+            {errors.college_id ? (
               <li>
                 <small className="text-red-500">
-                  {errors.username.message}
+                  {errors.college_id.message}
                 </small>
               </li>
             ) : null}
