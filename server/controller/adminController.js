@@ -16,13 +16,39 @@ const __dirname = path.dirname(__filename);
 
 async function sendEmails(users) {
   const htmlTemplate = await fs.readFile(
-    path.join(__dirname, "welcome_email.html"),
+    path.join(__dirname, "faculty_welcome_email.html"),
     "utf8"
   );
 
   for (const user of users) {
     let htmlContent = htmlTemplate
       .replace("{{user_email}}", user.email)
+      .replace("{{user_pass}}", user.newPassword)
+      .replace("{{user_name}}", user.name);
+
+    try {
+      const mailInfo = await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: user.email,
+        subject: "Welcome to GBPIET Result Management System",
+        html: htmlContent,
+      });
+      return mailInfo;
+    } catch (error) {
+      console.error(`Failed to send email to ${user.email}:`, error);
+    }
+  }
+}
+
+async function sendStudentEmails(users) {
+  const htmlTemplate = await fs.readFile(
+    path.join(__dirname, "student_welcome_email .html"),
+    "utf8"
+  );
+
+  for (const user of users) {
+    let htmlContent = htmlTemplate
+      .replace("{{user_college_id}}", user.college_id)
       .replace("{{user_pass}}", user.newPassword)
       .replace("{{user_name}}", user.name);
 
@@ -508,11 +534,20 @@ export const addStudent = async (req, res) => {
       avatar,
     } = req.body;
 
-    const errors = { collegeIdError: String };
-    const existingStudent = await Student.findOne({ college_id });
+    const errors = { studentError: String };
+    // const existingStudent = await Student.findOne({ college_id });
+    const existingStudent = await Student.findOne({
+      $or: [
+        { email: email },
+        { college_id: college_id },
+        { university_roll_no: university_roll_no },
+        { university_enrollment_no: university_enrollment_no },
+        { contact_number: contact_number },
+      ],
+    });
 
     if (existingStudent) {
-      errors.collegeIdError = "Student already exists";
+      errors.studentError = "Student already exists";
       return res.status(400).json(errors);
     } else if (college_id.length != 7) {
       return res.status(400).json({ message: "Invalid College ID" });
@@ -553,7 +588,14 @@ export const addStudent = async (req, res) => {
       }
     }
     await newStudent.save();
-    sendEmails([{ email: email, newPassword: newPassword, name: name }]);
+    sendStudentEmails([
+      {
+        college_id: college_id,
+        newPassword: newPassword,
+        name: name,
+        email: email,
+      },
+    ]);
 
     return res.status(200).json({
       success: true,

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome Email</title>
+  </head>
+  <body
+    style="
+      background-color: #f9fafb;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      color: #374151;
+    "
+  >
+    <div
+      style="
+        max-width: 600px;
+        margin: 24px auto;
+        padding: 24px;
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h2 style="color: #1f2937; margin-top: 0">
+        GBPIET Result Management System
+      </h2>
+      <p>Hello, {{user_name}}</p>
+      <p>
+        Your account has been created successfully. To get started with your new
+        account, please reset your password.
+      </p>
+      <p><strong>Login ID:</strong> {{user_college_id}}</p>
+      <p><strong>Password:</strong> {{user_pass}}</p>
+      <p>Please keep your password secure and do not share it with anyone.</p>
+      <p>You can login to your account by clicking the button below:</p>
+      <p style="text-align: center">
+        <a
+          href="#"
+          style="
+            display: inline-block;
+            background-color: #4f46e5;
+            color: #ffffff;
+            padding: 8px 16px;
+            margin: 16px 0;
+            border-radius: 6px;
+            text-decoration: none;
+          "
+          >Click to Login</a
+        >
+      </p>
+      <p style="margin-bottom: 0">Best Regards,<br />Your Service Team</p>
+      <div class="footer">
+        © 2024 <strong>GBPIET Result Management System.</strong> All rights
+        reserved.
+      </div>
+    </div>
+  </body>
+</html>
