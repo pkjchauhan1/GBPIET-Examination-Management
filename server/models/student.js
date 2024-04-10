@@ -16,8 +16,8 @@ const studentSchema = new Schema({
     required: true,
   },
   course: {
-    type: String,
-    requireL: true,
+    type: Schema.Types.ObjectId,
+    ref: "course",
   },
   year: {
     type: Number,

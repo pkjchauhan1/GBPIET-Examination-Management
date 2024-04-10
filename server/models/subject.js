@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const subjectSchema = new Schema({
-  subjectName: {
+  subject_Name: {
     type: String,
     required: true,
     trim: true,
   },
-  subjectCode: {
+  subject_Code: {
     type: String,
     required: true,
     index: true,
@@ -26,34 +26,20 @@ const subjectSchema = new Schema({
     required: true,
     enum: [1, 2],
   },
-  totalLectures: {
-    type: Number,
-    default: 15,
-    min: 0, //Ensure non-nagitive values
-  },
   credits: {
     type: Number,
     required: true,
     min: 1,
   },
-  externalMarks: {
+  external_marks: {
     type: Number,
     required: true,
   },
-  sessionalMarks: {
+  sessional_marks: {
     type: Number,
     required: true,
   },
-  totalMarks: {
-    type: Number,
-    required: true,
-  },
-  grade: {
-    type: String,
-    required: true,
-    enum: ["A", "B", "C", "D", "F"],
-  },
-  gradePoint: {
+  total_marks: {
     type: Number,
     required: true,
   },
