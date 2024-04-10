@@ -23,9 +23,9 @@ const Body = () => {
           </div>
         </div>
         <div className="w-[98%] bg-white relative rounded-xl ">
-          <div className="absolute left-[50%] top-[-10%]">
+          {/* <div className="absolute left-[50%] top-[-10%]">
             <Avatar src={user.result.avatar} sx={{ width: 70, height: 70 }} />
-          </div>
+          </div> */}
           <div className="flex py-10 ml-10 space-x-40">
             <div className="flex flex-col space-y-10">
               <Data label="Name" value={user.result.name} />
