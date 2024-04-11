@@ -4,6 +4,7 @@ import Faculty from "../models/faculty.js";
 import Student from "../models/student.js";
 import Subject from "../models/subject.js";
 import Notice from "../models/notice.js";
+import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import transporter from "../config/nodeMailerConfig.js";
@@ -173,8 +174,8 @@ export const addAdmin = async (req, res) => {
     } else if (contactNumber.toString().length != 10) {
       return res.status(400).json({ message: "Invalid contact number" });
     }
-    const existingCourse = await Course.findOne({ course });
-    let courseHelper = existingCourse?.courseCode;
+    // const existingCourse = await Course.findOne({ course });
+    // let courseHelper = existingCourse?.courseCode;
     const admins = await Admin.find({ course });
 
     let helper;
@@ -186,7 +187,7 @@ export const addAdmin = async (req, res) => {
       helper = admins.length.toString();
     }
     var date = new Date();
-    var components = ["ADM", date.getFullYear(), courseHelper, helper];
+    var components = ["ADM", date.getFullYear(), helper];
 
     var username = components.join("");
 
@@ -252,12 +253,10 @@ export const createNotice = async (req, res) => {
 
 export const addCourse = async (req, res) => {
   try {
-    const errors = { courseError: String };
     const { course } = req.body;
     const existingCourse = await Course.findOne({ course });
     if (existingCourse) {
-      errors.courseError = "Course already added";
-      return res.status(400).json(errors);
+      return res.status(400).json({ message: "Course already added" });
     }
 
     const newCourse = await new Course({
@@ -353,28 +352,42 @@ export const getNotice = async (req, res) => {
   }
 };
 
-//Sandy
-
 export const addSubject = async (req, res) => {
   try {
-    const { course, subjectCode, subjectName, year, semester } = req.body;
-    const errors = { subjectError: String };
-    const subject = await Subject.findOne({ subjectCode });
-    if (subject) {
-      errors.subjectError = "Given Subject is already added";
-      return res.status(400).json(errors);
-    }
-
-    const newSubject = await new Subject({
+    const {
+      subject_name,
+      subject_code,
       course,
-      subjectCode,
-      subjectName,
       year,
       semester,
+      credits,
+      external_marks,
+      sessional_marks,
+      total_marks,
+    } = req.body;
+    const existingSubject = await Subject.findOne({ subject_code });
+    if (existingSubject) {
+      return res
+        .status(400)
+        .json({ message: "Given Subject is already added" });
+    }
+    const newSubject = await new Subject({
+      subject_name,
+      subject_code,
+      course,
+      year,
+      semester,
+      credits,
+      external_marks,
+      sessional_marks,
+      total_marks,
     });
-
     await newSubject.save();
-    const students = await Student.find({ course, year });
+    const students = await Student.find({
+      course: course,
+      year: year,
+      semester: semester,
+    });
     if (students.length !== 0) {
       for (var i = 0; i < students.length; i++) {
         students[i].subjects.push(newSubject._id);
