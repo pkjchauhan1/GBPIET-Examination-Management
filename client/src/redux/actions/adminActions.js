@@ -112,6 +112,7 @@ export const addAdmin = (formData) => async (dispatch) => {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
+
 export const createNotice = (formData) => async (dispatch) => {
   try {
     const {} = await api.createNotice(formData);
@@ -121,6 +122,7 @@ export const createNotice = (formData) => async (dispatch) => {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
+
 export const getAdmin = (formData) => async (dispatch) => {
   try {
     const { data } = await api.getAdmin(formData);
@@ -129,6 +131,7 @@ export const getAdmin = (formData) => async (dispatch) => {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
+
 export const deleteAdmin = (formData) => async (dispatch) => {
   try {
     const {} = await api.deleteAdmin(formData);
@@ -138,6 +141,7 @@ export const deleteAdmin = (formData) => async (dispatch) => {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
+
 export const deleteFaculty = (formData) => async (dispatch) => {
   try {
     const {} = await api.deleteFaculty(formData);
@@ -147,6 +151,7 @@ export const deleteFaculty = (formData) => async (dispatch) => {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
+
 export const deleteStudent = (formData) => async (dispatch) => {
   try {
     const {} = await api.deleteStudent(formData);
@@ -156,6 +161,7 @@ export const deleteStudent = (formData) => async (dispatch) => {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
+
 export const deleteSubject = (formData) => async (dispatch) => {
   try {
     const {} = await api.deleteSubject(formData);
@@ -165,6 +171,7 @@ export const deleteSubject = (formData) => async (dispatch) => {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
+
 export const deleteCourse = (formData) => async (dispatch) => {
   try {
     const {} = await api.deleteCourse(formData);
@@ -174,6 +181,7 @@ export const deleteCourse = (formData) => async (dispatch) => {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
+
 export const addCourse = (formData) => async (dispatch) => {
   try {
     const {} = await api.addCourse(formData);

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addFaculty } from "../../../redux/actions/facultyActions.js";
 import Spinner from "../../../utils/Spinner";
 import axios from "axios";
 import Select from "react-select";
@@ -10,9 +12,9 @@ import { useForm, Controller } from "react-hook-form";
 const schema = yup
   .object({
     name: yup.string().required(),
-    avatar: yup.string().required(),
+    avatar: yup.string(),
     gender: yup.string().required(),
-    course: yup.array().of(yup.string()).required(),
+    course: yup.array().required(),
     contact_number: yup.string().required(),
     email: yup.string().email().required(),
   })
@@ -21,6 +23,7 @@ const schema = yup
 const defaultValues = {
   name: "",
   email: "",
+  gender: "",
   avatar: "",
   contact_number: "",
   course: [],
@@ -30,6 +33,8 @@ const FacultyRegister = () => {
   const [loading, setLoading] = useState(false);
   const [translate, setTranslate] = useState(false);
   const [courses, setCourses] = useState([]);
+
+  const dispatch = useDispatch();
 
   const {
     control,
@@ -60,6 +65,25 @@ const FacultyRegister = () => {
 
   const onSubmit = (data) => {
     setLoading(true);
+    const {
+    name,
+    avatar,
+    gender,
+    course:[],
+    contact_number,
+    email,
+    } = data;
+
+    dispatch(
+      addFaculty({
+      name,
+      avatar,
+      gender,
+      course:[],
+      contact_number,
+      email,
+      })
+    );
   };
 
   return (
@@ -77,7 +101,7 @@ const FacultyRegister = () => {
           </h1>
         </div>
         <form
-          onSubmit={handleSubmit(onSubmit)}
+         onSubmit={handleSubmit(onSubmit)}
           className={`h-[40rem] w-full bg-[#2c2f35] grid grid-cols-2 gap-4 p-[2rem] ${
             translate ? "-translate-x-[12rem]" : ""
           }  duration-1000 transition-all rounded-3xl shadow-2xl`}

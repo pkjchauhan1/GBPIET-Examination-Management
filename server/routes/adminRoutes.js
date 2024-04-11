@@ -42,12 +42,12 @@ router.post("/deleteadmin", auth, deleteAdmin);
 router.post("/createnotice", auth, createNotice);
 router.post("/getnotice", auth, getNotice);
 
-router.post("/addstudent", auth, addStudent);
+router.post("/addstudent", addStudent);
 router.post("/getstudent", auth, getStudent);
 router.get("/getallstudent", auth, getAllStudent);
 router.post("/deletestudent", auth, deleteStudent);
 
-router.post("/addfaculty", auth, addFaculty);
+router.post("/addfaculty", addFaculty);
 router.post("/getfaculty", auth, getFaculty);
 router.get("/getallfaculty", auth, getAllFaculty);
 router.post("/deletefaculty", auth, deleteFaculty);

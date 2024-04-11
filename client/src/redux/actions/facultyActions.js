@@ -7,7 +7,9 @@ import {
   GET_TEST,
   GET_STUDENT,
   MARKS_UPLOADED,
+  ADD_FACULTY,
 } from "../actionTypes";
+
 import * as api from "../api";
 
 export const facultySignIn = (formData, navigate) => async (dispatch) => {
@@ -16,6 +18,16 @@ export const facultySignIn = (formData, navigate) => async (dispatch) => {
     dispatch({ type: FACULTY_LOGIN, data });
     if (data.result.passwordUpdated) navigate("/faculty/home");
     else navigate("/faculty/password");
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const addFaculty = (formData) => async (dispatch) => {
+  try {
+    const {} = await api.addFaculty(formData);
+    alert("Faculty Added Successfully");
+    dispatch({ type: ADD_FACULTY, payload: true });
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }

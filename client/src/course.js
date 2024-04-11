@@ -1,1 +1,0 @@
-C:/Users/mohit/Desktop/GBPIET-Student-Management-System/server/models/course.js
