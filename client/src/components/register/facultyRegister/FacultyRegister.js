@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Spinner from "../../../utils/Spinner";
-// import { Controller } from 'react-hook-form';
-import CourseModel from "../../../../src/course.js"
+import axios from "axios";
+import Select from "react-select";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,8 +12,8 @@ const schema = yup
     name: yup.string().required(),
     avatar: yup.string().required(),
     gender: yup.string().required(),
-    course: yup.string().required(),
-    contactNumber: yup.string().required(),
+    course: yup.array().of(yup.string()).required(),
+    contact_number: yup.string().required(),
     email: yup.string().email().required(),
   })
   .required();
@@ -24,14 +22,15 @@ const defaultValues = {
   name: "",
   email: "",
   avatar: "",
-  course: "",
-  contactNumber: "",
+  contact_number: "",
+  course: [],
 };
 
 const FacultyRegister = () => {
   const [loading, setLoading] = useState(false);
   const [translate, setTranslate] = useState(false);
-  const [course, setCourse] = useState(undefined);
+  const [courses, setCourses] = useState([]);
+
   const {
     control,
     handleSubmit,
@@ -42,6 +41,18 @@ const FacultyRegister = () => {
   });
 
   useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:4000/api/admin/getallcourse"
+        );
+        setCourses(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCourses();
     setTimeout(() => {
       setTranslate(true);
     }, 1000);
@@ -142,47 +153,50 @@ const FacultyRegister = () => {
               />
             </div>
           </div>
-          {/* <div className="space-y-1">
+          <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Course</p>
             <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
+              className={`bg-[#515966] rounded-lg w-[14rem] ${
                 errors.course ? "border border-red-500" : ""
               }`}
             >
-             
               <Controller
                 name="course"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
-                 
-                  <select
-                    name="course"
-                    className="w-[13.5rem] bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                  <Select
                     {...field}
-                  >
-                    <option value="MCA">MCA</option>
-                    <option value="M.tech">M.tech</option>
-                    <option value="B.tech">B.tech</option>
-                    <option value="Civil">Civil</option>
-                    <option value="CSE">CSE</option>
-                  </select>
-              
+                    options={courses.map((course) => ({
+                      value: course.course,
+                      label: course.course,
+                    }))}
+                    isMulti
+                    className="text-black placeholder:text-sm"
+                    classNamePrefix="select"
+                    theme={(theme) => ({
+                      ...theme,
+                      borderRadius: 5,
+                      colors: {
+                        ...theme.colors,
+                        primary25: "grey",
+                        primary: "white",
+                      },
+                    })}
+                  />
                 )}
               />
             </div>
-          </div> */}
-
-          
+          </div>
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Contact Number</p>
             <div
               className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.contactNumber ? "border border-red-500" : ""
+                errors.contact_number ? "border border-red-500" : ""
               }`}
             >
               <Controller
-                name="contactNumber"
+                name="contact_number"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
@@ -222,8 +236,11 @@ const FacultyRegister = () => {
           >
             Register
           </button>
-          <a href="/" className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#FF2400]">
-          Home
+          <a
+            href="/"
+            className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#FF2400]"
+          >
+            Home
           </a>
           {loading && (
             <Spinner
