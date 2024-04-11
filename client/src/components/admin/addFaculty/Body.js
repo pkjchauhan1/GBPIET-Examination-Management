@@ -115,6 +115,21 @@ const Body = () => {
                     }
                   />
                 </div>
+                <div className={classes.adminForm3}>
+                  <h1 className={classes.adminLabel}>Contact Number :</h1>
+
+                  <input
+                    required
+                    placeholder="Contact Number"
+                    className={classes.adminInput}
+                    type="number"
+                    value={value.contactNumber}
+                    onChange={(e) =>
+                      setValue({ ...value, contactNumber: e.target.value })
+                    }
+                  />
+                </div>
+                  
                 {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Designation :</h1>
 
@@ -169,7 +184,7 @@ const Body = () => {
                     <MenuItem value="Other">Other</MenuItem>
                   </Select>
                 </div>
-                <div className={classes.adminForm3}>
+                {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Contact Number :</h1>
 
                   <input
@@ -182,7 +197,7 @@ const Body = () => {
                       setValue({ ...value, contactNumber: e.target.value })
                     }
                   />
-                </div>
+                </div> */}
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Avatar :</h1>
 
