@@ -9,20 +9,23 @@ const StudentRegister = () => {
   const [name, setName] = useState("");
   const [batch, setBatch] = useState("");
   const [email, setEmail] = useState("");
+  const [year, setYear] = useState("");
+  const [semester, setSemester] = useState("");
   const [error, setError] = useState({});
   const [avatar, setAvatar] = useState("");
   const [dob, setDob] = useState(new Date());
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [gender, setGender] = useState(undefined);
   const [course, setCourse] = useState("");
   const [fatherName, setFatherName] = useState("");
-  const [section, setSection] = useState(undefined);
+  // const [section, setSection] = useState(undefined);
   const [translate, setTranslate] = useState(false);
   const [subjects, setSubjects] = useState(undefined);
-  const [fatherContact, setFatherContact] = useState("");
+  // const [fatherContact, setFatherContact] = useState("");
   const [contactNumber, setContactNumber] = useState("");
+  const [university_roll_no] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [joiningYear, setJoiningYear] = useState(new Date());
 
@@ -69,16 +72,16 @@ const StudentRegister = () => {
       setBatch("");
       setAvatar("");
       setGender("");
-      setUsername("");
+      // setUsername("");
       setPassword("");
       setFatherName("");
       setLoading(false);
       setCourse("");
-      setDob(new Date());
+      // setDob(new Date());
       setShowPassword("");
       setContactNumber("");
       setSubjects(undefined);
-      setJoiningYear(new Date().getFullYear());
+      // setJoiningYear(new Date().getFullYear());
     }
   }, [store.errors]);
   return (
@@ -130,7 +133,7 @@ const StudentRegister = () => {
               />
             </div>
           </div>
-          <div className="space-y-1">
+          {/* <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Username</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
               <input
@@ -142,7 +145,7 @@ const StudentRegister = () => {
                 placeholder="Username"
               />
             </div>
-          </div>
+          </div> */}
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Password</p>
             <div className="bg-[#515966] rounded-lg px-2 flex w-[14rem] items-center">
@@ -184,7 +187,7 @@ const StudentRegister = () => {
             </div>
           </div>
 
-          <div className="space-y-1">
+          {/* <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">DOB</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
               <input
@@ -195,8 +198,8 @@ const StudentRegister = () => {
                 className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
               />
             </div>
-          </div>
-          <div className="space-y-1">
+          </div> */}
+          {/* <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Batch</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
               <input
@@ -208,8 +211,8 @@ const StudentRegister = () => {
                 className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
               />
             </div>
-          </div>
-          <div className="space-y-1">
+          </div> */}
+          {/* <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Section</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
               <input
@@ -220,8 +223,9 @@ const StudentRegister = () => {
                 className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
               />
             </div>
-          </div>
-          <div className="space-y-1">
+          </div> */}
+
+          {/* <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Course</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
               <input
@@ -229,10 +233,13 @@ const StudentRegister = () => {
                 type="text"
                 value={course}
                 onChange={(e) => setCourse(e.target.value)}
+                
                 className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
               />
             </div>
-          </div>
+          </div> */}
+
+
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Father Name</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
@@ -245,7 +252,7 @@ const StudentRegister = () => {
               />
             </div>
           </div>
-          <div className="space-y-1">
+          {/* <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Father Contact</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
               <input
@@ -255,7 +262,7 @@ const StudentRegister = () => {
                 className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
               />
             </div>
-          </div>
+          </div> */}
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Contact Number</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
@@ -268,18 +275,49 @@ const StudentRegister = () => {
               />
             </div>
           </div>
+          
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Year</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                required
-                value={joiningYear}
-                type="date"
-                onChange={(e) => setJoiningYear(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
+              <p className="text-[#515966] font-bold text-sm">Year</p>
+              <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+              <select
+              required
+              className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full"
+              value={year} // You need to define this state variable
+              onChange={(e) => setYear(e.target.value)} // And the corresponding setState function
+              >
+              <option value="" disabled>Select year</option>
+              <option value="none">none</option>            
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              </select>
           </div>
+         </div>
+
+         <div className="space-y-1">
+              <p className="text-[#515966] font-bold text-sm">Semester</p>
+              <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+              <select
+              required
+              className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full"
+              value={semester} // You need to define this state variable
+              onChange={(e) => setSemester(e.target.value)} // And the corresponding setState function
+              >
+              <option value="" disabled>Select semester</option>
+              <option value="none">none</option>            
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              </select>
+          </div>
+         </div>
+                    
 
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Avatar</p>
@@ -293,7 +331,22 @@ const StudentRegister = () => {
               />
             </div>
           </div>
+         
           <div className="space-y-1">
+            <p className="text-[#515966] font-bold text-sm">university_roll_no</p>
+            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+              <input
+                required
+                type="number"
+                value={university_roll_no}
+                onChange={(e) => (e.target.value)}
+                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+              />
+            </div>
+          </div>
+
+  
+          {/* <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Subjects</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
               <select
@@ -310,7 +363,7 @@ const StudentRegister = () => {
                 <option value="economics">Economics</option>
               </select>
             </div>
-          </div>
+          </div> */}
           <div className="col-span-3 flex items-center justify-between">
             <button
               type="submit"
