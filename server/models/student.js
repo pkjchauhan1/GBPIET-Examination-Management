@@ -20,11 +20,11 @@ const studentSchema = new Schema({
     ref: "course",
   },
   year: {
-    type: Number,
+    type: String,
     required: true,
   },
   semester: {
-    type: Number,
+    type: String,
     required: true,
   },
   university_roll_no: {

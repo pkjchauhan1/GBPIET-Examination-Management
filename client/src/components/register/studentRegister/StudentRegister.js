@@ -89,7 +89,7 @@ const StudentRegister = () => {
       <div className="grid grid-cols-2">
         <div
           className={`h-[40rem] w-full bg-white flex items-center justify-center ${
-            translate ? "translate-x-[23rem]" : ""
+            translate ? "translate-x-[25rem]" : ""
           }  duration-1000 transition-all rounded-3xl shadow-2xl`}
         >
           <h1 className="text-[3rem]  font-bold text-center">
@@ -371,10 +371,8 @@ const StudentRegister = () => {
             >
               Register
             </button>{" "}
-            <a href="/">
-              <button className="w-36 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]">
-                <ChevronLeftOutlined /> Back to Home
-              </button>
+            <a href="/"  className="w-36 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]">
+               Home
             </a>
           </div>
           {loading && (

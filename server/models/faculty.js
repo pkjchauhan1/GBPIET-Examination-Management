@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const facultySchema = mongoose.Schema({
   name: {
@@ -14,15 +14,16 @@ const facultySchema = mongoose.Schema({
     type: String,
   },
   gender: {
-    type: Boolean, // True -> Male, False -> Female
-    required: true,
-  },
-  course: {
+    type: String,
     type: String,
     required: true,
   },
+  course: {
+    type: Schema.Types.ObjectId,
+    ref: "course",
+  },
   contact_number: {
-    type: Number,
+    type: String,
     required: true,
   },
   avatar: {
