@@ -1,6 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { ref } from "firebase/database";
-import mongoose, { Schema } from "mongoose";
 
 const facultySchema = mongoose.Schema({
   name: {
@@ -23,8 +21,6 @@ const facultySchema = mongoose.Schema({
   course: {
     type: Schema.Types.ObjectId,
     ref: "course",
-    type: Schema.Types.ObjectId,
-    ref: "course"
   },
   contact_number: {
     type: String,

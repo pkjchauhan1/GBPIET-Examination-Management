@@ -364,6 +364,7 @@ export const addSubject = async (req, res) => {
       external_marks,
       sessional_marks,
       total_marks,
+      created_by,
     } = req.body;
     const existingSubject = await Subject.findOne({ subject_code });
     if (existingSubject) {
@@ -381,6 +382,7 @@ export const addSubject = async (req, res) => {
       external_marks,
       sessional_marks,
       total_marks,
+      created_by,
     });
     await newSubject.save();
     const students = await Student.find({
@@ -667,6 +669,7 @@ export const getAllAdmin = async (req, res) => {
     console.log("Backend Error", error);
   }
 };
+
 export const getAllCourse = async (req, res) => {
   try {
     const courses = await Course.find();
@@ -675,6 +678,7 @@ export const getAllCourse = async (req, res) => {
     console.log("Backend Error", error);
   }
 };
+
 export const getAllSubject = async (req, res) => {
   try {
     const subjects = await Subject.find();
