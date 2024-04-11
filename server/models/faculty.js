@@ -1,3 +1,4 @@
+import mongoose, { Schema } from "mongoose";
 import { ref } from "firebase/database";
 import mongoose, { Schema } from "mongoose";
 
@@ -16,9 +17,12 @@ const facultySchema = mongoose.Schema({
   },
   gender: {
     type: String,
+    type: String,
     required: true,
   },
   course: {
+    type: Schema.Types.ObjectId,
+    ref: "course",
     type: Schema.Types.ObjectId,
     ref: "course"
   },

@@ -2,45 +2,41 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const subjectSchema = new Schema({
-  subject_Name: {
+  subject_name: {
     type: String,
     required: true,
-    trim: true,
   },
-  subject_Code: {
+  subject_code: {
     type: String,
     required: true,
-    index: true,
   },
   course: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "course",
     required: true,
-    index: true,
   },
   year: {
     type: String,
     required: true,
   },
   semester: {
-    type: Number,
+    type: String,
     required: true,
-    enum: [1, 2],
   },
   credits: {
-    type: Number,
+    type: String,
     required: true,
-    min: 1,
   },
   external_marks: {
-    type: Number,
+    type: String,
     required: true,
   },
   sessional_marks: {
-    type: Number,
+    type: String,
     required: true,
   },
   total_marks: {
-    type: Number,
+    type: String,
     required: true,
   },
 });
