@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Spinner from "../../../utils/Spinner";
+// import { Controller } from 'react-hook-form';
+import CourseModel from "../../../../src/course.js"
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,38 +11,27 @@ import { useForm, Controller } from "react-hook-form";
 
 const schema = yup
   .object({
-    dob: yup.string().required(),
     name: yup.string().required(),
     avatar: yup.string().required(),
     gender: yup.string().required(),
-    username: yup.string().required(),
-    password: yup.string().required(),
     course: yup.string().required(),
-    designation: yup.string().required(),
-    joiningYear: yup.string().required(),
     contactNumber: yup.string().required(),
     email: yup.string().email().required(),
   })
   .required();
 
 const defaultValues = {
-  dob: "",
   name: "",
   email: "",
   avatar: "",
-  username: "",
-  password: "",
   course: "",
-  joiningYear: "",
-  showPassword: "",
   contactNumber: "",
 };
 
 const FacultyRegister = () => {
   const [loading, setLoading] = useState(false);
   const [translate, setTranslate] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
+  const [course, setCourse] = useState(undefined);
   const {
     control,
     handleSubmit,
@@ -58,31 +49,10 @@ const FacultyRegister = () => {
 
   const onSubmit = (data) => {
     setLoading(true);
-    // console.log(data);
-    // dispatch(
-    //   addFaculty({
-    //     dob,
-    //     name,
-    //     email,
-    //     gender,
-    //     avatar,
-    //     username,
-    //     password,
-    //     course,
-    //     designation,
-    //     contactNumber,
-    //     joiningYear: new Date(joiningYear).getFullYear(),
-    //   })
-    // );
   };
 
   return (
     <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center">
-      <a href="/">
-        <button className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]">
-          Home
-        </button>
-      </a>
       <div className="grid grid-cols-2">
         <div
           className={`h-[40rem] w-full bg-white flex items-center justify-center ${
@@ -149,61 +119,6 @@ const FacultyRegister = () => {
             </div>
           </div>
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Username</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.username ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="username"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="text"
-                    placeholder="Username"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Password</p>
-            <div className="bg-[#515966] rounded-lg px-2 flex w-[14rem] items-center">
-              <Controller
-                name="password"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <>
-                    <input
-                      placeholder="Password"
-                      type={showPassword ? "text" : "password"}
-                      pattern="^(?=.*[A-Z])(?=.*[@])(?=.*\d).{6,}$"
-                      title="USE ONE : @-Number-UpperCase (at least 6 character)"
-                      className="bg-[#515966] text-white rounded-lg outline-none py-2  placeholder:text-sm"
-                      {...field}
-                    />
-                    {showPassword ? (
-                      <VisibilityIcon
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="cursor-pointer"
-                      />
-                    ) : (
-                      <VisibilityOffIcon
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="cursor-pointer"
-                      />
-                    )}
-                  </>
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Gender</p>
             <div
               className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
@@ -227,69 +142,38 @@ const FacultyRegister = () => {
               />
             </div>
           </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Designation</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.designation ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="designation"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="text"
-                    placeholder="Teacher"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">DOB</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.dob ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="dob"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="date"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
+          {/* <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Course</p>
             <div
               className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
                 errors.course ? "border border-red-500" : ""
               }`}
             >
+             
               <Controller
                 name="course"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
-                  <input
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                 
+                  <select
+                    name="course"
+                    className="w-[13.5rem] bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
                     {...field}
-                  />
+                  >
+                    <option value="MCA">MCA</option>
+                    <option value="M.tech">M.tech</option>
+                    <option value="B.tech">B.tech</option>
+                    <option value="Civil">Civil</option>
+                    <option value="CSE">CSE</option>
+                  </select>
+              
                 )}
               />
             </div>
-          </div>
+          </div> */}
+
+          
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Contact Number</p>
             <div
@@ -304,27 +188,6 @@ const FacultyRegister = () => {
                 render={({ field }) => (
                   <input
                     type="number"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Joining Date</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.joiningYear ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="joiningYear"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="date"
                     className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
                     {...field}
                   />
@@ -355,10 +218,13 @@ const FacultyRegister = () => {
           </div>
           <button
             type="submit"
-            className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#04bd7d]"
+            className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-3 bg-[#04bd7d]"
           >
             Register
           </button>
+          <a href="/" className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#FF2400]">
+          Home
+          </a>
           {loading && (
             <Spinner
               message="Logging In"
