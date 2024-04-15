@@ -18,10 +18,12 @@ const facultySchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  course: {
+  course: [
+    {
     type: Schema.Types.ObjectId,
     ref: "course",
-  },
+  }
+],
   contact_number: {
     type: String,
     required: true,
