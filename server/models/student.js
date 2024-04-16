@@ -62,9 +62,6 @@ const studentSchema = new Schema({
     type: String,
     required: true,
   },
-  avatar: {
-    type: String,
-  },
   password_updated: {
     type: Boolean,
     default: false,
