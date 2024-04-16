@@ -159,7 +159,9 @@ const FacultyRegister = () => {
                       className="w-[13.5rem] bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
                       {...field}
                     >
-                      <option value="select">Select</option>
+                      <option value="" disabled>
+                        Select
+                      </option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
@@ -193,7 +195,7 @@ const FacultyRegister = () => {
                         borderRadius: 5,
                         colors: {
                           ...theme.colors,
-                          primary25: "grey",
+                          primary25: "#ccc6c6",
                           primary: "white",
                         },
                       })}
