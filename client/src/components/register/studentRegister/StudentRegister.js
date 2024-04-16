@@ -1,86 +1,94 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import ChevronLeftOutlined from "@mui/icons-material/ChevronLeftOutlined";
 import Spinner from "../../../utils/Spinner";
+import axios from "axios";
+import Select from "react-select";
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller } from "react-hook-form";
+
+const schema = yup
+  .object({
+    name: yup.string().required(),
+    gender: yup.string().required(),
+    course: yup.string().required(),
+    year: yup.string().required(),
+    semester: yup.string().required(),
+    university_roll_no:  yup.string().required(),
+    university_enrollment_no:  yup.string().required(),
+    avatar: yup.string(),
+    gender: yup.string(),
+    father_name: yup.string(),
+    contact_number: yup.string().required(),
+    email: yup.string().email().required(),
+  })
+  .required();
+
+const defaultValues = {
+  name: "",
+  email: "",
+  course: "",
+  avatar: "",
+  contact_number: "",
+  course: "",
+  year: "",
+  semester: "",
+  university_roll_no: "",
+  university_enrollment_no: "",
+  father_name: "",
+  gender: "",
+};
 
 const StudentRegister = () => {
-  const [name, setName] = useState("");
-  const [batch, setBatch] = useState("");
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("");
+  const [year, setYear] = useState("");
+  const [semester, setSemester] = useState("");
   const [error, setError] = useState({});
   const [avatar, setAvatar] = useState("");
-  const [dob, setDob] = useState(new Date());
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [gender, setGender] = useState(undefined);
-  const [course, setCourse] = useState("");
+  const [course, selectCourse] = useState("");
   const [fatherName, setFatherName] = useState("");
-  const [section, setSection] = useState(undefined);
-  const [translate, setTranslate] = useState(false);
   const [subjects, setSubjects] = useState(undefined);
-  const [fatherContact, setFatherContact] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [joiningYear, setJoiningYear] = useState(new Date());
+  const [contact_number, setContactNumber] = useState("");
+  const [university_roll_no] = useState("");
+  const [translate, setTranslate] = useState(false);
+  const [courses, setCourses] = useState([]);
 
-  // const dispatch = useDispatch();
-  const store = useSelector((state) => state);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues,
+    resolver: yupResolver(schema),
+  });
 
   useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:4000/api/admin/getallcourse"
+        );
+        setCourses(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCourses();
     setTimeout(() => {
       setTranslate(true);
     }, 1000);
   }, []);
 
-  useEffect(() => {
-    if (store.errors) {
-      setError(store.errors);
-    }
-  }, [store.errors]);
-
-  const register = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
     setLoading(true);
-
-    // dispatch(
-    //   addFaculty({
-    //     dob,
-    //     name,
-    //     email,
-    //     gender,
-    //     avatar,
-    //     username,
-    //     password,
-    //     course,
-    //     designation,
-    //     contactNumber,
-    //     joiningYear: new Date(joiningYear).getFullYear(),
-    //   })
-    // );
   };
 
-  useEffect(() => {
-    if (store.errors) {
-      setName("");
-      setEmail("");
-      setBatch("");
-      setAvatar("");
-      setGender("");
-      setUsername("");
-      setPassword("");
-      setFatherName("");
-      setLoading(false);
-      setCourse("");
-      setDob(new Date());
-      setShowPassword("");
-      setContactNumber("");
-      setSubjects(undefined);
-      setJoiningYear(new Date().getFullYear());
-    }
-  }, [store.errors]);
   return (
     <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center px-4">
       <div className="grid grid-cols-2">
@@ -130,20 +138,8 @@ const StudentRegister = () => {
               />
             </div>
           </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Username</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                onChange={(e) => setUsername(e.target.value)}
-                value={username}
-                type="text"
-                required
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                placeholder="Username"
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
+   
+          {/* <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Password</p>
             <div className="bg-[#515966] rounded-lg px-2 flex w-[14rem] items-center">
               <input
@@ -168,7 +164,7 @@ const StudentRegister = () => {
                 />
               )}
             </div>
-          </div>
+          </div> */}
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Gender</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
@@ -185,54 +181,42 @@ const StudentRegister = () => {
           </div>
 
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">DOB</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                required
-                value={dob}
-                type="date"
-                onChange={(e) => setDob(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Batch</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                required
-                type="text"
-                value={batch}
-                placeholder="Batch 19"
-                onChange={(e) => setBatch(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Section</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                required
-                type="text"
-                value={section}
-                onChange={(e) => setSection(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Course</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                required
-                type="text"
-                value={course}
-                onChange={(e) => setCourse(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+            <div
+              className={`bg-[#515966] rounded-lg w-[14rem] ${
+                errors.course ? "border border-red-500" : ""
+              }`}
+            >
+              <Controller
+                name="course"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    options={course.map((course) => ({
+                      value: course.course,
+                      label: course.course,
+                    }))}
+                    isMulti
+                    className="text-black placeholder:text-sm"
+                    classNamePrefix="select"
+                    theme={(theme) => ({
+                      ...theme,
+                      borderRadius: 5,
+                      colors: {
+                        ...theme.colors,
+                        primary25: "grey",
+                        primary: "white",
+                      },
+                    })}
+                  />
+                )}
               />
             </div>
           </div>
+
+
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Father Name</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
@@ -245,17 +229,7 @@ const StudentRegister = () => {
               />
             </div>
           </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Father Contact</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                type="text"
-                value={fatherContact}
-                onChange={(e) => setFatherContact(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
+
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Contact Number</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
@@ -268,18 +242,49 @@ const StudentRegister = () => {
               />
             </div>
           </div>
+          
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Year</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                required
-                value={joiningYear}
-                type="date"
-                onChange={(e) => setJoiningYear(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
+              <p className="text-[#515966] font-bold text-sm">Year</p>
+              <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+              <select
+              required
+              className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full"
+              value={year} // You need to define this state variable
+              onChange={(e) => setYear(e.target.value)} // And the corresponding setState function
+              >
+              <option value="" disabled>Select year</option>
+              <option value="none">none</option>            
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              </select>
           </div>
+         </div>
+
+         <div className="space-y-1">
+              <p className="text-[#515966] font-bold text-sm">Semester</p>
+              <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+              <select
+              required
+              className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full"
+              value={semester} // You need to define this state variable
+              onChange={(e) => setSemester(e.target.value)} // And the corresponding setState function
+              >
+              <option value="" disabled>Select semester</option>
+              <option value="none">none</option>            
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              </select>
+          </div>
+         </div>
+                    
 
           <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">Avatar</p>
@@ -293,24 +298,33 @@ const StudentRegister = () => {
               />
             </div>
           </div>
+         
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Subjects</p>
+            <p className="text-[#515966] font-bold text-sm">university_roll_no</p>
             <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <select
-                multiple
-                name="subjects"
-                value={subjects}
-                onChange={(e) => setSubjects(e.target.value)}
-                className="w-[13.5rem] bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              >
-                <option value="maths">Maths</option>
-                <option value="science">Science</option>
-                <option value="english">English</option>
-                <option value="history">History</option>
-                <option value="economics">Economics</option>
-              </select>
+              <input
+                required
+                type="number"
+                value={university_roll_no}
+                onChange={(e) => (e.target.value)}
+                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+              />
             </div>
           </div>
+          
+          <div className="space-y-1">
+            <p className="text-[#515966] font-bold text-sm">university_enrollment_no</p>
+            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+              <input
+                required
+                type="number"
+                value={university_enrollment_no}
+                onChange={(e) => (e.target.value)}
+                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+              />
+            </div>
+          </div>
+
           <div className="col-span-3 flex items-center justify-between">
             <button
               type="submit"
