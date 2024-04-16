@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addFaculty } from "../../../redux/actions/facultyActions.js";
-import Spinner from "../../../utils/Spinner";
 import axios from "axios";
 import Select from "react-select";
 
@@ -66,22 +65,22 @@ const FacultyRegister = () => {
   const onSubmit = (data) => {
     setLoading(true);
     const {
-    name,
-    avatar,
-    gender,
-    course:[],
-    contact_number,
-    email,
+      name,
+      avatar,
+      gender,
+      course: [],
+      contact_number,
+      email,
     } = data;
 
     dispatch(
       addFaculty({
-      name,
-      avatar,
-      gender,
-      course:[],
-      contact_number,
-      email,
+        name,
+        avatar,
+        gender,
+        course: [],
+        contact_number,
+        email,
       })
     );
   };
@@ -101,7 +100,7 @@ const FacultyRegister = () => {
           </h1>
         </div>
         <form
-         onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
           className={`h-[40rem] w-full bg-[#2c2f35] grid grid-cols-2 gap-4 p-[2rem] ${
             translate ? "-translate-x-[12rem]" : ""
           }  duration-1000 transition-all rounded-3xl shadow-2xl`}
@@ -266,15 +265,6 @@ const FacultyRegister = () => {
           >
             Home
           </a>
-          {loading && (
-            <Spinner
-              message="Logging In"
-              height={30}
-              width={150}
-              color="#ffffff"
-              messageColor="#fff"
-            />
-          )}
         </form>
       </div>
     </div>
