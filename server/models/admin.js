@@ -22,9 +22,6 @@ const adminSchema = mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "course",
     },
-    avatar: {
-      type: String,
-    },
     contactNumber: {
       type: Number,
       required: true,
