@@ -58,6 +58,10 @@ const studentSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "marks",
   },
+  batch: {
+    type: String,
+    required: true,
+  },
   avatar: {
     type: String,
   },
