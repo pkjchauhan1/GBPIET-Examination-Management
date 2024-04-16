@@ -90,26 +90,13 @@ const FacultyRegister = () => {
   return (
     <>
       <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center">
-        <div className="grid grid-cols-2">
-          <div
-            className={`h-[40rem] w-full bg-white flex items-center justify-center ${
-              translate ? "translate-x-[21rem]" : ""
-            }  duration-1000 transition-all rounded-3xl shadow-2xl`}
-          >
-            <h1 className="text-[3rem]  font-bold text-center">
-              Faculty
-              <br />
-              Register
-            </h1>
-          </div>
+        <div className="h-[40rem] w-[25rem] flex flex-col justify-center items-center">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className={`h-[40rem] w-full bg-[#2c2f35] grid grid-cols-2 gap-4 p-[2rem] ${
-              translate ? "-translate-x-[12rem]" : ""
-            }  duration-1000 transition-all rounded-3xl shadow-2xl`}
+            className="h-[40rem] w-full bg-[#2c2f35] flex flex-col justify-center items-center gap-4 rounded-3xl shadow-2xl md:p-6 md:h-auto sm:p-4 sm:h-auto"
           >
             <h1 className="text-white text-3xl font-semibold col-span-2">
-              Faculty
+              Faculty Register
             </h1>
             <div className="space-y-1">
               <p className="text-[#515966] font-bold text-sm">Name</p>
@@ -172,7 +159,9 @@ const FacultyRegister = () => {
                       className="w-[13.5rem] bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
                       {...field}
                     >
-                      <option value="select">Select</option>
+                      <option value="" disabled>
+                        Select
+                      </option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
@@ -206,7 +195,7 @@ const FacultyRegister = () => {
                         borderRadius: 5,
                         colors: {
                           ...theme.colors,
-                          primary25: "grey",
+                          primary25: "#ccc6c6",
                           primary: "white",
                         },
                       })}
@@ -228,7 +217,6 @@ const FacultyRegister = () => {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <input
-                      type="number"
                       placeholder="10 Digit Number"
                       className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
                       {...field}
@@ -239,7 +227,7 @@ const FacultyRegister = () => {
             </div>
             <button
               type="submit"
-              className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-3 bg-[#04bd7d]"
+              className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-2 bg-[#04bd7d]"
             >
               Register
             </button>
