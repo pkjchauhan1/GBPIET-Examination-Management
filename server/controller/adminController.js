@@ -38,32 +38,6 @@ async function sendEmails(users) {
   }
 }
 
-async function sendStudentEmails(users) {
-  const htmlTemplate = await fs.readFile(
-    path.join(__dirname, "student_welcome_email .html"),
-    "utf8"
-  );
-
-  for (const user of users) {
-    let htmlContent = htmlTemplate
-      .replace("{{user_college_id}}", user.college_id)
-      .replace("{{user_pass}}", user.newPassword)
-      .replace("{{user_name}}", user.name);
-
-    try {
-      const mailInfo = await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
-        to: user.email,
-        subject: "Welcome to GBPIET Result Management System",
-        html: htmlContent,
-      });
-      return mailInfo;
-    } catch (error) {
-      console.error(`Failed to send email to ${user.email}:`, error);
-    }
-  }
-}
-
 export const adminLogin = async (req, res) => {
   const { username, password } = req.body;
   const errors = { usernameError: "", passwordError: "" };

@@ -2,6 +2,39 @@ import Faculty from "../models/faculty.js";
 import Student from "../models/student.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import transporter from "../config/nodeMailerConfig.js";
+import fs from "fs/promises";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+async function sendStudentEmails(users) {
+  const htmlTemplate = await fs.readFile(
+    path.join(__dirname, "student_welcome_email .html"),
+    "utf8"
+  );
+
+  for (const user of users) {
+    let htmlContent = htmlTemplate
+      .replace("{{user_college_id}}", user.college_id)
+      .replace("{{user_pass}}", user.newPassword)
+      .replace("{{user_name}}", user.name);
+
+    try {
+      const mailInfo = await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: user.email,
+        subject: "Welcome to GBPIET Result Management System",
+        html: htmlContent,
+      });
+      return mailInfo;
+    } catch (error) {
+      console.error(`Failed to send email to ${user.email}:`, error);
+    }
+  }
+}
 
 export const facultyLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -110,6 +143,7 @@ export const addStudent = async (req, res) => {
       university_roll_no,
       university_enrollment_no,
       college_id,
+      batch,
     } = req.body;
 
     const errors = { studentError: String };
@@ -155,14 +189,16 @@ export const addStudent = async (req, res) => {
       university_enrollment_no,
       college_id,
       password_updated,
+      batch,
     });
 
-    const subjects = await Subject.find({ course, year });
-    if (subjects.length !== 0) {
-      for (var i = 0; i < subjects.length; i++) {
-        newStudent.subjects.push(subjects[i]._id);
-      }
-    }
+    // const subjects = await Subject.find({ course, year });
+    // if (subjects.length !== 0) {
+    //   for (var i = 0; i < subjects.length; i++) {
+    //     newStudent.subjects.push(subjects[i]._id);
+    //   }
+    // }
+
     await newStudent.save();
     sendStudentEmails([
       {
