@@ -4,7 +4,6 @@ import Faculty from "../models/faculty.js";
 import Student from "../models/student.js";
 import Subject from "../models/subject.js";
 import Notice from "../models/notice.js";
-import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import transporter from "../config/nodeMailerConfig.js";
@@ -136,7 +135,7 @@ export const updatedPassword = async (req, res) => {
 
 export const updateAdmin = async (req, res) => {
   try {
-    const { name, course, contactNumber, avatar, email } = req.body;
+    const { name, course, contactNumber, email } = req.body;
     const updatedAdmin = await Admin.findOne({ email });
     if (name) {
       updatedAdmin.name = name;
@@ -150,10 +149,6 @@ export const updateAdmin = async (req, res) => {
       updatedAdmin.contactNumber = contactNumber;
       await updatedAdmin.save();
     }
-    if (avatar) {
-      updatedAdmin.avatar = avatar;
-      await updatedAdmin.save();
-    }
     res.status(200).json(updatedAdmin);
   } catch (error) {
     const errors = { backendError: String };
@@ -164,8 +159,7 @@ export const updateAdmin = async (req, res) => {
 
 export const addAdmin = async (req, res) => {
   try {
-    const { name, course, contactNumber, avatar, email, joiningYear } =
-      req.body;
+    const { name, course, contactNumber, email } = req.body;
     const errors = { emailError: String };
     const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {
@@ -202,7 +196,6 @@ export const addAdmin = async (req, res) => {
       joiningYear,
       username,
       course,
-      avatar,
       contactNumber,
       passwordUpdated,
     });
@@ -278,7 +271,7 @@ export const addCourse = async (req, res) => {
 
 export const addFaculty = async (req, res) => {
   try {
-    const { name, course, contact_number, email, gender, avatar } = req.body;
+    const { name, course, contact_number, email, gender } = req.body;
     const errors = { facultyError: String };
     const existingFaculty = await Faculty.findOne({
       $or: [{ email: email }, { contact_number: contact_number }],
@@ -301,7 +294,6 @@ export const addFaculty = async (req, res) => {
         contact_number,
         email,
         gender,
-        avatar,
         passwordUpdated,
       });
       await newFaculty.save();
@@ -546,11 +538,9 @@ export const addStudent = async (req, res) => {
       university_roll_no,
       university_enrollment_no,
       college_id,
-      avatar,
     } = req.body;
 
     const errors = { studentError: String };
-    // const existingStudent = await Student.findOne({ college_id });
     const existingStudent = await Student.findOne({
       $or: [
         { email: email },
@@ -593,7 +583,6 @@ export const addStudent = async (req, res) => {
       university_enrollment_no,
       college_id,
       password_updated,
-      avatar,
     });
 
     const subjects = await Subject.find({ course, year });

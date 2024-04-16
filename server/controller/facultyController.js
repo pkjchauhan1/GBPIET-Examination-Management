@@ -70,8 +70,7 @@ export const updatedPassword = async (req, res) => {
 
 export const updateFaculty = async (req, res) => {
   try {
-    const { name, course, contactNumber, avatar, email, designation } =
-      req.body;
+    const { name, course, contactNumber, email, designation } = req.body;
     const updatedFaculty = await Faculty.findOne({ email });
     if (name) {
       updatedFaculty.name = name;
@@ -87,10 +86,6 @@ export const updateFaculty = async (req, res) => {
     }
     if (designation) {
       updatedFaculty.designation = designation;
-      await updatedFaculty.save();
-    }
-    if (avatar) {
-      updatedFaculty.avatar = avatar;
       await updatedFaculty.save();
     }
     res.status(200).json(updatedFaculty);

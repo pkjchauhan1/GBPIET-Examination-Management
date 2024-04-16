@@ -71,7 +71,6 @@ export const updateStudent = async (req, res) => {
       name,
       course,
       contactNumber,
-      avatar,
       email,
       batch,
       section,
@@ -115,10 +114,6 @@ export const updateStudent = async (req, res) => {
     }
     if (fatherContactNumber) {
       updatedStudent.fatherContactNumber = fatherContactNumber;
-      await updatedStudent.save();
-    }
-    if (avatar) {
-      updatedStudent.avatar = avatar;
       await updatedStudent.save();
     }
     res.status(200).json(updatedStudent);

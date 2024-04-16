@@ -31,7 +31,6 @@ const defaultValues = {
 Modal.setAppElement("#root");
 
 const FacultyRegister = () => {
-  const [loading, setLoading] = useState(false);
   const [translate, setTranslate] = useState(false);
   const [courses, setCourses] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -67,7 +66,6 @@ const FacultyRegister = () => {
   }, []);
 
   const onSubmit = (data) => {
-    setLoading(true);
     const { name, gender, course, contact_number, email } = data;
 
     const courseIds = course.map((c) => c.value);
@@ -82,12 +80,10 @@ const FacultyRegister = () => {
       })
     )
       .then(() => {
-        setModalIsOpen(true); // Open the modal on successful registration
-        setLoading(false);
+        setModalIsOpen(true);
       })
       .catch((error) => {
         console.error("Registration failed", error);
-        setLoading(false);
       });
   };
 
