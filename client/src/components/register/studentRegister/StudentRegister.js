@@ -17,7 +17,6 @@ const schema = yup
     semester: yup.string().required(),
     university_roll_no: yup.string().required(),
     university_enrollment_no: yup.string().required(),
-    avatar: yup.string(),
     gender: yup.string(),
     father_name: yup.string(),
     contact_number: yup.string().required(),
@@ -30,7 +29,6 @@ const defaultValues = {
   name: "",
   email: "",
   course: [],
-  avatar: "",
   contact_number: "",
   year: "",
   semester: "",
@@ -47,7 +45,6 @@ const StudentRegister = () => {
   const [year, setYear] = useState("");
   const [semester, setSemester] = useState("");
   const [error, setError] = useState({});
-  const [avatar, setAvatar] = useState("");
   const [loading, setLoading] = useState(false);
   const [gender, setGender] = useState(undefined);
   const [course, selectCourse] = useState([]);
@@ -96,7 +93,6 @@ const StudentRegister = () => {
       name,
       email,
       course,
-      avatar,
       contact_number,
       year,
       semester,
@@ -112,7 +108,6 @@ const StudentRegister = () => {
         name,
         email,
         course,
-        avatar,
         contact_number,
         year,
         semester,
@@ -126,11 +121,11 @@ const StudentRegister = () => {
   };
 
   return (
-    <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center px-4">
+    <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center">
       <div className="grid grid-cols-2">
         <div
           className={`h-[40rem] w-full bg-white flex items-center justify-center ${
-            translate ? "translate-x-[25rem]" : ""
+            translate ? "translate-x-[24rem]" : ""
           }  duration-1000 transition-all rounded-3xl shadow-2xl`}
         >
           <h1 className="text-[3rem]  font-bold text-center">
@@ -305,19 +300,6 @@ const StudentRegister = () => {
           </div>
 
           <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Avatar</p>
-            <div className="bg-[#515966] rounded-lg flex items-center w-full">
-              <input
-                required
-                type="file"
-                value={avatar}
-                onChange={(e) => setAvatar(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1">
             <p className="text-[#515966] font-bold text-sm">
               University Roll No
             </p>
@@ -357,7 +339,7 @@ const StudentRegister = () => {
             </button>{" "}
             <a
               href="/"
-              className="w-36 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]"
+              className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]"
             >
               Home
             </a>

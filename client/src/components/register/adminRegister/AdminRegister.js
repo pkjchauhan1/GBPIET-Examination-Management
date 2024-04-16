@@ -13,7 +13,6 @@ const schema = yup
   .object({
     dob: yup.string().required(),
     name: yup.string().required(),
-    avatar: yup.string().required(),
     username: yup.string().required(),
     password: yup.string().required(),
     course: yup.string().required(),
@@ -27,7 +26,6 @@ const defaultValues = {
   dob: "",
   name: "",
   email: "",
-  avatar: "",
   username: "",
   password: "",
   course: "",
@@ -65,7 +63,6 @@ const AdminRegister = () => {
       dob,
       name,
       email,
-      avatar,
       username,
       password,
       course,
@@ -78,7 +75,6 @@ const AdminRegister = () => {
         dob,
         name,
         email,
-        avatar,
         username,
         password,
         course,
@@ -299,27 +295,7 @@ const AdminRegister = () => {
               />
             </div>
           </div>
-          <div className="space-y-1 col-span-2">
-            <p className="text-[#515966] font-bold text-sm">Avatar</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-full flex  items-center ${
-                errors.avatar ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="avatar"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="file"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
+          
           <button
             type="submit"
             className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#04bd7d]"

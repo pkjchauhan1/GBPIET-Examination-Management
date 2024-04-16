@@ -11,7 +11,6 @@ import { useForm, Controller } from "react-hook-form";
 const schema = yup
   .object({
     name: yup.string().required(),
-    avatar: yup.string(),
     gender: yup.string().required(),
     course: yup.array().required(),
     contact_number: yup.string().required(),
@@ -23,7 +22,6 @@ const defaultValues = {
   name: "",
   email: "",
   gender: "",
-  avatar: "",
   contact_number: "",
   course: [],
 };
@@ -66,7 +64,6 @@ const FacultyRegister = () => {
     setLoading(true);
     const {
       name,
-      avatar,
       gender,
       course: [],
       contact_number,
@@ -76,7 +73,6 @@ const FacultyRegister = () => {
     dispatch(
       addFaculty({
         name,
-        avatar,
         gender,
         course: [],
         contact_number,
@@ -232,27 +228,7 @@ const FacultyRegister = () => {
               />
             </div>
           </div>
-          <div className="space-y-1 col-span-2">
-            <p className="text-[#515966] font-bold text-sm">Avatar</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-full flex  items-center ${
-                errors.avatar ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="avatar"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="file"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
+
           <button
             type="submit"
             className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-3 bg-[#04bd7d]"
