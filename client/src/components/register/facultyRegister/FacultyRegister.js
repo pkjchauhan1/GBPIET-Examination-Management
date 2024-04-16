@@ -68,7 +68,6 @@ const FacultyRegister = () => {
 
   const onSubmit = (data) => {
     setLoading(true);
-<<<<<<< HEAD
     const {
       name,
       gender,
@@ -76,11 +75,6 @@ const FacultyRegister = () => {
       contact_number,
       email,
     } = data;
-=======
-    const { name, gender, course, contact_number, email } = data;
-
-    const courseIds = course.map((c) => c.value);
->>>>>>> e405dfd67af1ac8944564758349ccc609a9c71ff
 
     dispatch(
       addFaculty({
@@ -265,7 +259,6 @@ const FacultyRegister = () => {
             </a>
           </form>
         </div>
-<<<<<<< HEAD
         <form
           onSubmit={handleSubmit(onSubmit)}
           className={`h-[40rem] w-full bg-[#2c2f35] grid grid-cols-2 gap-4 p-[2rem] ${
@@ -413,8 +406,6 @@ const FacultyRegister = () => {
             Home
           </a>
         </form>
-=======
->>>>>>> e405dfd67af1ac8944564758349ccc609a9c71ff
       </div>
       <Modal
         isOpen={modalIsOpen}
