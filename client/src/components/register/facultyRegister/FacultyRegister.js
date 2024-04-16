@@ -31,7 +31,6 @@ const defaultValues = {
 Modal.setAppElement("#root");
 
 const FacultyRegister = () => {
-  const [loading, setLoading] = useState(false);
   const [translate, setTranslate] = useState(false);
   const [courses, setCourses] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -67,14 +66,9 @@ const FacultyRegister = () => {
   }, []);
 
   const onSubmit = (data) => {
-    setLoading(true);
-    const {
-      name,
-      gender,
-      course: [],
-      contact_number,
-      email,
-    } = data;
+    const { name, gender, course, contact_number, email } = data;
+
+    const courseIds = course.map((c) => c.value);
 
     dispatch(
       addFaculty({
@@ -86,12 +80,10 @@ const FacultyRegister = () => {
       })
     )
       .then(() => {
-        setModalIsOpen(true); // Open the modal on successful registration
-        setLoading(false);
+        setModalIsOpen(true);
       })
       .catch((error) => {
         console.error("Registration failed", error);
-        setLoading(false);
       });
   };
 
@@ -259,153 +251,6 @@ const FacultyRegister = () => {
             </a>
           </form>
         </div>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className={`h-[40rem] w-full bg-[#2c2f35] grid grid-cols-2 gap-4 p-[2rem] ${
-            translate ? "-translate-x-[12rem]" : ""
-          }  duration-1000 transition-all rounded-3xl shadow-2xl`}
-        >
-          <h1 className="text-white text-3xl font-semibold col-span-2">
-            Faculty
-          </h1>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Name</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.name ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="name"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Email</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.email ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="email"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="text"
-                    placeholder="johndoe@email.com"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Gender</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.gender ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="gender"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <select
-                    name="gender"
-                    className="w-[13.5rem] bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Course</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] ${
-                errors.course ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="course"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    options={courses.map((course) => ({
-                      value: course.course,
-                      label: course.course,
-                    }))}
-                    isMulti
-                    className="text-black placeholder:text-sm"
-                    classNamePrefix="select"
-                    theme={(theme) => ({
-                      ...theme,
-                      borderRadius: 5,
-                      colors: {
-                        ...theme.colors,
-                        primary25: "grey",
-                        primary: "white",
-                      },
-                    })}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Contact Number</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.contact_number ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="contact_number"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="number"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-3 bg-[#04bd7d]"
-          >
-            Register
-          </button>
-          <a
-            href="/"
-            className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#FF2400]"
-          >
-            Home
-          </a>
-        </form>
       </div>
       <Modal
         isOpen={modalIsOpen}
