@@ -22,7 +22,6 @@ const Body = () => {
     email: "",
     course: "",
     contact_number: "",
-    avatar: "",
     university_roll_no: "",
     university_enrollment_no: "",
     college_id: "",
@@ -56,7 +55,6 @@ const Body = () => {
           email: "",
           course: "",
           contact_number: "", 
-          avatar: "",
           gender: "",
           year: "",
           father_name: "",
@@ -282,47 +280,6 @@ const Body = () => {
                   />
                 </div>
                 
-
-
-                {/* <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>
-                    Father's Contact Number :
-                  </h1>
-
-                  <input
-                    required
-                    placeholder="Father's Contact Number"
-                    className={classes.adminInput}
-                    type="number"
-                    value={value.father_contact_number}
-                    onChange={(e) =>
-                      setValue({
-                        ...value,
-                        father_contact_number: e.target.value,
-                      })
-                    }
-                  />
-                </div> */}
-
-                {/* <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>
-                    Mother's Contact Number :
-                  </h1>
-
-                  <input
-                    required
-                    placeholder="Mother's Contact Number"
-                    className={classes.adminInput}
-                    type="number"
-                    value={value.motherContactNumber}
-                    onChange={(e) =>
-                      setValue({
-                        ...value,
-                        motherContactNumber: e.target.value,
-                      })
-                    }
-                  />
-                </div> */}
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Semester :</h1>
                   <Select
@@ -346,18 +303,6 @@ const Body = () => {
                     <MenuItem value="8">8</MenuItem>
                   </Select>
                 </div>
-
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Avatar :</h1>
-
-                  <FileBase
-                    type="file"
-                    multiple={false}
-                    onDone={({ base64 }) =>
-                      setValue({ ...value, avatar: base64 })
-                    }
-                  />
-                </div>
               </div>
             </div>
             <div className={classes.adminFormButton}>
@@ -371,7 +316,6 @@ const Body = () => {
                     email: "",
                     course: "",
                     contact_number: "",
-                    avatar: "",
                     gender: "",
                     year: "",
                     father_name: "",
