@@ -23,7 +23,7 @@ const schema = yup
 const defaultValues = {
   name: "",
   email: "",
-  gender: "",
+  Gender: "",
   avatar: "",
   contact_number: "",
   course: [],
@@ -37,7 +37,7 @@ const FacultyRegister = () => {
   const dispatch = useDispatch();
 
   const {
-    control,
+    control, 
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -79,7 +79,7 @@ const FacultyRegister = () => {
       name,
       avatar,
       gender,
-      course:[],
+      course:[ ],
       contact_number,
       email,
       })
