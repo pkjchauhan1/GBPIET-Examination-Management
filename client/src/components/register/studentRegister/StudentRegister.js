@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addStudent } from "../../../redux/actions/adminActions.js";
 import axios from "axios";
 import Select from "react-select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
+
+import { addStudent } from "../../../redux/actions/adminActions.js";
 
 Modal.setAppElement("#root");
 
