@@ -3,74 +3,49 @@ import { useDispatch } from "react-redux";
 import { addStudent } from "../../../redux/actions/adminActions.js";
 import axios from "axios";
 import Select from "react-select";
-
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Controller } from "react-hook-form";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
-const schema = yup
-  .object({
-    name: yup.string().required(),
-    gender: yup.string().required(),
-    course: yup.array().required(),
-    year: yup.string().required(),
-    semester: yup.string().required(),
-    university_roll_no: yup.string().required(),
-    university_enrollment_no: yup.string().required(),
-    father_name: yup.string(),
-    contact_number: yup.string().required(),
-    email: yup.string().email().required(),
-    batch: yup.string().required(),
-  })
-  .required();
-
-const defaultValues = {
-  name: "",
-  email: "",
-  course: [],
-  contact_number: "",
-  year: "",
-  semester: "",
-  university_roll_no: "",
-  university_enrollment_no: "",
-  father_name: "",
-  gender: "",
-  batch: "",
-};
-
 Modal.setAppElement("#root");
 
+const validationSchema = Yup.object({
+  name: Yup.string().required("Name Required"),
+  email: Yup.string().email("Invalid Email Address").required("Email Required"),
+  gender: Yup.string().required("Gender Required"),
+  course: Yup.string()
+    .matches(
+      /^[0-9a-fA-F]{24}$/,
+      "Invalid course ID. It should be a 24-character hexadecimal string."
+    )
+    .required("Course ID is required"),
+  contact_number: Yup.string()
+    .matches(/^\d{10}$/, "Invalid Contact Number")
+    .required("Contact Number Required"),
+  year: Yup.string().required("Year Required"),
+  semester: Yup.string().required("Semester Required"),
+  college_id: Yup.string()
+    .matches(/^\d{7}$/, "Enter 7 Digit Number")
+    .required("College ID is required"),
+  university_roll_no: Yup.string()
+    .matches(/^\d{12}$/, "Enter 12 Digit Number")
+    .required("University Roll Number is required"),
+  university_enrollment_no: Yup.string()
+    .matches(/^\d{12}$/, "Enter 12 Digit Number")
+    .required("University Enrollment Number is required"),
+  father_name: Yup.string().required("Father Name Required"),
+  batch: Yup.string()
+    .matches(/^\d{4}$/, "Enter a valid 4-digit year")
+    .required("Batch is required"),
+});
+
 const StudentRegister = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [year, setYear] = useState("");
-  const [semester, setSemester] = useState("");
-  const [error, setError] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [gender, setGender] = useState("");
-  const [course, selectCourse] = useState([]);
-  const [father_name, setFatherName] = useState("");
-  const [contact_number, setContactNumber] = useState("");
-  const [university_roll_no, setUniversityRollNo] = useState("");
-  const [university_enrollment_no, setUniversityEnrollmentNo] = useState("");
-  const [translate, setTranslate] = useState(false);
   const [courses, setCourses] = useState([]);
-  const [batch, setBatch] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues,
-    resolver: yupResolver(schema),
-  });
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -78,283 +53,368 @@ const StudentRegister = () => {
         const response = await axios.get(
           "http://localhost:4000/api/admin/getallcourse"
         );
-        setCourses(response.data);
+        setCourses(
+          response.data.map((course) => ({
+            value: course._id,
+            label: course.course,
+          }))
+        );
       } catch (error) {
-        console.error(error);
+        console.error("Failed to load courses", error);
       }
     };
 
     fetchCourses();
-    setTimeout(() => {
-      setTranslate(true);
-    }, 1000);
   }, []);
-
-  const onSubmit = (data) => {
-    setLoading(true);
-    const {
-      name,
-      email,
-      course,
-      contact_number,
-      year,
-      semester,
-      university_roll_no,
-      university_enrollment_no,
-      father_name,
-      gender,
-      batch,
-    } = data;
-
-    const courseIds = course.map((c) => c.value);
-
-    dispatch(
-      addStudent({
-        name,
-        email,
-        course: courseIds,
-        contact_number,
-        year,
-        semester,
-        university_roll_no,
-        university_enrollment_no,
-        father_name,
-        gender,
-        batch,
-      })
-    )
-    .then(() => {
-      setModalIsOpen(true);
-    })
-    .catch((error) => {
-      console.error("Registration failed", error);
-    });
-};
 
   return (
     <>
-    <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center">
-      <div className="flex">
- 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className={`h-[40rem] w-full bg-[#2c2f35] grid gap-4 p-[2rem] rounded-3xl shadow-2xl`}
-        >
-          <h1 className="text-white text-3xl font-semibold col-span-3">
-            Student
-          </h1>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Name</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                required
-                type="text"
-                value={name}
-                placeholder="Enter your name"
-                onChange={(e) => setName(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Email</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                required
-                type="email"
-                value={email}
-                placeholder="Enter Your Email"
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
+      <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center">
+        <div className="flex">
+          <Formik
+            initialValues={{
+              name: "",
+              email: "",
+              gender: "",
+              course: "",
+              contact_number: "",
+              year: "",
+              semester: "",
+              college_id: "",
+              university_roll_no: "",
+              university_enrollment_no: "",
+              father_name: "",
+              batch: "",
+            }}
+            validationSchema={validationSchema}
+            onSubmit={(values, { setSubmitting }) => {
+              dispatch(addStudent(values))
+                .then(() => {
+                  setModalIsOpen(true);
+                })
+                .catch((error) => {
+                  console.error("Registration failed", error);
+                })
+                .finally(() => setSubmitting(false));
+            }}
+          >
+            {({ isSubmitting, setFieldValue, values }) => (
+              <Form className="h-[40rem] w-full bg-[#2c2f35] grid gap-4 p-[2rem] rounded-3xl shadow-2xl">
+                <h1 className="text-white text-3xl font-semibold col-span-3">
+                  Student
+                </h1>
 
-<div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Gender</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
-              <select
-                required
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-              >
-              <option value="" disabled>
-                        Select
+                <div className="space-y-1">
+                  <label
+                    htmlFor="name"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Name
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      type="text"
+                      name="name"
+                      placeholder="Enter Name"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="name"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="email"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Email
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      type="text"
+                      name="email"
+                      placeholder="Enter Email"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="gender"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Gender
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Field
+                      as="select"
+                      name="gender"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full cursor-pointer"
+                    >
+                      <option value="" disabled>
+                        Select Gender
                       </option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
-              </select>
-            </div>
-          </div>
+                    </Field>
+                  </div>
+                  <ErrorMessage
+                    name="gender"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
 
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Contact Number</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                value={contact_number}
-                placeholder="10 Digit Number"
-                onChange={(e) => setContactNumber(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Father Name</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                type="text"
-                value={father_name}
-                placeholder="Father Name"
-                onChange={(e) => setFatherName(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1">
-              <p className="text-[#515966] font-bold text-sm">Course</p>
-              <div
-                className={`bg-[#515966] rounded-lg w-[14rem] ${
-                  errors.course ? "border border-red-500" : ""
-                }`}
-              >
-                <Controller
-                  name="course"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={courses.map((course) => ({
-                        value: course._id,
-                        label: course.course,
-                      }))}
-              
-                      className="text-black placeholder:text-sm"
-                      classNamePrefix="select"
-                      theme={(theme) => ({
-                        ...theme,
-                        borderRadius: 5,
-                        colors: {
-                          ...theme.colors,
-                          primary25: "grey",
-                          primary: "white",
-                        },
-                      })}
+                <div className="space-y-1">
+                  <label
+                    htmlFor="contact_number"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Contact Number
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      type="text"
+                      name="contact_number"
+                      placeholder="Contact Number"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
                     />
-                  )}
-                />
-              </div>
-            </div>
+                  </div>
+                  <ErrorMessage
+                    name="contact_number"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
 
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Year</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
-              <select
-                required
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full"
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
-              >
-                <option value="" disabled>
-                  Select Year
-                </option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-              </select>
-            </div>
-          </div>
+                <div className="space-y-1">
+                  <label
+                    htmlFor="father_name"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Father Name
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      type="text"
+                      name="father_name"
+                      placeholder="Enter Father Name"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="father_name"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
 
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Semester</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
-              <select
-                required
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full"
-                value={semester}
-                onChange={(e) => setSemester(e.target.value)}
-              >
-                <option value="" disabled>
-                  Select Semester
-                </option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-              </select>
-            </div>
-          </div>
+                <div className="space-y-1">
+                  <label
+                    htmlFor="course"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Course
+                  </label>
+                  <Select
+                    options={courses}
+                    classNamePrefix="select"
+                    onChange={(option) =>
+                      setFieldValue("course", option ? option.value : "")
+                    }
+                    value={courses.find(
+                      (option) => option.value === values.course
+                    )}
+                    placeholder="Select Course"
+                  />
+                  <ErrorMessage
+                    name="course"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
 
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Batch</p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                value={batch}
-                placeholder="Enter Your Batch"
-                onChange={(e) => setBatch(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
+                <div className="space-y-1">
+                  <label
+                    htmlFor="year"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Year
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      as="select"
+                      name="year"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full cursor-pointer"
+                    >
+                      <option value="" disabled>
+                        Select Year
+                      </option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </Field>
+                  </div>
+                  <ErrorMessage
+                    name="year"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
 
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">
-              University Roll No
-            </p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                value={university_roll_no}
-                placeholder="12 Digit Number"
-                onChange={(e) => setUniversityRollNo(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">
-              University Enrollment No
-            </p>
-            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
-              <input
-                value={university_enrollment_no}
-                placeholder="12 Digit Number"
-                onChange={(e) => setUniversityEnrollmentNo(e.target.value)}
-                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-              />
-            </div>
-          </div>
+                <div className="space-y-1">
+                  <label
+                    htmlFor="semester"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Semester
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      as="select"
+                      name="semester"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full cursor-pointer"
+                    >
+                      <option value="" disabled>
+                        Select Semester
+                      </option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                    </Field>
+                  </div>
+                  <ErrorMessage
+                    name="semester"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
 
-          <div className="col-span-3 flex items-center justify-between">
-            <button
-              type="submit"
-              className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#04bd7d]"
-            >
-              Register
-            </button>{" "}
-            <a
-              href="/"
-              className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]"
-            >
-              Home
-            </a>
-          </div>
-          {(error.usernameError || error.passwordError) && (
-            <p className="text-red-500">
-              {error.usernameError || error.passwordError}
-            </p>
-          )}
-        </form>
+                <div className="space-y-1">
+                  <label
+                    htmlFor="batch"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Batch
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      type="text"
+                      name="batch"
+                      placeholder="Ex: 2022, 2024"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="batch"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="college_id"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    College ID
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      type="text"
+                      name="college_id"
+                      placeholder="Enter 07 Digit Number"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="college_id"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="university_enrollment_no"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    University Enrollment Number
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      type="text"
+                      name="university_enrollment_no"
+                      placeholder="Enter 12 Digit Number"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="university_enrollment_no"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="university_roll_no"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    University Roll Number
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+                    <Field
+                      type="text"
+                      name="university_roll_no"
+                      placeholder="Enter 12 Digit Number"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="university_roll_no"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="col-span-3 flex items-center justify-between">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="submit-button-class w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#04bd7d]"
+                  >
+                    Register
+                  </button>{" "}
+                  <a
+                    href="/"
+                    className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]"
+                  >
+                    Home
+                  </a>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
-    </div>
-    <Modal
+      <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
         contentLabel="Registration Successful"
