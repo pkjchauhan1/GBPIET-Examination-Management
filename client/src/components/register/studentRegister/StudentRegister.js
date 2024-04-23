@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-<<<<<<< HEAD
-import { addStudent } from "../../../redux/actions/facultyActions.js";
-=======
->>>>>>> 2648d560f1c2a26b63144b8a2d64a4c4fa09e429
 import axios from "axios";
 import Select from "react-select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
