@@ -50,7 +50,7 @@ const Body = () => {
   useEffect(() => {
     if (store.errors || store.faculty.studentAdded) {
       setLoading(false);
-      if (store.admin.studentAdded) {
+      if (store.faculty.studentAdded) {
         setValue({
           name: "",
           email: "",
@@ -72,7 +72,7 @@ const Body = () => {
     } else {
       setLoading(true);
     }
-  }, [store.errors, store.admin.studentAdded]);
+  }, [store.errors, store.faculty.studentAdded]);
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
