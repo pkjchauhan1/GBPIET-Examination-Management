@@ -140,8 +140,6 @@ export const addAdmin = async (req, res) => {
     } else if (contactNumber.toString().length != 10) {
       return res.status(400).json({ message: "Invalid contact number" });
     }
-    // const existingCourse = await Course.findOne({ course });
-    // let courseHelper = existingCourse?.courseCode;
     const admins = await Admin.find({ course });
 
     let helper;
@@ -165,7 +163,6 @@ export const addAdmin = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      joiningYear,
       username,
       course,
       contactNumber,
