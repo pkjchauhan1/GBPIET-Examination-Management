@@ -26,7 +26,7 @@ router.get("/getallstudent", auth, getAllStudent);
 router.post("/deletestudent", auth, deleteStudent);
 
 router.post("/addsubject", auth, addSubject);
-router.post("/getsubject", getSubject);
+router.post("/getsubject", auth, getSubject);
 router.get("/getallsubject", getAllSubject);
 router.post("/deletesubject", auth, deleteSubject);
 
