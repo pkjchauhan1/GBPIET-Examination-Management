@@ -12,6 +12,7 @@ const subjectSchema = new Schema({
   },
   subject_type: {
     type: String,
+    enum: ["Core", "Open Elective", "Program Elective", "Bridge Course"],
     required: true,
   },
   course: {

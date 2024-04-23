@@ -22,7 +22,6 @@ import {
 const router = express.Router();
 
 router.post("/login", adminLogin);
-
 router.post("/updatepassword", auth, updatedPassword);
 
 router.post("/addadmin", addAdmin);

@@ -38,32 +38,6 @@ async function sendEmails(users) {
   }
 }
 
-async function sendStudentEmails(users) {
-  const htmlTemplate = await fs.readFile(
-    path.join(__dirname, "student_welcome_email .html"),
-    "utf8"
-  );
-
-  for (const user of users) {
-    let htmlContent = htmlTemplate
-      .replace("{{user_college_id}}", user.college_id)
-      .replace("{{user_pass}}", user.newPassword)
-      .replace("{{user_name}}", user.name);
-
-    try {
-      const mailInfo = await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
-        to: user.email,
-        subject: "Welcome to GBPIET Result Management System",
-        html: htmlContent,
-      });
-      return mailInfo;
-    } catch (error) {
-      console.error(`Failed to send email to ${user.email}:`, error);
-    }
-  }
-}
-
 export const adminLogin = async (req, res) => {
   const { username, password } = req.body;
   const errors = { usernameError: "", passwordError: "" };
@@ -166,8 +140,6 @@ export const addAdmin = async (req, res) => {
     } else if (contactNumber.toString().length != 10) {
       return res.status(400).json({ message: "Invalid contact number" });
     }
-    // const existingCourse = await Course.findOne({ course });
-    // let courseHelper = existingCourse?.courseCode;
     const admins = await Admin.find({ course });
 
     let helper;
@@ -191,7 +163,6 @@ export const addAdmin = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      joiningYear,
       username,
       course,
       contactNumber,

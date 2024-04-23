@@ -1,51 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addFaculty } from "../../../redux/actions/adminActions.js";
 import axios from "axios";
 import Select from "react-select";
-
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Controller } from "react-hook-form";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
-const schema = yup
-  .object({
-    name: yup.string().required(),
-    gender: yup.string().required(),
-    course: yup.array().required(),
-    contact_number: yup.string().required(),
-    email: yup.string().email().required(),
-  })
-  .required();
-
-const defaultValues = {
-  name: "",
-  email: "",
-  gender: "",
-  contact_number: "",
-  course: [],
-};
+import { addFaculty } from "../../../redux/actions/adminActions.js";
 
 Modal.setAppElement("#root");
 
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  gender: Yup.string().required("Gender is required"),
+  contact_number: Yup.string()
+    .matches(/^\d{10}$/, "Contact number must be 10 digits")
+    .required("Contact number is required"),
+  course: Yup.array()
+    .min(1, "At least one course is required")
+    .required("Course is required"),
+});
+
 const FacultyRegister = () => {
-  const [translate, setTranslate] = useState(false);
   const [courses, setCourses] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues,
-    resolver: yupResolver(schema),
-  });
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -53,37 +36,37 @@ const FacultyRegister = () => {
         const response = await axios.get(
           "http://localhost:4000/api/admin/getallcourse"
         );
-        setCourses(response.data);
+        setCourses(
+          response.data.map((course) => ({
+            value: course._id,
+            label: course.course,
+          }))
+        );
       } catch (error) {
-        console.error(error);
+        console.error("Failed to load courses", error);
       }
     };
 
     fetchCourses();
-    setTimeout(() => {
-      setTranslate(true);
-    }, 1000);
   }, []);
 
-  const onSubmit = (data) => {
-    const { name, gender, course, contact_number, email } = data;
+  const onSubmit = (values, { setSubmitting }) => {
+    const courseIds = values.course.map((course) => course.value);
 
-    const courseIds = course.map((c) => c.value);
+    const submissionData = {
+      ...values,
+      course: courseIds,
+    };
 
-    dispatch(
-      addFaculty({
-        name,
-        gender,
-        course: courseIds,
-        contact_number,
-        email,
-      })
-    )
+    dispatch(addFaculty(submissionData))
       .then(() => {
         setModalIsOpen(true);
       })
       .catch((error) => {
         console.error("Registration failed", error);
+      })
+      .finally(() => {
+        setSubmitting(false);
       });
   };
 
@@ -91,153 +74,156 @@ const FacultyRegister = () => {
     <>
       <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center">
         <div className="h-[40rem] w-[25rem] flex flex-col justify-center items-center">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="h-[40rem] w-full bg-[#2c2f35] flex flex-col justify-center items-center gap-4 rounded-3xl shadow-2xl md:p-6 md:h-auto sm:p-4 sm:h-auto"
+          <Formik
+            initialValues={{
+              name: "",
+              email: "",
+              gender: "",
+              contact_number: "",
+              course: [],
+            }}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
           >
-            <h1 className="text-white text-3xl font-semibold col-span-2">
-              Faculty Register
-            </h1>
-            <div className="space-y-1">
-              <p className="text-[#515966] font-bold text-sm">Name</p>
-              <div
-                className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                  errors.name ? "border border-red-500" : ""
-                }`}
-              >
-                <Controller
-                  name="name"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <input
+            {({ setFieldValue, isSubmitting }) => (
+              <Form className="h-[40rem] w-full bg-[#2c2f35] flex flex-col justify-center items-center gap-4 rounded-3xl shadow-2xl md:p-6 md:h-auto sm:p-4 sm:h-auto">
+                <h1 className="text-white text-3xl font-semibold col-span-2">
+                  Faculty Register
+                </h1>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="name"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Name
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Field
+                      name="name"
                       type="text"
                       placeholder="Enter Your Name"
                       className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                      {...field}
                     />
-                  )}
-                />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <p className="text-[#515966] font-bold text-sm">Email</p>
-              <div
-                className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                  errors.email ? "border border-red-500" : ""
-                }`}
-              >
-                <Controller
-                  name="email"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <input
+                  </div>
+                  <ErrorMessage
+                    name="name"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="email"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Email
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Field
+                      name="email"
                       type="text"
                       placeholder="Enter Your Email"
                       className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                      {...field}
                     />
-                  )}
-                />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <p className="text-[#515966] font-bold text-sm">Gender</p>
-              <div
-                className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                  errors.gender ? "border border-red-500" : ""
-                }`}
-              >
-                <Controller
-                  name="gender"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <select
+                  </div>
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="gender"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Gender
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Field
+                      as="select"
                       name="gender"
-                      className="w-[13.5rem] bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                      {...field}
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full cursor-pointer"
                     >
-                      <option value="" disabled>
-                        Select
-                      </option>
+                      <option value="">Select Gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
-                    </select>
-                  )}
-                />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <p className="text-[#515966] font-bold text-sm">Course</p>
-              <div
-                className={`bg-[#515966] rounded-lg w-[14rem] ${
-                  errors.course ? "border border-red-500" : ""
-                }`}
-              >
-                <Controller
-                  name="course"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={courses.map((course) => ({
-                        value: course._id,
-                        label: course.course,
-                      }))}
-                      isMulti
-                      className="text-black placeholder:text-sm"
-                      classNamePrefix="select"
-                      theme={(theme) => ({
-                        ...theme,
-                        borderRadius: 5,
-                        colors: {
-                          ...theme.colors,
-                          primary25: "#ccc6c6",
-                          primary: "white",
-                        },
-                      })}
-                    />
-                  )}
-                />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <p className="text-[#515966] font-bold text-sm">Contact Number</p>
-              <div
-                className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                  errors.contact_number ? "border border-red-500" : ""
-                }`}
-              >
-                <Controller
-                  name="contact_number"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <input
+                    </Field>
+                  </div>
+                  <ErrorMessage
+                    name="gender"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="contact_number"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Contact Number
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Field
+                      name="contact_number"
+                      type="text"
                       placeholder="10 Digit Number"
                       className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                      {...field}
                     />
-                  )}
-                />
-              </div>
-            </div>
-            <button
-              type="submit"
-              className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-2 bg-[#04bd7d]"
-            >
-              Register
-            </button>
-            <a
-              href="/"
-              className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#FF2400]"
-            >
-              Home
-            </a>
-          </form>
+                  </div>
+                  <ErrorMessage
+                    name="contact_number"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="course"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Course
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Select
+                      isMulti
+                      name="course"
+                      options={courses}
+                      classNamePrefix="select"
+                      onChange={(opt) => setFieldValue("course", opt)}
+                      className="react-select-container w-full"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="course"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="col-span-3 flex items-center justify-between">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="submit-button-class w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#04bd7d]"
+                  >
+                    Register
+                  </button>{" "}
+                  <a
+                    href="/"
+                    className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]"
+                  >
+                    Home
+                  </a>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
       <Modal
@@ -277,7 +263,7 @@ const FacultyRegister = () => {
               setModalIsOpen(false);
               navigate("/");
             }}
-            className="bg-[#04bd7d] text-white font-medium py-2 px-6 rounded hover:bg-green-600 transition duration-150"
+            className="close-button"
           >
             OK
           </button>

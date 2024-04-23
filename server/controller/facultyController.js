@@ -1,7 +1,43 @@
 import Faculty from "../models/faculty.js";
 import Student from "../models/student.js";
+import Subject from "../models/subject.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import transporter from "../config/nodeMailerConfig.js";
+import fs from "fs/promises";
+import mongoose from "mongoose";
+
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+async function sendStudentEmails(users) {
+  const htmlTemplate = await fs.readFile(
+    path.join(__dirname, "student_welcome_email .html"),
+    "utf8"
+  );
+
+  for (const user of users) {
+    let htmlContent = htmlTemplate
+      .replace("{{user_college_id}}", user.college_id)
+      .replace("{{user_pass}}", user.newPassword)
+      .replace("{{user_name}}", user.name);
+
+    try {
+      const mailInfo = await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: user.email,
+        subject: "Welcome to GBPIET Result Management System",
+        html: htmlContent,
+      });
+      return mailInfo;
+    } catch (error) {
+      console.error(`Failed to send email to ${user.email}:`, error);
+    }
+  }
+}
 
 export const facultyLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -110,6 +146,7 @@ export const addStudent = async (req, res) => {
       university_roll_no,
       university_enrollment_no,
       college_id,
+      batch,
     } = req.body;
 
     const errors = { studentError: String };
@@ -155,14 +192,16 @@ export const addStudent = async (req, res) => {
       university_enrollment_no,
       college_id,
       password_updated,
+      batch,
     });
 
-    const subjects = await Subject.find({ course, year });
-    if (subjects.length !== 0) {
-      for (var i = 0; i < subjects.length; i++) {
-        newStudent.subjects.push(subjects[i]._id);
-      }
-    }
+    // const subjects = await Subject.find({ course, year });
+    // if (subjects.length !== 0) {
+    //   for (var i = 0; i < subjects.length; i++) {
+    //     newStudent.subjects.push(subjects[i]._id);
+    //   }
+    // }
+
     await newStudent.save();
     sendStudentEmails([
       {
@@ -187,19 +226,31 @@ export const addStudent = async (req, res) => {
 
 export const getStudent = async (req, res) => {
   try {
-    const { course, year, section } = req.body;
-    const errors = { noStudentError: String };
-    const students = await Student.find({ course, year, section });
-    if (students.length === 0) {
-      errors.noStudentError = "No Student Found";
-      return res.status(404).json(errors);
+    const { course, year, semester, batch } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(course)) {
+      return res.status(400).json({
+        error:
+          "Invalid course ID. It must be a single String of 12 bytes or a string of 24 hex characters",
+      });
     }
-
-    res.status(200).json({ result: students });
+    if (!year || !semester || !batch) {
+      return res.status(400).json({
+        error:
+          "Missing one or more of the required parameters: year, semester, batch",
+      });
+    }
+    const students = await Student.find({ course, year, semester, batch });
+    if (students.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No students found matching the provided criteria." });
+    }
+    res.status(200).json({ students });
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
+    console.error("Failed to retrieve students:", error);
+    res
+      .status(500)
+      .json({ error: "Internal server error while retrieving students." });
   }
 };
 
@@ -240,6 +291,7 @@ export const addSubject = async (req, res) => {
       external_marks,
       sessional_marks,
       total_marks,
+      subject_type,
       created_by,
     } = req.body;
     const existingSubject = await Subject.findOne({ subject_code });
@@ -258,6 +310,7 @@ export const addSubject = async (req, res) => {
       external_marks,
       sessional_marks,
       total_marks,
+      subject_type,
       created_by,
     });
     await newSubject.save();
@@ -286,12 +339,14 @@ export const addSubject = async (req, res) => {
 
 export const getSubject = async (req, res) => {
   try {
-    const { course, year, semester } = req.body;
-
-    if (!req.userId) return res.json({ message: "Unauthenticated" });
+    const { course, year, semester, subject_type } = req.body;
     const errors = { noSubjectError: String };
-
-    const subjects = await Subject.find({ course, year, semester });
+    const subjects = await Subject.find({
+      course,
+      year,
+      semester,
+      subject_type,
+    });
     if (subjects.length === 0) {
       errors.noSubjectError = "No Subject Found";
       return res.status(404).json(errors);
