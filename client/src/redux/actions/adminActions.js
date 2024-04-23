@@ -5,22 +5,14 @@ import {
   ADD_COURSE,
   ADD_FACULTY,
   GET_ALL_FACULTY,
-  ADD_SUBJECT,
-  ADD_STUDENT,
-  GET_ALL_STUDENT,
   GET_FACULTY,
-  GET_SUBJECT,
-  GET_STUDENT,
   GET_ALL_ADMIN,
   GET_ALL_COURSE,
   SET_ERRORS,
   UPDATE_PASSWORD,
-  GET_ALL_SUBJECT,
   DELETE_ADMIN,
   DELETE_COURSE,
   DELETE_FACULTY,
-  DELETE_STUDENT,
-  DELETE_SUBJECT,
   CREATE_NOTICE,
   GET_NOTICE,
 } from "../actionTypes";
@@ -50,14 +42,7 @@ export const adminUpdatePassword = (formData, navigate) => async (dispatch) => {
   }
 };
 
-export const getAllStudent = () => async (dispatch) => {
-  try {
-    const { data } = await api.getAllStudent();
-    dispatch({ type: GET_ALL_STUDENT, payload: data });
-  } catch (error) {
-    console.log("Redux Error", error);
-  }
-};
+
 export const getAllFaculty = () => async (dispatch) => {
   try {
     const { data } = await api.getAllFaculty();
@@ -85,14 +70,6 @@ export const getAllCourse = () => async (dispatch) => {
   }
 };
 
-export const getAllSubject = () => async (dispatch) => {
-  try {
-    const { data } = await api.getAllSubject();
-    dispatch({ type: GET_ALL_SUBJECT, payload: data });
-  } catch (error) {
-    console.log("Redux Error", error);
-  }
-};
 
 export const updateAdmin = (formData) => async (dispatch) => {
   try {
@@ -126,7 +103,7 @@ export const createNotice = (formData) => async (dispatch) => {
 export const getAdmin = (formData) => async (dispatch) => {
   try {
     const { data } = await api.getAdmin(formData);
-    dispatch({ type: GET_STUDENT, payload: data });
+    // dispatch({ type: GET_STUDENT, payload: data });
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
@@ -147,26 +124,6 @@ export const deleteFaculty = (formData) => async (dispatch) => {
     const {} = await api.deleteFaculty(formData);
     alert("Faculty Deleted");
     dispatch({ type: DELETE_FACULTY, payload: true });
-  } catch (error) {
-    dispatch({ type: SET_ERRORS, payload: error.response.data });
-  }
-};
-
-export const deleteStudent = (formData) => async (dispatch) => {
-  try {
-    const {} = await api.deleteStudent(formData);
-    alert("Student Deleted");
-    dispatch({ type: DELETE_STUDENT, payload: true });
-  } catch (error) {
-    dispatch({ type: SET_ERRORS, payload: error.response.data });
-  }
-};
-
-export const deleteSubject = (formData) => async (dispatch) => {
-  try {
-    const {} = await api.deleteSubject(formData);
-    alert("Subject Deleted");
-    dispatch({ type: DELETE_SUBJECT, payload: true });
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
@@ -211,43 +168,6 @@ export const getFaculty = (course) => async (dispatch) => {
   }
 };
 
-export const addSubject = (formData) => async (dispatch) => {
-  try {
-    const {} = await api.addSubject(formData);
-    alert("Subject Added Successfully");
-    dispatch({ type: ADD_SUBJECT, payload: true });
-  } catch (error) {
-    dispatch({ type: SET_ERRORS, payload: error.response.data });
-  }
-};
-
-export const getSubject = (formData) => async (dispatch) => {
-  try {
-    const { data } = await api.getSubject(formData);
-    dispatch({ type: GET_SUBJECT, payload: data });
-  } catch (error) {
-    dispatch({ type: SET_ERRORS, payload: error.response.data });
-  }
-};
-
-export const addStudent = (formData) => async (dispatch) => {
-  try {
-    const {} = await api.addStudent(formData);
-    alert("Student Added Successfully");
-    dispatch({ type: ADD_STUDENT, payload: true });
-  } catch (error) {
-    dispatch({ type: SET_ERRORS, payload: error.response.data });
-  }
-};
-
-export const getStudent = (formData) => async (dispatch) => {
-  try {
-    const { data } = await api.getStudent(formData);
-    dispatch({ type: GET_STUDENT, payload: data });
-  } catch (error) {
-    dispatch({ type: SET_ERRORS, payload: error.response.data });
-  }
-};
 
 export const getNotice = (formData) => async (dispatch) => {
   try {

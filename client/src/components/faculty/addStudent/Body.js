@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
 import FileBase from "react-file-base64";
-import { addStudent } from "../../../redux/actions/adminActions";
+import { addStudent } from "../../../redux/actions/facultyActions";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Spinner from "../../../utils/Spinner";
@@ -29,6 +29,7 @@ const Body = () => {
     year: "",
     father_name: "",
     semester: "",
+    batch: "",
   });
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const Body = () => {
   };
 
   useEffect(() => {
-    if (store.errors || store.admin.studentAdded) {
+    if (store.errors || store.faculty.studentAdded) {
       setLoading(false);
       if (store.admin.studentAdded) {
         setValue({
@@ -62,6 +63,7 @@ const Body = () => {
           university_roll_no:"",
           university_enrollment_no:"",
           college_id:"",    
+          batch: "",
         });
 
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -134,12 +136,12 @@ const Body = () => {
                   />
                 </div>
 
-                {/* <div className={classes.adminForm3}>
+                <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Batch :</h1>
 
                   <input
                     required
-                    placeholder="yyyy-yyyy"
+                    placeholder="Enter Your Batch"
                     className={classes.adminInput}
                     type="text"
                     value={value.batch}
@@ -147,7 +149,7 @@ const Body = () => {
                       setValue({ ...value, batch: e.target.value })
                     }
                   />
-                </div> */}
+                </div>
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Father's Name :</h1>
 
@@ -162,20 +164,7 @@ const Body = () => {
                     }
                   />
                 </div>
-                {/* <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Mother's Name :</h1>
-
-                  <input
-                    required
-                    placeholder="Mother's Name"
-                    className={classes.adminInput}
-                    type="text"
-                    value={value.motherName}
-                    onChange={(e) =>
-                      setValue({ ...value, motherName: e.target.value })
-                    }
-                  />
-                </div> */}
+                
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Year :</h1>
                   <Select
@@ -305,6 +294,21 @@ const Body = () => {
                 </div>
               </div>
             </div>
+
+            {/* <div className="space-y-1">
+            <p className="text-[#515966] font-bold text-sm">Batch</p>
+            <div className="bg-[#515966] rounded-lg w-[14rem] flex  items-center">
+              <input
+                value={batch}
+                placeholder="Enter Your Batch"
+                onChange={(e) => setBatch(e.target.value)}
+                className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+              />
+            </div>
+          </div> */}
+                
+                
+
             <div className={classes.adminFormButton}>
               <button className={classes.adminFormSubmitButton} type="submit">
                 Submit

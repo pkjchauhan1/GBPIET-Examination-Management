@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addStudent } from "../../../redux/actions/adminActions.js";
+import { addStudent } from "../../../redux/actions/facultyActions.js";
 import axios from "axios";
 import Select from "react-select";
 

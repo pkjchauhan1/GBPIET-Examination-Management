@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
+import BoyIcon from "@mui/icons-material/Boy";
 import { useDispatch, useSelector } from "react-redux";
-import { getSubject } from "../../../redux/actions/adminActions";
+import { getStudent } from "../../../redux/actions/facultyActions";
 import { MenuItem, Select } from "@mui/material";
 import Spinner from "../../../utils/Spinner";
-import { SET_ERRORS } from "../../../redux/actionTypes";
 import * as classes from "../../../utils/styles";
-
+import { SET_ERRORS } from "../../../redux/actionTypes";
 const Body = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState({});
@@ -16,6 +15,7 @@ const Body = () => {
   const [value, setValue] = useState({
     course: "",
     year: "",
+    semester: "",
   });
   const [search, setSearch] = useState(false);
 
@@ -31,13 +31,13 @@ const Body = () => {
     setSearch(true);
     setLoading(true);
     setError({});
-    dispatch(getSubject(value));
+    dispatch(getStudent(value));
   };
-  const subjects = useSelector((state) => state.admin.subjects.result);
+  const students = useSelector((state) => state.admin.students.result);
 
   useEffect(() => {
-    if (subjects?.length !== 0) setLoading(false);
-  }, [subjects]);
+    if (students?.length !== 0) setLoading(false);
+  }, [students]);
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
@@ -47,8 +47,8 @@ const Body = () => {
     <div className="flex-[0.8] mt-3">
       <div className="space-y-5">
         <div className="flex text-gray-400 items-center space-x-2">
-          <MenuBookIcon />
-          <h1>All Subjects</h1>
+          <BoyIcon />
+          <h1>All Students</h1>
         </div>
         <div className=" mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]">
           <form
@@ -86,6 +86,27 @@ const Body = () => {
               <MenuItem value="3">3</MenuItem>
               <MenuItem value="4">4</MenuItem>
             </Select>
+
+            <label htmlFor="semester">Semester</label>
+            <Select
+              required
+              displayEmpty
+              sx={{ height: 36, width: 224 }}
+              inputProps={{ "aria-label": "Without label" }}
+              value={value.semester}
+              onChange={(e) => setValue({ ...value, semester: e.target.value })}
+            >
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="1">1</MenuItem>
+              <MenuItem value="2">2</MenuItem>
+              <MenuItem value="3">3</MenuItem>
+              <MenuItem value="4">4</MenuItem>
+              <MenuItem value="5">5</MenuItem>
+              <MenuItem value="6">6</MenuItem>
+              <MenuItem value="7">7</MenuItem>
+              <MenuItem value="8">8</MenuItem>
+            </Select>
+
             <button
               className={`${classes.adminFormSubmitButton} w-56`}
               type="submit"
@@ -93,7 +114,6 @@ const Body = () => {
               Search
             </button>
           </form>
-
           <div className="col-span-3 mr-6">
             <div className={classes.loadingAndError}>
               {loading && (
@@ -105,35 +125,41 @@ const Body = () => {
                   messageColor="blue"
                 />
               )}
-              {(error.noSubjectError || error.backendError) && (
+              {(error.noStudentError || error.backendError) && (
                 <p className="text-red-500 text-2xl font-bold">
-                  {error.noSubjectError || error.backendError}
+                  {error.noStudentError || error.backendError}
                 </p>
               )}
             </div>
             {search &&
               !loading &&
               Object.keys(error).length === 0 &&
-              subjects?.length !== 0 && (
+              students?.length !== 0 && (
                 <div className={classes.adminData}>
-                  <div className="grid grid-cols-7">
-                    <h1 className={`${classes.adminDataHeading} col-span-1`}>
+                  <div className="grid grid-cols-10">
+                    <h1 className={`col-span-1 ${classes.adminDataHeading}`}>
                       Sr no.
                     </h1>
-                    <h1 className={`${classes.adminDataHeading} col-span-2`}>
-                      Subject Code
+                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
+                      Name
                     </h1>
-                    <h1 className={`${classes.adminDataHeading} col-span-3`}>
-                      Subject Name
+                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
+                      Username
                     </h1>
-                    <h1 className={`${classes.adminDataHeading} col-span-1`}>
-                      Total Lectures
+                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
+                      Email
+                    </h1>
+                    <h1 className={`col-span-1 ${classes.adminDataHeading}`}>
+                      Section
+                    </h1>
+                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
+                      Batch
                     </h1>
                   </div>
-                  {subjects?.map((sub, idx) => (
+                  {students?.map((stu, idx) => (
                     <div
                       key={idx}
-                      className={`${classes.adminDataBody} grid-cols-7`}
+                      className={`${classes.adminDataBody} grid-cols-10`}
                     >
                       <h1
                         className={`col-span-1 ${classes.adminDataBodyFields}`}
@@ -143,17 +169,27 @@ const Body = () => {
                       <h1
                         className={`col-span-2 ${classes.adminDataBodyFields}`}
                       >
-                        {sub.subjectCode}
+                        {stu.name}
                       </h1>
                       <h1
-                        className={`col-span-3 ${classes.adminDataBodyFields}`}
+                        className={`col-span-2 ${classes.adminDataBodyFields}`}
                       >
-                        {sub.subjectName}
+                        {stu.username}
+                      </h1>
+                      <h1
+                        className={`col-span-2 ${classes.adminDataBodyFields}`}
+                      >
+                        {stu.email}
                       </h1>
                       <h1
                         className={`col-span-1 ${classes.adminDataBodyFields}`}
                       >
-                        {sub.totalLectures}
+                        {stu.section}
+                      </h1>
+                      <h1
+                        className={`col-span-2 ${classes.adminDataBodyFields}`}
+                      >
+                        {stu.batch}
                       </h1>
                     </div>
                   ))}

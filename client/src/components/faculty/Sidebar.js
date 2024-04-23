@@ -4,8 +4,12 @@ import HomeIcon from "@mui/icons-material/Home";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import AddIcon from "@mui/icons-material/Add";
+import BoyIcon from "@mui/icons-material/Boy";
+import DeleteIcon from "@mui/icons-material/Delete";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useDispatch } from "react-redux";
 import decode from "jwt-decode";
+
 const isNotActiveStyle =
   "flex items-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out capitalize hover:bg-gray-200 py-2 my-1";
 const isActiveStyle =
@@ -30,6 +34,8 @@ const Sidebar = () => {
 
     setUser(JSON.parse(localStorage.getItem("faculty")));
   }, [navigate]);
+
+  
   return (
     <div className="flex-[0.2]">
       <div className="space-y-8 overflow-y-scroll scrollbar-thin scrollbar-track-white scrollbar-thumb-gray-300 h-[33rem]">
@@ -73,6 +79,69 @@ const Sidebar = () => {
             <h1 className="font-normal">Upload Marks</h1>
           </NavLink>
         </div>
+
+        <div className="">
+          <NavLink
+            to="/faculty/allsubject"
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <MenuBookIcon className="" />
+            <h1 className="font-normal">Subjects</h1>
+          </NavLink>
+
+          <NavLink
+            to="/faculty/addsubject"
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <AddIcon className="" />
+            <h1 className="font-normal">Add Subject</h1>
+          </NavLink>
+          <NavLink
+            to="/faculty/deletesubject"
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <DeleteIcon className="" />
+            <h1 className="font-normal">Delete Subject</h1>
+          </NavLink>
+        </div>
+
+        <div className="">
+          <NavLink
+            to="/faculty/allstudent"
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <BoyIcon className="" />
+            <h1 className="font-normal">Our Students</h1>
+          </NavLink>
+
+          <NavLink
+            to="/faculty/addstudent"
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <AddIcon className="" />
+            <h1 className="font-normal">Add Students</h1>
+          </NavLink>
+          <NavLink
+            to="/faculty/deletestudent"
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <DeleteIcon className="" />
+            <h1 className="font-normal">Delete Student</h1>
+          </NavLink>
+        </div>
+
         <div className="">
           <NavLink
             to="/faculty/result"
