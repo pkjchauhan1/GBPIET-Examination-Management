@@ -8551,6 +8551,11 @@ react-select@^5.8.0:
     react-transition-group "^4.3.0"
     use-isomorphic-layout-effect "^1.1.2"
 
+react-selector@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.npmjs.org/react-selector/-/react-selector-0.0.5.tgz"
+  integrity sha512-WJeA0Er7RuQe6AT0KxS59RHOQnQxKgxaZywiBqW725e0wU9F6PNaUJanlMSmH670BXPh7QgFE05gFUwK6qSdpw==
+
 react-spinners@^0.11.0:
   version "0.11.0"
   resolved "https://registry.npmjs.org/react-spinners/-/react-spinners-0.11.0.tgz"
