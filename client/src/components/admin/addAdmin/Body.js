@@ -142,8 +142,6 @@ const Body = () => {
                     required
                     placeholder="Contact Number"
                     className={classes.adminInput}
-                    type="number"
-                    value={value.contactNumber}
                     onChange={(e) =>
                       setValue({ ...value, contactNumber: e.target.value })
                     }

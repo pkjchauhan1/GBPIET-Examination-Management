@@ -188,8 +188,6 @@ const Body = () => {
                     required
                     placeholder="university enrollment no"
                     className={classes.adminInput}
-                    type="number"
-                    value={value.university_enrollment_no}
                     onChange={(e) =>
                       setValue({ ...value, university_enrollment_no: e.target.value })
                     }
