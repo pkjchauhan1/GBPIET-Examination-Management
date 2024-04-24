@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
-import { addStudent } from "../../../redux/actions/facultyActions";
+import { addStudent } from "../../../redux/actions/facultyActions.js";
 
 Modal.setAppElement("#root");
 
