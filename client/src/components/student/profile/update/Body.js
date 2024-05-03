@@ -20,7 +20,7 @@ const Body = () => {
   const [error, setError] = useState({});
   const [value, setValue] = useState({
     name: "",
-    dob: "",
+    // dob: "",
     email: user.result.email,
     course: "",
     contactNumber: "",
@@ -29,7 +29,7 @@ const Body = () => {
     year: "",
     motherName: "",
     fatherName: "",
-    fatherContactNumber: "",
+    // fatherContactNumber: "",
     section: "",
   });
 
@@ -45,7 +45,7 @@ const Body = () => {
     setLoading(true);
     if (
       value.name === "" &&
-      value.dob === "" &&
+      // value.dob === "" &&
       value.course === "" &&
       value.contactNumber === "" &&
       value.avatar === "" &&
@@ -53,7 +53,7 @@ const Body = () => {
       value.year === "" &&
       value.motherName === "" &&
       value.fatherName === "" &&
-      value.fatherContactNumber === "" &&
+      // value.fatherContactNumber === "" &&
       value.section === ""
     ) {
       alert("Enter atleast one value");
@@ -111,7 +111,7 @@ const Body = () => {
                   />
                 </div>
 
-                <div className={classes.adminForm3}>
+                {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>DOB :</h1>
                   <input
                     placeholder={user.result?.dob}
@@ -122,7 +122,7 @@ const Body = () => {
                       setValue({ ...value, dob: e.target.value })
                     }
                   />
-                </div>
+                </div> */}
 
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Email :</h1>
@@ -228,7 +228,7 @@ const Body = () => {
                     }
                   />
                 </div>
-                <div className={classes.adminForm3}>
+                {/* <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>
                     Father's Contact Number :
                   </h1>
@@ -244,7 +244,7 @@ const Body = () => {
                     }
                     type="text"
                   />
-                </div>
+                </div> */}
                 <div className={classes.adminForm3}>
                   <h1 className={classes.adminLabel}>Avatar :</h1>
                   <FileBase

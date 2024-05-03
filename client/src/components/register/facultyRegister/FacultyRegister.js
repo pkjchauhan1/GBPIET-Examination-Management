@@ -23,7 +23,7 @@ const schema = yup
 const defaultValues = {
   name: "",
   email: "",
-  Gender: "",
+  ender: "",
   avatar: "",
   contact_number: "",
   course: [],

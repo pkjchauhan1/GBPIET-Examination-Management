@@ -20,7 +20,6 @@ const Body = () => {
     email: "",
     course: "",
     contactNumber: "",
-    avatar: "",
     gender: "",
   });
 
@@ -47,7 +46,6 @@ const Body = () => {
           email: "",
           course: "",
           contactNumber: "",
-          avatar: "",
           gender: "",
         });
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -198,17 +196,7 @@ const Body = () => {
                     }
                   />
                 </div> */}
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Avatar :</h1>
-
-                  <FileBase
-                    type="file"
-                    multiple={false}
-                    onDone={({ base64 }) =>
-                      setValue({ ...value, avatar: base64 })
-                    }
-                  />
-                </div>
+                
               </div>
             </div>
             <div className={classes.adminFormButton}>
@@ -222,7 +210,6 @@ const Body = () => {
                     email: "",
                     course: "",
                     contactNumber: "",
-                    avatar: "",
                     password: "",
                     username: "",
                   });

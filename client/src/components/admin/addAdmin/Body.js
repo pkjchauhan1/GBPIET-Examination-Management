@@ -20,7 +20,6 @@ const Body = () => {
     email: "",
     course: "",
     contactNumber: "",
-    avatar: "",
   });
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
@@ -45,7 +44,6 @@ const Body = () => {
           email: "",
           course: "",
           contactNumber: "",
-          avatar: "",
           password: "",
           username: "",
         });
@@ -151,17 +149,6 @@ const Body = () => {
                     }
                   />
                 </div>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Avatar :</h1>
-
-                  <FileBase
-                    type="file"
-                    multiple={false}
-                    onDone={({ base64 }) =>
-                      setValue({ ...value, avatar: base64 })
-                    }
-                  />
-                </div>
               </div>
             </div>
             <div className={classes.adminFormButton}>
@@ -175,7 +162,6 @@ const Body = () => {
                     email: "",
                     course: "",
                     contactNumber: "",
-                    avatar: "",
                     joiningYear: Date().split(" ")[3],
                     password: "",
                     username: "",

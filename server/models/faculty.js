@@ -20,16 +20,13 @@ const facultySchema = mongoose.Schema({
   },
   course: [
     {
-    type: Schema.Types.ObjectId,
-    ref: "course",
-  }
-],
+      type: Schema.Types.ObjectId,
+      ref: "course",
+    },
+  ],
   contact_number: {
     type: String,
     required: true,
-  },
-  avatar: {
-    type: String,
   },
   passwordUpdated: {
     type: Boolean,

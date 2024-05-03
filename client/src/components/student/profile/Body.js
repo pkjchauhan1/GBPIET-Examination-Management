@@ -37,17 +37,17 @@ const Body = () => {
                 <Data label="Mother's Name" value={user.result.motherName} />
               </div>
               <div className="flex flex-col space-y-10 ">
-                <Data label="DOB" value={user.result.dob} />
+                {/* <Data label="DOB" value={user.result.dob} /> */}
                 <Data label="Year" value={user.result.year} />
                 <Data
                   label="Contact Number"
                   value={user.result.contactNumber}
                 />
                 <Data label="Section" value={user.result.section} />
-                <Data
+                {/* <Data
                   label="Father's Contact Number"
                   value={user.result.fatherContactNumber}
-                />
+                /> */}
                 <Data label="Batch" value={user.result.batch} />
               </div>
             </div>

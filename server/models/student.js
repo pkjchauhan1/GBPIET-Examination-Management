@@ -58,8 +58,9 @@ const studentSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "marks",
   },
-  avatar: {
+  batch: {
     type: String,
+    required: true,
   },
   password_updated: {
     type: Boolean,

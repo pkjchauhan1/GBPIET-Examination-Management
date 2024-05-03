@@ -4,6 +4,13 @@ import {
   updatedPassword,
   updateFaculty,
   getStudent,
+  addSubject,
+  getSubject,
+  getAllSubject,
+  deleteSubject,
+  addStudent,
+  getAllStudent,
+  deleteStudent,
 } from "../controller/facultyController.js";
 import auth from "../middleware/auth.js";
 
@@ -12,6 +19,15 @@ const router = express.Router();
 router.post("/login", facultyLogin);
 router.post("/updatepassword", auth, updatedPassword);
 router.post("/updateprofile", auth, updateFaculty);
+
+router.post("/addsubject", auth, addSubject);
+router.post("/getsubject", auth, getSubject);
+router.get("/getallsubject", auth, getAllSubject);
+router.post("/deletesubject", auth, deleteSubject);
+
+router.post("/addstudent", addStudent);
 router.post("/getstudent", auth, getStudent);
+router.get("/getallstudent", auth, getAllStudent);
+router.post("/deletestudent", auth, deleteStudent);
 
 export default router;
