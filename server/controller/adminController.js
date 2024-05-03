@@ -241,42 +241,71 @@ export const addCourse = async (req, res) => {
 export const addFaculty = async (req, res) => {
   try {
     const { name, course, contact_number, email, gender } = req.body;
-    const errors = { facultyError: String };
+
+    // Validate contact number length
+    if (contact_number.toString().length !== 10) {
+      return res.status(400).json({
+        errors: {
+          contact_number: "Invalid contact number, must be 10 digits.",
+        },
+      });
+    }
+
+    // Check for existing faculty with the same email or contact number
     const existingFaculty = await Faculty.findOne({
-      $or: [{ email: email }, { contact_number: contact_number }],
+      $or: [{ email }, { contact_number }],
     });
 
     if (existingFaculty) {
-      errors.facultyError = "Faculty already exists";
-      return res.status(400).json(errors);
-    } else if (contact_number.toString().length != 10) {
-      return res.status(400).json({ message: "Invalid contact number" });
-    } else {
-      let newPassword = "@Abc12345";
-      let hashedPassword = await bcrypt.hash(newPassword, 10);
-      var passwordUpdated = false;
+      let errors = {};
+      if (existingFaculty.email === email) {
+        errors.email = "This email is already registered.";
+      }
+      if (existingFaculty.contact_number === contact_number) {
+        errors.contact_number = "This contact number is already in use.";
+      }
+      return res.status(400).json({ errors });
+    }
 
-      const newFaculty = await new Faculty({
-        name,
-        password: hashedPassword,
-        course,
-        contact_number,
-        email,
-        gender,
-        passwordUpdated,
-      });
-      await newFaculty.save();
-      sendEmails([{ email: email, newPassword: newPassword, name: name }]);
-      return res.status(200).json({
+    // Hash password and create new faculty
+    const newPassword = "@Abc12345"; // Consider generating this dynamically or more securely
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const newFaculty = new Faculty({
+      name,
+      password: hashedPassword,
+      course,
+      contact_number,
+      email,
+      gender,
+      passwordUpdated: false,
+    });
+
+    await newFaculty.save();
+
+    // Send welcome email
+    try {
+      await sendEmails([{ email, newPassword, name }]);
+      return res.status(201).json({
         success: true,
-        message: "Faculty registerd successfully, email sent",
-        response: newFaculty,
+        message:
+          "Faculty registered successfully. Login details have been sent via email.",
+        faculty: newFaculty,
+      });
+    } catch (emailError) {
+      console.error("Failed to send email", emailError);
+      // Consider how critical email sending is to your process and handle accordingly
+      return res.status(201).json({
+        success: true,
+        message:
+          "Faculty registered, but failed to send login details via email.",
+        faculty: newFaculty,
       });
     }
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
+    console.error("Server error", error);
+    return res.status(500).json({
+      errors: { serverError: "An error occurred on the server." },
+    });
   }
 };
 
