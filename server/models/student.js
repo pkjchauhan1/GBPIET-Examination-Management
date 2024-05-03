@@ -33,11 +33,11 @@ const studentSchema = new Schema({
   },
   university_enrollment_no: {
     type: String,
-    require: true,
+    required: true,
   },
   college_id: {
     type: String,
-    require: true,
+    required: true,
   },
   subjects: [
     {
@@ -47,12 +47,15 @@ const studentSchema = new Schema({
   ],
   gender: {
     type: String,
+    required: true,
   },
   father_name: {
     type: String,
+    required: true,
   },
   contact_number: {
     type: String,
+    required: true,
   },
   marks: {
     type: Schema.Types.ObjectId,

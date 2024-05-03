@@ -20,14 +20,14 @@ router.post("/login", facultyLogin);
 router.post("/updatepassword", auth, updatedPassword);
 router.post("/updateprofile", auth, updateFaculty);
 
-router.post("/addsubject", auth, addSubject);
-router.post("/getsubject", auth, getSubject);
-router.get("/getallsubject", auth, getAllSubject);
-router.post("/deletesubject", auth, deleteSubject);
-
 router.post("/addstudent", addStudent);
 router.post("/getstudent", auth, getStudent);
 router.get("/getallstudent", auth, getAllStudent);
 router.post("/deletestudent", auth, deleteStudent);
+
+router.post("/addsubject", auth, addSubject);
+router.post("/getsubject", auth, getSubject);
+router.get("/getallsubject", getAllSubject);
+router.post("/deletesubject", auth, deleteSubject);
 
 export default router;

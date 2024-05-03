@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
-import { getStudent, deleteStudent } from "../../../redux/actions/adminActions";
+import { getSubject, deleteSubject } from "../../../redux/actions/facultyActions";
 import { MenuItem, Select } from "@mui/material";
 import Spinner from "../../../utils/Spinner";
 import * as classes from "../../../utils/styles";
-import { DELETE_STUDENT, SET_ERRORS } from "../../../redux/actionTypes";
+import { DELETE_SUBJECT, SET_ERRORS } from "../../../redux/actionTypes";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -18,6 +18,7 @@ const Body = () => {
   const [value, setValue] = useState({
     course: "",
     year: "",
+    semester: "",
   });
   const [search, setSearch] = useState(false);
 
@@ -45,28 +46,28 @@ const Body = () => {
     setSearch(true);
     setLoading(true);
     setError({});
-    dispatch(getStudent(value));
+    dispatch(getSubject(value));
   };
-  const students = useSelector((state) => state.admin.students.result);
+  const subjects = useSelector((state) => state.admin.subjects.result);
 
-  const dltStudent = (e) => {
+  const dltSubject = (e) => {
     setError({});
     setLoading(true);
-    dispatch(deleteStudent(checkedValue));
+    dispatch(deleteSubject(checkedValue));
   };
 
   useEffect(() => {
-    if (store.admin.studentDeleted) {
+    if (store.admin.subjectDeleted) {
       setValue({ course: "", year: "" });
       setSearch(false);
       setLoading(false);
-      dispatch({ type: DELETE_STUDENT, payload: false });
+      dispatch({ type: DELETE_SUBJECT, payload: false });
     }
-  }, [store.admin.studentDeleted]);
+  }, [store.admin.subjectDeleted]);
 
   useEffect(() => {
-    if (students?.length !== 0) setLoading(false);
-  }, [students]);
+    if (subjects?.length !== 0) setLoading(false);
+  }, [subjects]);
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
@@ -77,7 +78,7 @@ const Body = () => {
       <div className="space-y-5">
         <div className="flex text-gray-400 items-center space-x-2">
           <DeleteIcon />
-          <h1>Delete Faculty</h1>
+          <h1>Delete Subject</h1>
         </div>
         <div className=" mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]">
           <form
@@ -116,6 +117,26 @@ const Body = () => {
               <MenuItem value="4">4</MenuItem>
             </Select>
 
+            <label htmlFor="semester">Semester</label>
+            <Select
+              required
+              displayEmpty
+              sx={{ height: 36, width: 224 }}
+              inputProps={{ "aria-label": "Without label" }}
+              value={value.semester}
+              onChange={(e) => setValue({ ...value, semester: e.target.value })}
+            >
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="1">1</MenuItem>
+              <MenuItem value="2">2</MenuItem>
+              <MenuItem value="3">3</MenuItem>
+              <MenuItem value="4">4</MenuItem>
+              <MenuItem value="5">5</MenuItem>
+              <MenuItem value="6">6</MenuItem>
+              <MenuItem value="7">7</MenuItem>
+              <MenuItem value="8">8</MenuItem>
+            </Select>
+
             <button
               className={`${classes.adminFormSubmitButton} w-56`}
               type="submit"
@@ -134,16 +155,16 @@ const Body = () => {
                   messageColor="blue"
                 />
               )}
-              {(error.noStudentError || error.backendError) && (
+              {(error.noSubjectError || error.backendError) && (
                 <p className="text-red-500 text-2xl font-bold">
-                  {error.noStudentError || error.backendError}
+                  {error.noSubjectError || error.backendError}
                 </p>
               )}
             </div>
             {search &&
               !loading &&
               Object.keys(error).length === 0 &&
-              students?.length !== 0 && (
+              subjects?.length !== 0 && (
                 <div className={`${classes.adminData} h-[20rem]`}>
                   <div className="grid grid-cols-8">
                     <h1 className={`col-span-1 ${classes.adminDataHeading}`}>
@@ -153,17 +174,17 @@ const Body = () => {
                       Sr no.
                     </h1>
                     <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Name
+                      Subject Code
                     </h1>
                     <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Username
+                      Subject Name
                     </h1>
 
                     <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Section
+                      Total Lectures
                     </h1>
                   </div>
-                  {students?.map((adm, idx) => (
+                  {subjects?.map((adm, idx) => (
                     <div
                       key={idx}
                       className={`${classes.adminDataBody} grid-cols-8`}
@@ -182,18 +203,18 @@ const Body = () => {
                       <h1
                         className={`col-span-2 ${classes.adminDataBodyFields}`}
                       >
-                        {adm.name}
+                        {adm.subjectCode}
                       </h1>
                       <h1
                         className={`col-span-2 ${classes.adminDataBodyFields}`}
                       >
-                        {adm.username}
+                        {adm.subjectName}
                       </h1>
 
                       <h1
                         className={`col-span-2 ${classes.adminDataBodyFields}`}
                       >
-                        {adm.section}
+                        {adm.totalLectures}
                       </h1>
                     </div>
                   ))}
@@ -202,7 +223,7 @@ const Body = () => {
             {search && Object.keys(error).length === 0 && (
               <div className="space-x-3 flex items-center justify-center mt-5">
                 <button
-                  onClick={dltStudent}
+                  onClick={dltSubject}
                   className={`${classes.adminFormSubmitButton} bg-blue-500`}
                 >
                   Delete

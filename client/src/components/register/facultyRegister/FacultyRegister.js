@@ -1,49 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addFaculty } from "../../../redux/actions/facultyActions.js";
-import Spinner from "../../../utils/Spinner";
 import axios from "axios";
 import Select from "react-select";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Controller } from "react-hook-form";
+import { addFaculty } from "../../../redux/actions/adminActions.js";
 
-const schema = yup
-  .object({
-    name: yup.string().required(),
-    avatar: yup.string(),
-    gender: yup.string().required(),
-    course: yup.array().required(),
-    contact_number: yup.string().required(),
-    email: yup.string().email().required(),
-  })
-  .required();
+Modal.setAppElement("#root");
 
-const defaultValues = {
-  name: "",
-  email: "",
-  ender: "",
-  avatar: "",
-  contact_number: "",
-  course: [],
-};
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  gender: Yup.string().required("Gender is required"),
+  contact_number: Yup.string()
+    .matches(/^\d{10}$/, "Contact number must be 10 digits")
+    .required("Contact number is required"),
+  course: Yup.array()
+    .min(1, "At least one course is required")
+    .required("Course is required"),
+});
 
 const FacultyRegister = () => {
-  const [loading, setLoading] = useState(false);
-  const [translate, setTranslate] = useState(false);
   const [courses, setCourses] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const dispatch = useDispatch();
-
-  const {
-    control, 
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues,
-    resolver: yupResolver(schema),
-  });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -51,233 +38,303 @@ const FacultyRegister = () => {
         const response = await axios.get(
           "http://localhost:4000/api/admin/getallcourse"
         );
-        setCourses(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+        setCourses(
+          response.data.map((course) => ({
+            value: course._id,
+            label: course.course,
+          }))
+        );
+      } catch (error) {}
     };
 
     fetchCourses();
-    setTimeout(() => {
-      setTranslate(true);
-    }, 1000);
   }, []);
 
-  const onSubmit = (data) => {
-    setLoading(true);
-    const {
-    name,
-    avatar,
-    gender,
-    course:[],
-    contact_number,
-    email,
-    } = data;
+  const onSubmit = (values, { setSubmitting, setFieldError }) => {
+    const courseIds = values.course.map((course) => course.value);
+    const submissionData = {
+      ...values,
+      course: courseIds,
+    };
 
-    dispatch(
-      addFaculty({
-      name,
-      avatar,
-      gender,
-      course:[ ],
-      contact_number,
-      email,
+    dispatch(addFaculty(submissionData))
+      .then((response) => {
+        setSubmitting(false);
+        if (response && response.success) {
+          setModalIsOpen(true);
+        } else if (response && response.errors) {
+          if (response.errors.email) {
+            setFieldError("email", response.errors.email);
+          }
+          if (response.errors.contact_number) {
+            setFieldError("contact_number", response.errors.contact_number);
+          }
+        } else {
+          setErrorMessage("An unexpected error occurred.");
+          setErrorModalIsOpen(true);
+        }
       })
-    );
+      .catch((error) => {
+        setSubmitting(false);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          if (error.response.data.errors.email) {
+            setFieldError("email", error.response.data.errors.email);
+          }
+          if (error.response.data.errors.contact_number) {
+            setFieldError(
+              "contact_number",
+              error.response.data.errors.contact_number
+            );
+          }
+        } else {
+          setErrorMessage("An unexpected error occurred. Please try again.");
+          setErrorModalIsOpen(true);
+        }
+      });
   };
 
   return (
-    <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center">
-      <div className="grid grid-cols-2">
-        <div
-          className={`h-[40rem] w-full bg-white flex items-center justify-center ${
-            translate ? "translate-x-[21rem]" : ""
-          }  duration-1000 transition-all rounded-3xl shadow-2xl`}
-        >
-          <h1 className="text-[3rem]  font-bold text-center">
-            Faculty
-            <br />
-            Register
-          </h1>
-        </div>
-        <form
-         onSubmit={handleSubmit(onSubmit)}
-          className={`h-[40rem] w-full bg-[#2c2f35] grid grid-cols-2 gap-4 p-[2rem] ${
-            translate ? "-translate-x-[12rem]" : ""
-          }  duration-1000 transition-all rounded-3xl shadow-2xl`}
-        >
-          <h1 className="text-white text-3xl font-semibold col-span-2">
-            Faculty
-          </h1>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Name</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.name ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="name"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Email</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.email ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="email"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="text"
-                    placeholder="johndoe@email.com"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Gender</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.gender ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="gender"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <select
-                    name="gender"
-                    className="w-[13.5rem] bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
+    <>
+      <div className="bg-[#04bd7d] h-screen w-screen flex items-center justify-center">
+        <div className="h-[40rem] w-[25rem] flex flex-col justify-center items-center">
+          <Formik
+            initialValues={{
+              name: "",
+              email: "",
+              gender: "",
+              contact_number: "",
+              course: [],
+            }}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {({ setFieldValue, isSubmitting }) => (
+              <Form className="h-[40rem] w-full bg-[#2c2f35] flex flex-col justify-center items-center gap-4 rounded-3xl shadow-2xl md:p-6 md:h-auto sm:p-4 sm:h-auto">
+                <h1 className="text-white text-3xl font-semibold col-span-2">
+                  Faculty Register
+                </h1>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="name"
+                    className="text-[#515966] font-bold text-sm"
                   >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Course</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] ${
-                errors.course ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="course"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    options={courses.map((course) => ({
-                      value: course.course,
-                      label: course.course,
-                    }))}
-                    isMulti
-                    className="text-black placeholder:text-sm"
-                    classNamePrefix="select"
-                    theme={(theme) => ({
-                      ...theme,
-                      borderRadius: 5,
-                      colors: {
-                        ...theme.colors,
-                        primary25: "grey",
-                        primary: "white",
-                      },
-                    })}
+                    Name
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Field
+                      name="name"
+                      type="text"
+                      placeholder="Enter Your Name"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="name"
+                    component="div"
+                    className="error text-red-500 text-sm"
                   />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-[#515966] font-bold text-sm">Contact Number</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-[14rem] flex  items-center ${
-                errors.contact_number ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="contact_number"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="number"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="email"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Email
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Field
+                      name="email"
+                      type="text"
+                      placeholder="Enter Your Email"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="error text-red-500 text-sm"
                   />
-                )}
-              />
-            </div>
-          </div>
-          <div className="space-y-1 col-span-2">
-            <p className="text-[#515966] font-bold text-sm">Avatar</p>
-            <div
-              className={`bg-[#515966] rounded-lg w-full flex  items-center ${
-                errors.avatar ? "border border-red-500" : ""
-              }`}
-            >
-              <Controller
-                name="avatar"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <input
-                    type="file"
-                    className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
-                    {...field}
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="gender"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Gender
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Field
+                      as="select"
+                      name="gender"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg w-full cursor-pointer"
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </Field>
+                  </div>
+                  <ErrorMessage
+                    name="gender"
+                    component="div"
+                    className="error text-red-500 text-sm"
                   />
-                )}
-              />
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-3 bg-[#04bd7d]"
-          >
-            Register
-          </button>
-          <a
-            href="/"
-            className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#FF2400]"
-          >
-            Home
-          </a>
-          {loading && (
-            <Spinner
-              message="Logging In"
-              height={30}
-              width={150}
-              color="#ffffff"
-              messageColor="#fff"
-            />
-          )}
-        </form>
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="contact_number"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Contact Number
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Field
+                      name="contact_number"
+                      type="text"
+                      placeholder="10 Digit Number"
+                      className="bg-[#515966] text-white px-2 outline-none py-2 rounded-lg placeholder:text-sm"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="contact_number"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="course"
+                    className="text-[#515966] font-bold text-sm"
+                  >
+                    Course
+                  </label>
+                  <div className="bg-[#515966] rounded-lg w-[14rem] flex items-center">
+                    <Select
+                      isMulti
+                      name="course"
+                      options={courses}
+                      classNamePrefix="select"
+                      onChange={(opt) => setFieldValue("course", opt)}
+                      className="react-select-container w-full"
+                    />
+                  </div>
+                  <ErrorMessage
+                    name="course"
+                    component="div"
+                    className="error text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="col-span-3 flex items-center justify-between">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="submit-button-class w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#04bd7d]"
+                  >
+                    Register
+                  </button>{" "}
+                  <a
+                    href="/"
+                    className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]"
+                  >
+                    Home
+                  </a>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
-    </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Registration Successful"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+          },
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            border: "none",
+            background: "#2c2f35",
+            borderRadius: "10px",
+            padding: "20px",
+            color: "white",
+            width: "30rem",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          },
+        }}
+      >
+        <h2 className="text-xl font-bold text-center mb-4">
+          Registration Successful!
+        </h2>
+        <p className="text-center">
+          Please check your email for your login ID and password.
+        </p>
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={() => {
+              setModalIsOpen(false);
+              navigate("/");
+            }}
+            className="close-button"
+          >
+            OK
+          </button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={errorModalIsOpen}
+        onRequestClose={() => setErrorModalIsOpen(false)}
+        contentLabel="Registration Error"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+          },
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            border: "none",
+            background: "#2c2f35",
+            borderRadius: "10px",
+            padding: "20px",
+            color: "white",
+            width: "30rem",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          },
+        }}
+      >
+        <h2 className="text-xl font-bold text-center mb-4">
+          Error: Registration Failed
+        </h2>
+        <p className="text-center">{errorMessage}</p>
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={() => setErrorModalIsOpen(false)}
+            className="close-button"
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
+    </>
   );
 };
 

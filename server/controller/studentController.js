@@ -4,64 +4,79 @@ import bcrypt from "bcryptjs";
 
 export const studentLogin = async (req, res) => {
   const { college_id, password } = req.body;
-  const errors = { collegeIdError: String, passwordError: String };
+
   try {
     const existingStudent = await Student.findOne({ college_id });
     if (!existingStudent) {
-      errors.collegeIdError = "Student doesn't exist.";
-      return res.status(404).json(errors);
+      // Return a generic error message for both cases
+      return res
+        .status(401)
+        .json({ message: "Invalid credentials, please try again." });
     }
     const isPasswordCorrect = await bcrypt.compare(
       password,
       existingStudent.password
     );
     if (!isPasswordCorrect) {
-      errors.passwordError = "Invalid Credentials";
-      return res.status(404).json(errors);
+      return res
+        .status(401)
+        .json({ message: "Invalid credentials, please try again." });
     }
 
+    // Make sure you have a JWT_SECRET environment variable
     const token = jwt.sign(
       {
         college_id: existingStudent.college_id,
         id: existingStudent._id,
       },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      process.env.JWT_SECRET, // Use the secret from your environment variables
+      { expiresIn: "1h" } // Set the token to expire in 1 hour
     );
 
-    res.status(200).json({ result: existingStudent, token: token });
+    res.status(200).json({ result: existingStudent, token });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 export const updatedPassword = async (req, res) => {
   try {
     const { newPassword, confirmPassword, email } = req.body;
-    const errors = { mismatchError: String };
     if (newPassword !== confirmPassword) {
-      errors.mismatchError =
-        "Your password and confirmation password do not match";
-      return res.status(400).json(errors);
+      return res.status(400).json({
+        mismatchError: "Your password and confirmation password do not match.",
+      });
     }
 
     const student = await Student.findOne({ email });
-    let hashedPassword;
-    hashedPassword = await bcrypt.hash(newPassword, 10);
-    student.password = hashedPassword;
-    await student.save();
-    if (student.passwordUpdated === false) {
-      student.passwordUpdated = true;
-      await student.save();
+    if (!student) {
+      return res.status(404).json({ message: "Student not found." });
     }
 
+    // Optionally, add password strength validation here
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    student.password = hashedPassword;
+    student.passwordUpdated = true; // Assuming you want to set this regardless of its previous value
+    await student.save();
+
+    // Consider what information needs to be sent back. For security, avoid sending sensitive data.
     res.status(200).json({
       success: true,
       message: "Password updated successfully",
-      response: student,
+      // Only send back necessary information
+      student: {
+        id: student._id,
+        email: student.email,
+        passwordUpdated: student.passwordUpdated,
+      },
     });
   } catch (error) {
-    res.status(500).json(error);
+    console.error(error); // Log the error for server-side inspection.
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating the password." });
   }
 };
 
@@ -79,7 +94,8 @@ export const updateStudent = async (req, res) => {
       motherName,
       fatherContactNumber,
     } = req.body;
-    const updatedStudent = await Student.findOne({ email });
+
+    const updatedStudent = await Student.findOneAndUpdate({ email });
     if (name) {
       updatedStudent.name = name;
       await updatedStudent.save();
@@ -121,40 +137,3 @@ export const updateStudent = async (req, res) => {
     res.status(500).json(error);
   }
 };
-
-// export const testResult = async (req, res) => {
-//   try {
-//     const { course, year, section } = req.body;
-//     const errors = { notestError: String };
-//     const student = await Student.findOne({ course, year, section });
-//     const test = await Test.find({ course, year, section });
-//     if (test.length === 0) {
-//       errors.notestError = "No Test Found";
-//       return res.status(404).json(errors);
-//     }
-//     var result = [];
-//     for (var i = 0; i < test.length; i++) {
-//       var subjectCode = test[i].subjectCode;
-//       var subject = await Subject.findOne({ subjectCode });
-//       var marks = await Marks.findOne({
-//         student: student._id,
-//         exam: test[i]._id,
-//       });
-//       if (marks) {
-//         var temp = {
-//           marks: marks.marks,
-//           totalMarks: test[i].totalMarks,
-//           subjectName: subject.subjectName,
-//           subjectCode,
-//           test: test[i].test,
-//         };
-
-//         result.push(temp);
-//       }
-//     }
-
-//     res.status(200).json({ result });
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// };

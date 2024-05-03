@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
-  getAllStudent,
   getAllFaculty,
   getAllAdmin,
   getAllCourse,
@@ -14,7 +13,6 @@ import Sidebar from "./Sidebar";
 const AdminHome = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllStudent());
     dispatch(getAllFaculty());
     dispatch(getAllAdmin());
     dispatch(getAllCourse());

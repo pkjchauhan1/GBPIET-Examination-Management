@@ -20,14 +20,14 @@ export const adminSignIn = async (formData) => {
 export const adminUpdatePassword = (updatedPassword) =>
   API.post("/api/admin/updatepassword", updatedPassword);
 
-export const getAllStudent = () => API.get("/api/admin/getallstudent");
+export const getAllStudent = () => API.get("/api/faculty/getallstudent");
 
 export const getAllFaculty = () => API.get("/api/admin/getallfaculty");
 
 export const getAllAdmin = () => API.get("/api/admin/getalladmin");
 
 export const getAllCourse = () => API.get("/api/admin/getallcourse");
-export const getAllSubject = () => API.get("/api/admin/getallsubject");
+export const getAllSubject = () => API.get("/api/faculty/getallsubject");
 
 export const updateAdmin = (updatedAdmin) =>
   API.post("/api/admin/updateprofile", updatedAdmin);
@@ -39,9 +39,9 @@ export const deleteAdmin = (data) => API.post("/api/admin/deleteadmin", data);
 export const deleteFaculty = (data) =>
   API.post("/api/admin/deletefaculty", data);
 export const deleteStudent = (data) =>
-  API.post("/api/admin/deletestudent", data);
+  API.post("/api/faculty/deletestudent", data);
 export const deleteSubject = (data) =>
-  API.post("/api/admin/deletesubject", data);
+  API.post("/api/faculty/deletesubject", data);
 export const deleteCourse = (data) => API.post("/api/admin/deletecourse", data);
 
 export const getAdmin = (admin) => API.post("/api/admin/getadmin", admin);
@@ -54,15 +54,15 @@ export const addFaculty = (faculty) =>
 export const getFaculty = (course) => API.post("/api/admin/getfaculty", course);
 
 export const addSubject = (subject) =>
-  API.post("/api/admin/addsubject", subject);
+  API.post("/api/faculty/addsubject", subject);
 export const getSubject = (subject) =>
-  API.post("/api/admin/getsubject", subject);
+  API.post("/api/faculty/getsubject", subject);
 
 export const addStudent = (student) =>
-  API.post("/api/admin/addstudent", student);
+  API.post("/api/faculty/addstudent", student);
 
 export const getStudent = (student) =>
-  API.post("/api/admin/getstudent", student);
+  API.post("/api/faculty/getstudent", student);
 export const getNotice = (notice) => API.post("/api/admin/getnotice", notice);
 
 // Faculty
