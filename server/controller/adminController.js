@@ -241,8 +241,6 @@ export const addCourse = async (req, res) => {
 export const addFaculty = async (req, res) => {
   try {
     const { name, course, contact_number, email, gender } = req.body;
-
-    // Validate contact number length
     if (contact_number.toString().length !== 10) {
       return res.status(400).json({
         errors: {
@@ -250,8 +248,6 @@ export const addFaculty = async (req, res) => {
         },
       });
     }
-
-    // Check for existing faculty with the same email or contact number
     const existingFaculty = await Faculty.findOne({
       $or: [{ email }, { contact_number }],
     });
@@ -262,13 +258,11 @@ export const addFaculty = async (req, res) => {
         errors.email = "This email is already registered.";
       }
       if (existingFaculty.contact_number === contact_number) {
-        errors.contact_number = "This contact number is already in use.";
+        errors.contact_number = "Contact number is already in use.";
       }
       return res.status(400).json({ errors });
     }
-
-    // Hash password and create new faculty
-    const newPassword = "@Abc12345"; // Consider generating this dynamically or more securely
+    const newPassword = "@Abc12345";
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     const newFaculty = new Faculty({
       name,
@@ -281,8 +275,6 @@ export const addFaculty = async (req, res) => {
     });
 
     await newFaculty.save();
-
-    // Send welcome email
     try {
       await sendEmails([{ email, newPassword, name }]);
       return res.status(201).json({
@@ -293,7 +285,6 @@ export const addFaculty = async (req, res) => {
       });
     } catch (emailError) {
       console.error("Failed to send email", emailError);
-      // Consider how critical email sending is to your process and handle accordingly
       return res.status(201).json({
         success: true,
         message:

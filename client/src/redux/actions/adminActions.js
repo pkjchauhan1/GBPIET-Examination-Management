@@ -42,7 +42,6 @@ export const adminUpdatePassword = (formData, navigate) => async (dispatch) => {
   }
 };
 
-
 export const getAllFaculty = () => async (dispatch) => {
   try {
     const { data } = await api.getAllFaculty();
@@ -69,7 +68,6 @@ export const getAllCourse = () => async (dispatch) => {
     console.log("Redux Error", error);
   }
 };
-
 
 export const updateAdmin = (formData) => async (dispatch) => {
   try {
@@ -151,11 +149,13 @@ export const addCourse = (formData) => async (dispatch) => {
 
 export const addFaculty = (formData) => async (dispatch) => {
   try {
-    const {} = await api.addFaculty(formData);
+    const response = await api.addFaculty(formData);
     alert("Faculty Added Successfully");
-    dispatch({ type: ADD_FACULTY, payload: true });
+    dispatch({ type: ADD_FACULTY, payload: response.data });
+    return response.data;
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
+    return error.response.data;
   }
 };
 
@@ -167,7 +167,6 @@ export const getFaculty = (course) => async (dispatch) => {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
-
 
 export const getNotice = (formData) => async (dispatch) => {
   try {

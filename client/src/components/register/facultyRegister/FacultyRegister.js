@@ -44,9 +44,7 @@ const FacultyRegister = () => {
             label: course.course,
           }))
         );
-      } catch (error) {
-        console.error("Failed to load courses", error);
-      }
+      } catch (error) {}
     };
 
     fetchCourses();
@@ -61,16 +59,19 @@ const FacultyRegister = () => {
 
     dispatch(addFaculty(submissionData))
       .then((response) => {
-        setSubmitting(false); // Ensure setSubmitting is called in all paths.
-        if (response.success) {
+        setSubmitting(false);
+        if (response && response.success) {
           setModalIsOpen(true);
-        } else if (response.errors) {
+        } else if (response && response.errors) {
           if (response.errors.email) {
             setFieldError("email", response.errors.email);
           }
           if (response.errors.contact_number) {
             setFieldError("contact_number", response.errors.contact_number);
           }
+        } else {
+          setErrorMessage("An unexpected error occurred.");
+          setErrorModalIsOpen(true);
         }
       })
       .catch((error) => {
@@ -90,8 +91,7 @@ const FacultyRegister = () => {
             );
           }
         } else {
-          console.error("Registration failed", error);
-          setErrorMessage("Email or Contact already in use.");
+          setErrorMessage("An unexpected error occurred. Please try again.");
           setErrorModalIsOpen(true);
         }
       });
