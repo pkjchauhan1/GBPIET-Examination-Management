@@ -322,7 +322,7 @@ const FacultyRegister = () => {
         }}
       >
         <h2 className="text-xl font-bold text-center mb-4">
-          Error: Registration Failed
+          Registration Failed
         </h2>
         <p className="text-center">{errorMessage}</p>
         <div className="mt-4 flex justify-center">

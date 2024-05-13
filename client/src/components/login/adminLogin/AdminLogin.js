@@ -139,9 +139,11 @@ const AdminLogin = () => {
           >
             Login
           </button>
-          <a href="/" className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]">
-              Home
-            
+          <a
+            href="/"
+            className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-right justify-center text-white text-base py-1 bg-[#FF2400]"
+          >
+            Home
           </a>
 
           {loading && (
