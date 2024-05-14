@@ -138,66 +138,6 @@ const Sidebar = () => {
             <h1 className="font-normal">Delete Faculty</h1>
           </NavLink>
         </div>
-        <div className="">
-          <NavLink
-            to="/admin/allstudent"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <BoyIcon className="" />
-            <h1 className="font-normal">Our Students</h1>
-          </NavLink>
-
-          <NavLink
-            to="/admin/addstudent"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <AddIcon className="" />
-            <h1 className="font-normal">Add Students</h1>
-          </NavLink>
-          <NavLink
-            to="/admin/deletestudent"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <DeleteIcon className="" />
-            <h1 className="font-normal">Delete Student</h1>
-          </NavLink>
-        </div>
-        <div className="">
-          <NavLink
-            to="/admin/allsubject"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <MenuBookIcon className="" />
-            <h1 className="font-normal">Subjects</h1>
-          </NavLink>
-
-          <NavLink
-            to="/admin/addsubject"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <AddIcon className="" />
-            <h1 className="font-normal">Add Subject</h1>
-          </NavLink>
-          <NavLink
-            to="/admin/deletesubject"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <DeleteIcon className="" />
-            <h1 className="font-normal">Delete Subject</h1>
-          </NavLink>
-        </div>
       </div>
     </div>
   );

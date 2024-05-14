@@ -26,6 +26,8 @@ const validationSchema = Yup.object().shape({
 const FacultyRegister = () => {
   const [courses, setCourses] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,31 +44,56 @@ const FacultyRegister = () => {
             label: course.course,
           }))
         );
-      } catch (error) {
-        console.error("Failed to load courses", error);
-      }
+      } catch (error) {}
     };
 
     fetchCourses();
   }, []);
 
-  const onSubmit = (values, { setSubmitting }) => {
+  const onSubmit = (values, { setSubmitting, setFieldError }) => {
     const courseIds = values.course.map((course) => course.value);
-
     const submissionData = {
       ...values,
       course: courseIds,
     };
 
     dispatch(addFaculty(submissionData))
-      .then(() => {
-        setModalIsOpen(true);
+      .then((response) => {
+        setSubmitting(false);
+        if (response && response.success) {
+          setModalIsOpen(true);
+        } else if (response && response.errors) {
+          if (response.errors.email) {
+            setFieldError("email", response.errors.email);
+          }
+          if (response.errors.contact_number) {
+            setFieldError("contact_number", response.errors.contact_number);
+          }
+        } else {
+          setErrorMessage("An unexpected error occurred.");
+          setErrorModalIsOpen(true);
+        }
       })
       .catch((error) => {
-        console.error("Registration failed", error);
-      })
-      .finally(() => {
         setSubmitting(false);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          if (error.response.data.errors.email) {
+            setFieldError("email", error.response.data.errors.email);
+          }
+          if (error.response.data.errors.contact_number) {
+            setFieldError(
+              "contact_number",
+              error.response.data.errors.contact_number
+            );
+          }
+        } else {
+          setErrorMessage("An unexpected error occurred. Please try again.");
+          setErrorModalIsOpen(true);
+        }
       });
   };
 
@@ -266,6 +293,44 @@ const FacultyRegister = () => {
             className="close-button"
           >
             OK
+          </button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={errorModalIsOpen}
+        onRequestClose={() => setErrorModalIsOpen(false)}
+        contentLabel="Registration Error"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+          },
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            border: "none",
+            background: "#2c2f35",
+            borderRadius: "10px",
+            padding: "20px",
+            color: "white",
+            width: "30rem",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          },
+        }}
+      >
+        <h2 className="text-xl font-bold text-center mb-4">
+          Registration Failed
+        </h2>
+        <p className="text-center">{errorMessage}</p>
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={() => setErrorModalIsOpen(false)}
+            className="close-button"
+          >
+            Close
           </button>
         </div>
       </Modal>

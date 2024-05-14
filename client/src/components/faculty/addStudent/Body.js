@@ -128,8 +128,6 @@ const Body = () => {
                     required
                     placeholder="College ID"
                     className={classes.adminInput}
-                    type="number"
-                    value={value.college_id}
                     onChange={(e) =>
                       setValue({ ...value,college_id: e.target.value })
                     }
@@ -190,8 +188,6 @@ const Body = () => {
                     required
                     placeholder="university enrollment no"
                     className={classes.adminInput}
-                    type="number"
-                    value={value.university_enrollment_no}
                     onChange={(e) =>
                       setValue({ ...value, university_enrollment_no: e.target.value })
                     }
@@ -246,8 +242,6 @@ const Body = () => {
                     required
                     placeholder="Contact Number"
                     className={classes.adminInput}
-                    type="number"
-                    value={value.contact_number}
                     onChange={(e) =>
                       setValue({ ...value, contact_number: e.target.value })
                     }
@@ -261,8 +255,6 @@ const Body = () => {
                     required
                     placeholder="University roll no"
                     className={classes.adminInput}
-                    type="number"
-                    value={value.university_roll_no}
                     onChange={(e) =>
                       setValue({ ...value, university_roll_no: e.target.value })
                     }
