@@ -2,35 +2,29 @@ import Student from "../models/student.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
+import Student from "../models/student.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+
 export const studentLogin = async (req, res) => {
   const { college_id, password } = req.body;
 
   try {
     const existingStudent = await Student.findOne({ college_id });
-    if (!existingStudent) {
-      // Return a generic error message for both cases
-      return res
-        .status(401)
-        .json({ message: "Invalid credentials, please try again." });
-    }
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      existingStudent.password
-    );
-    if (!isPasswordCorrect) {
+    if (
+      !existingStudent ||
+      !(await bcrypt.compare(password, existingStudent.password))
+    ) {
+      // Generic message to avoid username enumeration
       return res
         .status(401)
         .json({ message: "Invalid credentials, please try again." });
     }
 
-    // Make sure you have a JWT_SECRET environment variable
     const token = jwt.sign(
-      {
-        college_id: existingStudent.college_id,
-        id: existingStudent._id,
-      },
-      process.env.JWT_SECRET, // Use the secret from your environment variables
-      { expiresIn: "1h" } // Set the token to expire in 1 hour
+      { college_id: existingStudent.college_id, id: existingStudent._id },
+      process.env.JWT_SECRET, // Ensure your environment variable is properly set
+      { expiresIn: "1h" } // Token expiration set to 1 hour
     );
 
     res.status(200).json({ result: existingStudent, token });
